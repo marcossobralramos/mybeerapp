@@ -2,21 +2,23 @@ package br.edu.ifba.mybeerapp.model;
 
 public class Modelo
 {
-    private String id;
+    private Integer id;
     private String descricao;
-    private int volume; // ml
+    private Integer volume; // ml
 
-    public Modelo(String id, String descricao, int volume) {
+    public Modelo(){}
+
+    public Modelo(Integer id, String descricao, int volume) {
         this.id = id;
         this.descricao = descricao;
         this.volume = volume;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -28,11 +30,16 @@ public class Modelo
         this.descricao = descricao;
     }
 
-    public int getVolume() {
+    public Integer getVolume() {
         return volume;
     }
 
-    public void setVolume(int volume) {
+    public void setVolume(Integer volume) {
         this.volume = volume;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(this.id);
     }
 }

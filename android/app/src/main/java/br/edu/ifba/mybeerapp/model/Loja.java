@@ -25,4 +25,11 @@ public class Loja
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    @Override
+    public String toString()
+    {
+        return String.valueOf(this.id);
+    }
+
 }

@@ -10,17 +10,17 @@ public class Cesta
     private Double valorTotal;
     private Loja loja;
     private ArrayList<Produto> produtos;
-    private Map<String, Integer> quantidade;
+    private Map<String, Integer> quantidadeProdutos;
 
     public Cesta(){}
 
-    public Cesta(int id, String descricao, Double valorTotal, Loja loja, ArrayList<Produto> produtos, Map<String, Integer> quantidade) {
+    public Cesta(int id, String descricao, Double valorTotal, Loja loja, ArrayList<Produto> produtos, Map<String, Integer> quantidadeProdutos) {
         this.id = id;
         this.descricao = descricao;
         this.valorTotal = valorTotal;
         this.loja = loja;
         this.produtos = produtos;
-        this.quantidade = quantidade;
+        this.quantidadeProdutos = quantidadeProdutos;
     }
 
     public int getId() {
@@ -63,11 +63,16 @@ public class Cesta
         this.produtos = produtos;
     }
 
-    public Map<String, Integer> getQuantidade() {
-        return quantidade;
+    public Map<String, Integer> getQuantidadeProdutos() {
+        return quantidadeProdutos;
     }
 
-    public void setQuantidade(Map<String, Integer> quantidade) {
-        this.quantidade = quantidade;
+    public void setQuantidade(Map<String, Integer> quantidadeProdutos) {
+        this.quantidadeProdutos = quantidadeProdutos;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(this.id);
     }
 }

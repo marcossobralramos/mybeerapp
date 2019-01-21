@@ -60,4 +60,9 @@ public class Produto
     public void setUltimaAtualizacao(Date ultimaAtualizacao) {
         this.ultimaAtualizacao = ultimaAtualizacao;
     }
+
+    public String toString()
+    {
+        return String.valueOf(this.id);
+    }
 }

@@ -2,8 +2,8 @@ package br.edu.ifba.mybeerapp.model;
 
 public class Marca
 {
-    private int id;
-    private String nome;
+    public int id;
+    public String nome;
 
     public Marca(){}
 
@@ -26,5 +26,23 @@ public class Marca
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o == this)
+            return true;
+        if(!(o instanceof Marca))
+            return false;
+
+        Marca marca = (Marca) o;
+
+        return (this.id == marca.id && this.nome.equals(marca.nome));
+    }
+
+    public String toString()
+    {
+        return String.valueOf(this.id);
     }
 }

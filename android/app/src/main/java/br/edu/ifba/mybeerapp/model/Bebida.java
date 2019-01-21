@@ -7,13 +7,13 @@ public class Bebida
     private int id;
     private Marca marca;
     private Modelo modelo;
-    private Image imagem;
+    //private Image imagem;
 
-    public Bebida(int id, Marca marca, Modelo modelo, Image imagem) {
+    public Bebida(int id, Marca marca, Modelo modelo /*, Image imagem*/) {
         this.id = id;
         this.marca = marca;
         this.modelo = modelo;
-        this.imagem = imagem;
+        //this.imagem = imagem;
     }
 
     public int getId() {
@@ -40,11 +40,18 @@ public class Bebida
         this.modelo = modelo;
     }
 
-    public Image getImagem() {
+    /*public Image getImagem() {
         return imagem;
     }
 
     public void setImagem(Image imagem) {
         this.imagem = imagem;
+    }*/
+
+    @Override
+    public String toString()
+    {
+        return String.valueOf(this.id);
     }
+
 }
