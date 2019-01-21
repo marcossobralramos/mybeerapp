@@ -5,34 +5,29 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_cestas"
+            android:icon="@drawable/briefcase_outline"
+            android:title="Cestas" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_lojas"
+            android:icon="@drawable/store"
+            android:title="Lojas" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_cervejas"
+            android:icon="@drawable/beer"
+            android:title="Cervejas" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_marcas"
+            android:icon="@drawable/alpha_m_circle"
+            android:title="Marcas" />
+        <item
+            android:id="@+id/nav_modelos"
+            android:icon="@drawable/ammunition"
+            android:title="Modelos" />
+        <item
+            android:id="@+id/nav_pesquisas"
+            android:icon="@drawable/help_circle_outline"
+            android:title="Pesquisas Rápidas" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
 
 </menu>
