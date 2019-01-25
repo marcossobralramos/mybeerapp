@@ -2,15 +2,18 @@ package br.edu.ifba.mybeerapp.model;
 
 import android.media.Image;
 
-public class Bebida
+import br.edu.ifba.mybeerapp.model.interfaces.IModel;
+
+public class Bebida implements IModel
 {
     private int id;
     private Marca marca;
     private Modelo modelo;
     //private Image imagem;
 
-    public Bebida(int id, Marca marca, Modelo modelo /*, Image imagem*/) {
-        this.id = id;
+    public Bebida(){}
+
+    public Bebida(Marca marca, Modelo modelo /*, Image imagem*/) {
         this.marca = marca;
         this.modelo = modelo;
         //this.imagem = imagem;

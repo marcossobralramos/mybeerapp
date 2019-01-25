@@ -4,20 +4,23 @@ import java.util.Date;
 
 import br.edu.ifba.mybeerapp.model.Loja;
 import br.edu.ifba.mybeerapp.model.Bebida;
+import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 
-public class Produto
+public class Produto implements IModel
 {
     private int id;
     private Loja loja;
     private Bebida bebida;
-    private Double preco;
-    private Date ultimaAtualizacao;
+    private Double precoUnidade;
+    private Double precoML;
+    private String ultimaAtualizacao;
 
-    public Produto(int id, Loja loja, Bebida bebida, Double preco, Date ultimaAtualizacao) {
-        this.id = id;
+    public Produto(){}
+
+    public Produto(Loja loja, Bebida bebida, Double precoUnidade, String ultimaAtualizacao) {
         this.loja = loja;
         this.bebida = bebida;
-        this.preco = preco;
+        this.precoUnidade = precoUnidade;
         this.ultimaAtualizacao = ultimaAtualizacao;
     }
 
@@ -45,20 +48,32 @@ public class Produto
         this.bebida = bebida;
     }
 
-    public Double getPreco() {
-        return preco;
+    public Double getPrecoUnidade() {
+        return precoUnidade;
     }
 
-    public void setPreco(Double preco) {
-        this.preco = preco;
+    public void setPrecoUnidade(Double precoUnidade) {
+        this.precoUnidade = precoUnidade;
+        this.precoML = this.precoUnidade/this.bebida.getModelo().getVolume();
     }
 
-    public Date getUltimaAtualizacao() {
+    public Double getPrecoML() {
+        return precoML;
+    }
+
+    public String getUltimaAtualizacao() {
         return ultimaAtualizacao;
     }
 
-    public void setUltimaAtualizacao(Date ultimaAtualizacao) {
+    public void setUltimaAtualizacao(String ultimaAtualizacao) {
         this.ultimaAtualizacao = ultimaAtualizacao;
+    }
+
+    public boolean equals(Object o)
+    {
+        if(((Produto) o).getId() == this.getId())
+            return true;
+        return false;
     }
 
     public String toString()

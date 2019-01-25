@@ -4,7 +4,11 @@ import android.content.Context;
 
 import br.edu.ifba.mybeerapp.model.Modelo;
 
-public class ModeloRepository extends Repository {
+public class ModeloRepository extends Repository
+{
+    public ModeloRepository(){
+        super("modelo", "nome", Modelo.class.getName());
+    }
 
     public ModeloRepository(Context context)
     {

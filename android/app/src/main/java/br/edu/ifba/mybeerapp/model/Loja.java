@@ -1,12 +1,15 @@
 package br.edu.ifba.mybeerapp.model;
 
-public class Loja
+import br.edu.ifba.mybeerapp.model.interfaces.IModel;
+
+public class Loja implements IModel
 {
     private int id;
     private String nome;
 
-    public Loja(int id, String nome) {
-        this.id = id;
+    public Loja(){}
+
+    public Loja(String nome) {
         this.nome = nome;
     }
 

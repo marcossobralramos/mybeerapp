@@ -26,12 +26,19 @@ public class DBManager extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+        db.execSQL("DROP TABLE IF EXISTS produtos_cestas");
+        db.execSQL("DROP TABLE IF EXISTS cesta");
+        db.execSQL("DROP TABLE IF EXISTS produto");
+        db.execSQL("DROP TABLE IF EXISTS loja");
+        db.execSQL("DROP TABLE IF EXISTS bebida");
+        db.execSQL("DROP TABLE IF EXISTS modelo");
+        db.execSQL("DROP TABLE IF EXISTS marca");
         onCreate(db);
     }
 
     // DB info
     private static final String NOME_BASE_DE_DADOS = "MYBEERAPP.db";
-    private static final int VERSAO_BASE_DE_DADOS = 1;
+    private static final int VERSAO_BASE_DE_DADOS = 2;
 
     // create tables
     private static final String CREATE_MARCA_TABLE = "CREATE TABLE marca (" +
@@ -44,23 +51,23 @@ public class DBManager extends SQLiteOpenHelper
             "id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL)";
 
     private static final String CREATE_BEBIDA_TABLE = "CREATE TABLE bebida (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, BLOB foto, marca_id INTEGER NOT NULL, " +
-            "modelo_id INTEGER NOT NULL, FOREIGN KEY(marca_id) REFERENCES marca(id)," +
-            "FOREIGN KEY(modelo_id) REFERENCES modelo(id))";
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, BLOB foto, marcaId INTEGER NOT NULL, " +
+            "modeloId INTEGER NOT NULL, FOREIGN KEY(marcaId) REFERENCES marca(id)," +
+            "FOREIGN KEY(modeloId) REFERENCES modelo(id))";
 
     private static final String CREATE_PRODUTO_TABLE = "CREATE TABLE produto (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, loja_id INTEGER NOT NULL, " +
-            "bebida_id INTEGER NOT NULL, preco_unidade REAL(8,2) NOT NULL, " +
-            "preco_ml REAL(8,2) NOT NULL, ultima_atualizacao TEXT, " +
-            "FOREIGN KEY(loja_id) REFERENCES loja(id)," +
-            "FOREIGN KEY(bebida_id) REFERENCES bebida(id))";
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, lojaId INTEGER NOT NULL, " +
+            "bebidaId INTEGER NOT NULL, precoUnidade REAL(8,2) NOT NULL, " +
+            "precoML REAL(8,2) NOT NULL, ultimaAtualizacao TEXT, " +
+            "FOREIGN KEY(lojaId) REFERENCES loja(id)," +
+            "FOREIGN KEY(bebidaId) REFERENCES bebida(id))";
 
     private static final String CREATE_CESTA_TABLE = "CREATE TABLE cesta (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT NOT NULL, " +
-            "valor_total REAL(8,2))";
+            "valorTotal REAL(8,2))";
 
     private static final String CREATE_PRODUTOS_CESTAS_TABLE = "CREATE TABLE produtos_cestas (" +
-            "produto_id INTEGER NOT NULL, cesta_id INTEGER NOT NULL, " +
-            "qtde_produtos INTEGER NOT NULL)";
+            "produtoId INTEGER NOT NULL, cestaId INTEGER NOT NULL, " +
+            "qtdeProdutos INTEGER NOT NULL)";
 
 }

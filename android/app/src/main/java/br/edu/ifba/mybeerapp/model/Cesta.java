@@ -1,26 +1,31 @@
 package br.edu.ifba.mybeerapp.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
-public class Cesta
+import br.edu.ifba.mybeerapp.model.interfaces.IModel;
+
+public class Cesta implements IModel
 {
     private int id;
     private String descricao;
-    private Double valorTotal;
+    private double valorTotal;
     private Loja loja;
     private ArrayList<Produto> produtos;
-    private Map<String, Integer> quantidadeProdutos;
+    private Map<String, Integer> quantidadesProdutos;
 
-    public Cesta(){}
+    public Cesta(){
+        this.produtos = new ArrayList<>();
+        this.quantidadesProdutos = new HashMap<>();
+    }
 
-    public Cesta(int id, String descricao, Double valorTotal, Loja loja, ArrayList<Produto> produtos, Map<String, Integer> quantidadeProdutos) {
-        this.id = id;
+    public Cesta(String descricao, Double valorTotal, Loja loja, ArrayList<Produto> produtos, Map<String, Integer> quantidadesProdutos) {
         this.descricao = descricao;
         this.valorTotal = valorTotal;
         this.loja = loja;
         this.produtos = produtos;
-        this.quantidadeProdutos = quantidadeProdutos;
+        this.quantidadesProdutos = quantidadesProdutos;
     }
 
     public int getId() {
@@ -63,12 +68,36 @@ public class Cesta
         this.produtos = produtos;
     }
 
-    public Map<String, Integer> getQuantidadeProdutos() {
-        return quantidadeProdutos;
+    public Map<String, Integer> getQuantidadesProdutos() {
+        return quantidadesProdutos;
     }
 
-    public void setQuantidade(Map<String, Integer> quantidadeProdutos) {
-        this.quantidadeProdutos = quantidadeProdutos;
+    public void setQuantidadeProdutos(Map<String, Integer> quantidadesProdutos) {
+        this.quantidadesProdutos = quantidadesProdutos;
+    }
+
+    public boolean addProduto(Produto produto)
+    {
+        boolean result = this.produtos.add(produto);
+
+        if(result == true)
+            this.valorTotal += produto.getPrecoUnidade();
+        return false;
+    }
+
+    public boolean removeProduto(Produto produto)
+    {
+        return this.produtos.remove(produto);
+    }
+
+    public void setQuantidadeProduto(int idProduto, int quantidade)
+    {
+        this.quantidadesProdutos.put(String.valueOf(idProduto), quantidade);
+    }
+
+    public int getQuantidadeProduto(int idProduto)
+    {
+        return this.quantidadesProdutos.get(idProduto);
     }
 
     public String toString()

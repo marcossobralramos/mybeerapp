@@ -1,14 +1,15 @@
 package br.edu.ifba.mybeerapp.model;
 
-public class Marca
+import br.edu.ifba.mybeerapp.model.interfaces.IModel;
+
+public class Marca implements IModel
 {
     public int id;
     public String nome;
 
     public Marca(){}
 
-    public Marca(int id, String nome) {
-        this.id = id;
+    public Marca(String nome) {
         this.nome = nome;
     }
 

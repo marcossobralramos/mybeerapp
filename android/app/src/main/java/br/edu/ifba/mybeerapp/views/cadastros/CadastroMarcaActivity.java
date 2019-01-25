@@ -1,7 +1,9 @@
-package br.edu.ifba.mybeerapp;
+package br.edu.ifba.mybeerapp.views.cadastros;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import br.edu.ifba.mybeerapp.R;
 
 public class CadastroMarcaActivity extends AppCompatActivity {
 

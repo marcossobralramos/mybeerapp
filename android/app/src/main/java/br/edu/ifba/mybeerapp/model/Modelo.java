@@ -1,33 +1,34 @@
 package br.edu.ifba.mybeerapp.model;
 
-public class Modelo
+import br.edu.ifba.mybeerapp.model.interfaces.IModel;
+
+public class Modelo implements IModel
 {
-    private Integer id;
-    private String descricao;
+    private int id;
+    private String nome;
     private Integer volume; // ml
 
     public Modelo(){}
 
-    public Modelo(Integer id, String descricao, int volume) {
-        this.id = id;
-        this.descricao = descricao;
+    public Modelo(String nome, int volume) {
+        this.nome = nome;
         this.volume = volume;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getNome() {
+        return nome;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public Integer getVolume() {

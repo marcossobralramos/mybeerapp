@@ -4,18 +4,28 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.net.URL;
+import java.nio.file.DirectoryStream;
 import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
+import br.edu.ifba.mybeerapp.model.interfaces.IModel;
+import br.edu.ifba.mybeerapp.repository.Repository;
+import br.edu.ifba.mybeerapp.repository.interfaces.Decorator;
 
 public class UtilsDB
 {
+    public static String PACKAGE_NAME_MODEL = "br.edu.ifba.mybeerapp.model";
     @NonNull
     public static String generateStringFields(String modelClassName)
             throws ClassNotFoundException, IllegalAccessException, InstantiationException
@@ -24,14 +34,31 @@ public class UtilsDB
 
         Object object = Class.forName(modelClassName).newInstance();
         for(Field f : object.getClass().getDeclaredFields())
-            fields += f.getName() + ",";
+        {
+            String typeName = f.getType().getTypeName();
 
+            if(Map.class.getName().equals(typeName) ||
+                    ArrayList.class.getName().equals(typeName))
+                continue;
+
+            String modelName = f.getName().substring(0,1).toUpperCase() +
+                    f.getName().substring(1,f.getName().length());
+
+            try
+            {
+                if(Class.forName(UtilsDB.PACKAGE_NAME_MODEL + "." + modelName) != null)
+                    fields += f.getName() + "Id,";
+            }
+            catch (ClassNotFoundException ex)
+            {
+                fields += f.getName() + ",";
+            }
+        }
         return  fields.substring(0, fields.length() - 1);
     }
 
     public static ContentValues getContentValues(Object model) throws
-            IllegalAccessException, InvocationTargetException, NoSuchMethodException
-    {
+            IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, ClassNotFoundException {
         ContentValues contentValues = new ContentValues();
 
         for(Field f : model.getClass().getDeclaredFields())
@@ -42,25 +69,40 @@ public class UtilsDB
 
             Method method = model.getClass().getMethod(methodName);
 
+            String typeName = method.getReturnType().getTypeName();
+
+            if(Map.class.getName().equals(typeName) ||
+                    ArrayList.class.getName().equals(typeName))
+                continue;
+
+            String modelName = fieldName.substring(0,1).toUpperCase() + fieldName.substring(1,fieldName.length());
+
+            try
+            {
+                if(Class.forName(UtilsDB.PACKAGE_NAME_MODEL + "." + modelName) != null)
+                    fieldName += "Id";
+            }
+            catch (ClassNotFoundException ex) {}
+
             contentValues.put(fieldName, String.valueOf(method.invoke(model)));
         }
 
         return contentValues;
     }
 
-    public static List<Object> createListModel(String modelClassName, Cursor dbResult)
+    public static List<IModel> createListModel(String modelClassName, Cursor dbResult, Repository repository)
             throws ClassNotFoundException, IllegalAccessException, InstantiationException,
-            InvocationTargetException, ColunmTypeNotKnownException
+            InvocationTargetException, ColunmTypeNotKnownException, NoSuchMethodException
     {
-        List<Object> models = new ArrayList<>();
+        List<IModel> models = new ArrayList<>();
 
         dbResult.moveToFirst();
 
-        Object model;
+        IModel model;
 
         while(!dbResult.isAfterLast())
         {
-            model = Class.forName(modelClassName).newInstance();
+            model = (IModel) Class.forName(modelClassName).newInstance();
 
             Method[] methods = model.getClass().getMethods();
 
@@ -71,7 +113,13 @@ public class UtilsDB
                 if(name.contains("set"))
                 {
                     String typeName = method.getParameterTypes()[0].getTypeName();
-                    String fieldName = name.substring(3, name.length()).toLowerCase();
+
+                    if(Map.class.getName().equals(typeName) ||
+                            ArrayList.class.getName().equals(typeName))
+                        continue;
+
+                    String fieldName = name.substring(3, 4).toLowerCase() +
+                            name.substring(4, name.length());
 
                     if(String.class.getName().equals(typeName))
                         method.invoke(model, dbResult.getString(dbResult.getColumnIndex(fieldName)));
@@ -88,7 +136,18 @@ public class UtilsDB
                     else if(Short.class.getName().equals(typeName) || short.class.getName().equals(typeName))
                         method.invoke(model, dbResult.getShort(dbResult.getColumnIndex(fieldName)));
                     else
-                        throw new ColunmTypeNotKnownException(typeName);
+                    {
+                        if(repository != null)
+                        {
+                            fieldName += "Id";
+                            Object obj =  repository.retrieveModel(
+                                typeName,
+                                String.valueOf(dbResult.getInt(dbResult.getColumnIndex(fieldName)))
+                            );
+                            method.invoke(model, obj);
+                        }
+                    }
+
                 }
             }
 
