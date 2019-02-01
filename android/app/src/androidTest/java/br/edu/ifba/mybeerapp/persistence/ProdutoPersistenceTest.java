@@ -10,15 +10,11 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
 import java.util.List;
 
-import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
 import br.edu.ifba.mybeerapp.model.Bebida;
 import br.edu.ifba.mybeerapp.model.Loja;
 import br.edu.ifba.mybeerapp.model.Produto;
-import br.edu.ifba.mybeerapp.model.Marca;
-import br.edu.ifba.mybeerapp.model.Modelo;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import br.edu.ifba.mybeerapp.repository.BebidaRepository;
 import br.edu.ifba.mybeerapp.repository.LojaRepository;
@@ -35,36 +31,36 @@ public class ProdutoPersistenceTest
     }
 
     @Test
-    public void createProduto() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void createProduto() throws  IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
 
-        Loja loja = (Loja) (new LojaRepository(this.appContext)).retrieveById(3);
+        Loja loja = (Loja) (new LojaRepository(this.appContext)).retrieveById(1);
         Bebida bebida = (Bebida) (new BebidaRepository(this.appContext)).retrieveById(3);
 
         Produto produto = new Produto();
         produto.setLoja(loja);
         produto.setBebida(bebida);
-        produto.setPrecoUnidade(4.40);
+        produto.setPrecoUnidade(5.99);
         produto.setUltimaAtualizacao("25/01/2019");
 
         Assert.assertNotEquals(-1, produtoRepository.create(produto));
     }
 
     @Test
-    public void retrieveProdutoById() throws IllegalAccessException, InvocationTargetException, InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException, ClassNotFoundException {
+    public void retrieveProdutoById() throws IllegalAccessException, InvocationTargetException, InstantiationException,  NoSuchMethodException, ClassNotFoundException {
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
 
-        Produto produto = (Produto) produtoRepository.retrieveById(2);
+        Produto produto = (Produto) produtoRepository.retrieveById(1);
 
         Assert.assertNotEquals(null, produto);
     }
 
     @Test
     public void retrieveAll() throws IllegalAccessException, InvocationTargetException,
-            InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException,
+            InstantiationException,  NoSuchMethodException,
             ClassNotFoundException
     {
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
@@ -75,7 +71,7 @@ public class ProdutoPersistenceTest
     }
 
     @Test
-    public void updateProduto() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void updateProduto() throws  IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {
@@ -90,7 +86,7 @@ public class ProdutoPersistenceTest
     public void deleteProduto()
     {
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
-        int result = produtoRepository.delete(0);
+        int result = produtoRepository.delete(1);
 
         Assert.assertEquals(1, result);
     }

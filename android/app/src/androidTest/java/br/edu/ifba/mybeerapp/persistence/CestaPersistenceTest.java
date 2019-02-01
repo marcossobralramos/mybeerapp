@@ -12,13 +12,10 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
 import br.edu.ifba.mybeerapp.model.Cesta;
-import br.edu.ifba.mybeerapp.model.Loja;
 import br.edu.ifba.mybeerapp.model.Produto;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import br.edu.ifba.mybeerapp.repository.CestaRepository;
-import br.edu.ifba.mybeerapp.repository.LojaRepository;
 import br.edu.ifba.mybeerapp.repository.ProdutoRepository;
 
 
@@ -33,28 +30,31 @@ public class CestaPersistenceTest
     }
 
     @Test
-    public void createCesta() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void createCesta() throws IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
-            InvocationTargetException, IOException
-    {
+            InvocationTargetException, IOException {
         CestaRepository cestaRepository = new CestaRepository(this.appContext);
-        LojaRepository lojaRepository = new LojaRepository(this.appContext);
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
 
         Cesta cesta = new Cesta();
         cesta.setDescricao("Cesta 01");
 
-        cesta.setLoja((Loja) lojaRepository.retrieveById(1));
+        Produto prod1 = (Produto) produtoRepository.retrieveById(14);
+        cesta.addProduto(prod1, 3);
 
-        Produto prod1 = (Produto) produtoRepository.retrieveById(1);
-        cesta.addProduto(prod1);
-        cesta.setQuantidadeProduto(prod1.getId(), 3);
+        Produto prod2 = (Produto) produtoRepository.retrieveById(15);
+        cesta.addProduto(prod2, 8);
+
+        Produto prod3 = (Produto) produtoRepository.retrieveById(16);
+        cesta.addProduto(prod3, 10);
 
         Assert.assertNotEquals(-1, cestaRepository.create(cesta));
     }
 
     @Test
-    public void retrieveCestaById() throws IllegalAccessException, InvocationTargetException, InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException, ClassNotFoundException {
+    public void retrieveCestaById() throws IllegalAccessException, InvocationTargetException,
+            InstantiationException,  NoSuchMethodException, ClassNotFoundException
+    {
         CestaRepository cestaRepository = new CestaRepository(this.appContext);
 
         Cesta cesta = (Cesta) cestaRepository.retrieveById(1);
@@ -64,7 +64,7 @@ public class CestaPersistenceTest
 
     @Test
     public void retrieveAll() throws IllegalAccessException, InvocationTargetException,
-            InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException,
+            InstantiationException,  NoSuchMethodException,
             ClassNotFoundException
     {
         CestaRepository cestaRepository = new CestaRepository(this.appContext);
@@ -75,7 +75,7 @@ public class CestaPersistenceTest
     }
 
     @Test
-    public void updateCesta() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void updateCesta() throws  IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {
@@ -90,7 +90,7 @@ public class CestaPersistenceTest
     public void deleteCesta()
     {
         CestaRepository cestaRepository = new CestaRepository(this.appContext);
-        int result = cestaRepository.delete(1);
+        int result = cestaRepository.delete(6);
 
         Assert.assertEquals(1, result);
     }

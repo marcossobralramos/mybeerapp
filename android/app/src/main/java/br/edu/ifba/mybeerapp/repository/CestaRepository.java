@@ -9,11 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
 import br.edu.ifba.mybeerapp.model.Cesta;
 import br.edu.ifba.mybeerapp.model.Produto;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.utils.UtilsDB;
 
 public class CestaRepository extends Repository
 {
@@ -21,17 +19,17 @@ public class CestaRepository extends Repository
 
     public CestaRepository()
     {
-        super("cesta", "lojaId", Cesta.class.getName());
+        super("cesta", "descricao", Cesta.class.getName());
         this.tableToSaveProdutosCesta = "produtos_cestas";
     }
 
     public CestaRepository(Context context)
     {
-        super(context, "cesta", "lojaId", Cesta.class.getName());
+        super(context, "cesta", "descricao", Cesta.class.getName());
         this.tableToSaveProdutosCesta = "produtos_cestas";
     }
 
-    public long create(IModel model) throws IllegalAccessException, ColunmTypeNotKnownException,
+    public long create(IModel model) throws IllegalAccessException,
             InvocationTargetException, NoSuchMethodException, IOException, ClassNotFoundException
     {
         long id = super.create(model);
@@ -41,45 +39,33 @@ public class CestaRepository extends Repository
 
         dbManager.getWritableDatabase().beginTransaction();
 
-        try
+        Cesta cesta = (Cesta) model;
+
+        for(int x = 0; x < cesta.getProdutos().size(); x++)
         {
-            Cesta cesta = (Cesta) model;
+            int idProduto = cesta.getProdutos().get(x).getId();
 
-            for(int x = 0; x < cesta.getProdutos().size(); x++)
-            {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("cestaId", cesta.getId());
-                contentValues.put("produtoId", cesta.getProdutos().get(x).getId());
-                contentValues.put("qtdeProdutos", cesta.getQuantidadesProdutos().get(x));
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("cestaId", id);
+            contentValues.put("produtoId", idProduto);
+            contentValues.put("qtdeProdutos", cesta.getQuantidadeProduto(idProduto));
 
-                dbManager.getWritableDatabase().insert(
-                        this.tableToSaveProdutosCesta,
-                        null,
-                        contentValues
-                );
-            }
+            long result = dbManager.getWritableDatabase().insert(
+                    this.tableToSaveProdutosCesta,
+                    null,
+                    contentValues
+            );
 
-            dbManager.getWritableDatabase().setTransactionSuccessful();
+            if(result == -1)
+                break;
         }
-        catch (Exception e)
-        {
-            //
-        }
-        finally
-        {
-            dbManager.getWritableDatabase().endTransaction();
-        }
-
-
-        dbManager.getWritableDatabase().endTransaction();
 
         return id;
 
     }
 
     public List<IModel> retrieveAll() throws ClassNotFoundException, IllegalAccessException,
-            InstantiationException, NoSuchMethodException, InvocationTargetException,
-            ColunmTypeNotKnownException
+            InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         List<IModel> cestas = super.retrieveAll();
 
@@ -93,13 +79,13 @@ public class CestaRepository extends Repository
 
     public IModel retrieveById(int id)
             throws IllegalAccessException, InstantiationException, ClassNotFoundException,
-            NoSuchMethodException, InvocationTargetException, ColunmTypeNotKnownException
+            NoSuchMethodException, InvocationTargetException
     {
         Cesta cesta = (Cesta) super.retrieveById(id);
         return loadProdutosCesta(cesta);
     }
 
-    public int update(IModel modelOld, IModel modelNew) throws IllegalAccessException, ColunmTypeNotKnownException,
+    public int update(IModel modelOld, IModel modelNew) throws IllegalAccessException,
             InvocationTargetException, NoSuchMethodException, IOException, ClassNotFoundException
     {
         int result = super.update(modelOld, modelNew);
@@ -107,44 +93,26 @@ public class CestaRepository extends Repository
         if(result == -1)
             return -1;
 
-        dbManager.getWritableDatabase().beginTransaction();
+        Cesta novaCesta = (Cesta) modelNew;
+        Cesta antigaCesta = (Cesta) modelOld;
 
-        try
+        for(int x = 0; x < novaCesta.getProdutos().size(); x++)
         {
-            Cesta novaCesta = (Cesta) modelNew;
-            Cesta antigaCesta = (Cesta) modelOld;
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("cestaId", novaCesta.getId());
+            contentValues.put("produtoId", novaCesta.getProdutos().get(x).getId());
+            contentValues.put("qtdeProdutos", novaCesta.getQuantidadesProdutos().get(x));
 
-            for(int x = 0; x < novaCesta.getProdutos().size(); x++)
-            {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("cestaId", novaCesta.getId());
-                contentValues.put("produtoId", novaCesta.getProdutos().get(x).getId());
-                contentValues.put("qtdeProdutos", novaCesta.getQuantidadesProdutos().get(x));
-
-                return dbManager.getWritableDatabase().update(
-                        this.table,
-                        contentValues,
-                        "cestaId = ? AND produtoId = ?",
-                        new String[]{
-                                String.valueOf(antigaCesta.getId()),
-                                String.valueOf(antigaCesta.getProdutos().get(x).getId())
-                        }
-                );
-            }
-
-            dbManager.getWritableDatabase().setTransactionSuccessful();
+            return dbManager.getWritableDatabase().update(
+                    this.table,
+                    contentValues,
+                    "cestaId = ? AND produtoId = ?",
+                    new String[]{
+                            String.valueOf(antigaCesta.getId()),
+                            String.valueOf(antigaCesta.getProdutos().get(x).getId())
+                    }
+            );
         }
-        catch (Exception e)
-        {
-            //
-        }
-        finally
-        {
-            dbManager.getWritableDatabase().endTransaction();
-        }
-
-
-        dbManager.getWritableDatabase().endTransaction();
 
         return result;
     }
@@ -158,11 +126,11 @@ public class CestaRepository extends Repository
     }
 
     private Cesta loadProdutosCesta(Cesta cesta) throws IllegalAccessException,
-            InvocationTargetException, InstantiationException, ColunmTypeNotKnownException,
+            InvocationTargetException, InstantiationException,
             NoSuchMethodException, ClassNotFoundException
     {
-        String selectQuery = "SELECT produtoId FROM " + this.tableToSaveProdutosCesta +
-                "WHERE cestaId = " + cesta.getId();
+        String selectQuery = "SELECT * FROM " + this.tableToSaveProdutosCesta +
+                " WHERE cestaId = " + cesta.getId();
 
         ProdutoRepository produtoRepository = new ProdutoRepository(this.context);
 
@@ -173,10 +141,8 @@ public class CestaRepository extends Repository
         {
             int produtoId = dbResult.getInt(dbResult.getColumnIndex("produtoId"));
             Produto produto = (Produto) produtoRepository.retrieveById(produtoId);
-            cesta.addProduto(produto);
-
             int quantidade = dbResult.getInt(dbResult.getColumnIndex("qtdeProdutos"));
-            cesta.setQuantidadeProduto(produtoId, quantidade);
+            cesta.addProduto(produto, quantidade);
         }
 
         return cesta;

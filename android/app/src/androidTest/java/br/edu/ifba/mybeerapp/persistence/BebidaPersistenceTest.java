@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
 import br.edu.ifba.mybeerapp.model.Bebida;
 import br.edu.ifba.mybeerapp.model.Marca;
 import br.edu.ifba.mybeerapp.model.Modelo;
@@ -31,17 +30,16 @@ public class BebidaPersistenceTest
     }
 
     @Test
-    public void createBebida() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void createBebida() throws IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
-            InvocationTargetException, IOException
-    {
+            InvocationTargetException, IOException {
         BebidaRepository bebidaRepository = new BebidaRepository(this.appContext);
 
         Marca marca = new Marca();
-        marca.setId(1);
+        marca.setId(3);
 
         Modelo modelo = new Modelo();
-        modelo.setId(2);
+        modelo.setId(3);
 
         Bebida bebida = new Bebida(marca, modelo);
 
@@ -49,7 +47,7 @@ public class BebidaPersistenceTest
     }
 
     @Test
-    public void retrieveBebidaById() throws IllegalAccessException, InvocationTargetException, InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException, ClassNotFoundException {
+    public void retrieveBebidaById() throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
         BebidaRepository bebidaRepository = new BebidaRepository(this.appContext);
 
         Bebida bebida = (Bebida) bebidaRepository.retrieveById(1);
@@ -59,7 +57,7 @@ public class BebidaPersistenceTest
 
     @Test
     public void retrieveAll() throws IllegalAccessException, InvocationTargetException,
-            InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException,
+            InstantiationException, NoSuchMethodException,
             ClassNotFoundException
     {
         BebidaRepository bebidaRepository = new BebidaRepository(this.appContext);
@@ -70,7 +68,7 @@ public class BebidaPersistenceTest
     }
 
     @Test
-    public void updateBebida() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void updateBebida() throws IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {

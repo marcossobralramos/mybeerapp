@@ -38,7 +38,7 @@ public class DBManager extends SQLiteOpenHelper
 
     // DB info
     private static final String NOME_BASE_DE_DADOS = "MYBEERAPP.db";
-    private static final int VERSAO_BASE_DE_DADOS = 2;
+    private static final int VERSAO_BASE_DE_DADOS = 3;
 
     // create tables
     private static final String CREATE_MARCA_TABLE = "CREATE TABLE marca (" +
@@ -68,6 +68,8 @@ public class DBManager extends SQLiteOpenHelper
 
     private static final String CREATE_PRODUTOS_CESTAS_TABLE = "CREATE TABLE produtos_cestas (" +
             "produtoId INTEGER NOT NULL, cestaId INTEGER NOT NULL, " +
-            "qtdeProdutos INTEGER NOT NULL)";
+            "qtdeProdutos INTEGER NOT NULL," +
+            "FOREIGN KEY(produtoId) REFERENCES produto(id)," +
+            "FOREIGN KEY(cestaId) REFERENCES cesta(id))";
 
 }

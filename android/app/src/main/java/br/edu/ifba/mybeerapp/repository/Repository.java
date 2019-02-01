@@ -10,12 +10,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import br.edu.ifba.mybeerapp.db.DBManager;
-import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.interfaces.Decorator;
 import br.edu.ifba.mybeerapp.utils.UtilsDB;
 
-public abstract class Repository implements Decorator
+public abstract class Repository
 {
     protected SQLiteOpenHelper dbManager;
     protected String table;
@@ -40,7 +38,7 @@ public abstract class Repository implements Decorator
         this.context = context;
     }
 
-    public long create(IModel model) throws IllegalAccessException, ColunmTypeNotKnownException,
+    public long create(IModel model) throws IllegalAccessException,
             InvocationTargetException, NoSuchMethodException, IOException, ClassNotFoundException
     {
         ContentValues contentValues = UtilsDB.getContentValues(model);
@@ -53,8 +51,8 @@ public abstract class Repository implements Decorator
     }
 
     public List<IModel> retrieveAll() throws ClassNotFoundException, IllegalAccessException,
-            InstantiationException, NoSuchMethodException, InvocationTargetException,
-            ColunmTypeNotKnownException
+            InstantiationException, NoSuchMethodException, InvocationTargetException
+
     {
         String fieldsNames = UtilsDB.generateStringFields(this.modelClassName);
 
@@ -68,7 +66,7 @@ public abstract class Repository implements Decorator
 
     public IModel retrieveById(int id)
             throws IllegalAccessException, InstantiationException, ClassNotFoundException,
-            NoSuchMethodException, InvocationTargetException, ColunmTypeNotKnownException
+            NoSuchMethodException, InvocationTargetException
     {
         String fieldsNames = UtilsDB.generateStringFields(this.modelClassName);
         String selectQuery = "SELECT " + fieldsNames + " FROM " + this.table + " WHERE id = " + id;
@@ -85,7 +83,7 @@ public abstract class Repository implements Decorator
         }
     }
 
-    public int update(IModel modelOld, IModel modelNew) throws IllegalAccessException, ColunmTypeNotKnownException,
+    public int update(IModel modelOld, IModel modelNew) throws IllegalAccessException,
             InvocationTargetException, NoSuchMethodException, IOException, ClassNotFoundException
     {
         ContentValues contentValues = UtilsDB.getContentValues(modelNew);
@@ -105,9 +103,8 @@ public abstract class Repository implements Decorator
         );
     }
 
-    @Override
     public Object retrieveModel(String typeName, String id) throws IllegalAccessException,
-            InvocationTargetException, InstantiationException, ColunmTypeNotKnownException,
+            InvocationTargetException, InstantiationException,
             NoSuchMethodException, ClassNotFoundException
     {
         Repository repository =

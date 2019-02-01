@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
 import br.edu.ifba.mybeerapp.model.Loja;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import br.edu.ifba.mybeerapp.repository.LojaRepository;
@@ -29,7 +28,7 @@ public class LojaPersistenceTest
     }
 
     @Test
-    public void createLoja() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void createLoja() throws  IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {
@@ -41,17 +40,17 @@ public class LojaPersistenceTest
     }
 
     @Test
-    public void retrieveLojaById() throws IllegalAccessException, InvocationTargetException, InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException, ClassNotFoundException {
+    public void retrieveLojaById() throws IllegalAccessException, InvocationTargetException, InstantiationException,  NoSuchMethodException, ClassNotFoundException {
         LojaRepository lojaRepository = new LojaRepository(this.appContext);
 
-        Loja loja = (Loja) lojaRepository.retrieveById(1);
+        Loja loja = (Loja) lojaRepository.retrieveById(2);
 
         Assert.assertNotEquals(null, loja);
     }
 
     @Test
     public void retrieveAll() throws IllegalAccessException, InvocationTargetException,
-            InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException,
+            InstantiationException,  NoSuchMethodException,
             ClassNotFoundException
     {
         LojaRepository lojaRepository = new LojaRepository(this.appContext);
@@ -62,7 +61,7 @@ public class LojaPersistenceTest
     }
 
     @Test
-    public void updateLoja() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void updateLoja() throws  IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {

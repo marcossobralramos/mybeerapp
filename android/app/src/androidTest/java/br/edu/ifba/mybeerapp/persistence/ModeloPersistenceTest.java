@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
 import br.edu.ifba.mybeerapp.model.Modelo;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import br.edu.ifba.mybeerapp.repository.ModeloRepository;
@@ -29,19 +28,19 @@ public class ModeloPersistenceTest
     }
 
     @Test
-    public void createModelo() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void createModelo() throws  IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {
         ModeloRepository modeloRepository = new ModeloRepository(this.appContext);
 
-        Modelo modelo = new Modelo("Garrafa", 600);
+        Modelo modelo = new Modelo("Litrinho", 250);
 
         Assert.assertNotEquals(-1, modeloRepository.create(modelo));
     }
 
     @Test
-    public void retrieveModeloById() throws IllegalAccessException, InvocationTargetException, InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException, ClassNotFoundException {
+    public void retrieveModeloById() throws IllegalAccessException, InvocationTargetException, InstantiationException,  NoSuchMethodException, ClassNotFoundException {
         ModeloRepository modeloRepository = new ModeloRepository(this.appContext);
 
         Modelo modelo = (Modelo) modeloRepository.retrieveById(1);
@@ -51,7 +50,7 @@ public class ModeloPersistenceTest
 
     @Test
     public void retrieveAll() throws IllegalAccessException, InvocationTargetException,
-            InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException,
+            InstantiationException,  NoSuchMethodException,
             ClassNotFoundException
     {
         ModeloRepository modeloRepository = new ModeloRepository(this.appContext);
@@ -62,7 +61,7 @@ public class ModeloPersistenceTest
     }
 
     @Test
-    public void updateModelo() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void updateModelo() throws  IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {

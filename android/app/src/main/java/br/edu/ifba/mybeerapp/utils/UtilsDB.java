@@ -4,24 +4,18 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.net.URL;
-import java.nio.file.DirectoryStream;
 import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
-import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
+import br.edu.ifba.mybeerapp.model.annotations.RepositoryNotAccess;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import br.edu.ifba.mybeerapp.repository.Repository;
-import br.edu.ifba.mybeerapp.repository.interfaces.Decorator;
 
 public class UtilsDB
 {
@@ -58,7 +52,7 @@ public class UtilsDB
     }
 
     public static ContentValues getContentValues(Object model) throws
-            IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, ClassNotFoundException {
+            IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         ContentValues contentValues = new ContentValues();
 
         for(Field f : model.getClass().getDeclaredFields())
@@ -69,11 +63,10 @@ public class UtilsDB
 
             Method method = model.getClass().getMethod(methodName);
 
-            String typeName = method.getReturnType().getTypeName();
-
-            if(Map.class.getName().equals(typeName) ||
-                    ArrayList.class.getName().equals(typeName))
+            if(method.isAnnotationPresent(RepositoryNotAccess.class))
                 continue;
+
+            String typeName = method.getReturnType().getTypeName();
 
             String modelName = fieldName.substring(0,1).toUpperCase() + fieldName.substring(1,fieldName.length());
 
@@ -92,7 +85,7 @@ public class UtilsDB
 
     public static List<IModel> createListModel(String modelClassName, Cursor dbResult, Repository repository)
             throws ClassNotFoundException, IllegalAccessException, InstantiationException,
-            InvocationTargetException, ColunmTypeNotKnownException, NoSuchMethodException
+            InvocationTargetException, NoSuchMethodException
     {
         List<IModel> models = new ArrayList<>();
 
@@ -108,15 +101,14 @@ public class UtilsDB
 
             for(Method method : methods)
             {
+                if(method.isAnnotationPresent(RepositoryNotAccess.class))
+                    continue;
+
                 String name = method.getName();
 
                 if(name.contains("set"))
                 {
                     String typeName = method.getParameterTypes()[0].getTypeName();
-
-                    if(Map.class.getName().equals(typeName) ||
-                            ArrayList.class.getName().equals(typeName))
-                        continue;
 
                     String fieldName = name.substring(3, 4).toLowerCase() +
                             name.substring(4, name.length());

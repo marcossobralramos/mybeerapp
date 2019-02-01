@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import br.edu.ifba.mybeerapp.exceptions.ColunmTypeNotKnownException;
 import br.edu.ifba.mybeerapp.model.Marca;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import br.edu.ifba.mybeerapp.repository.MarcaRepository;
@@ -29,19 +28,19 @@ public class MarcaPersistenceTest
     }
 
     @Test
-    public void createMarca() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void createMarca() throws  IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {
         MarcaRepository marcaRepository = new MarcaRepository(this.appContext);
 
-        Marca marca = new Marca("Schin");
+        Marca marca = new Marca("Petra");
 
         Assert.assertNotEquals(-1, marcaRepository.create(marca));
     }
 
     @Test
-    public void retrieveMarcaById() throws IllegalAccessException, InvocationTargetException, InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException, ClassNotFoundException {
+    public void retrieveMarcaById() throws IllegalAccessException, InvocationTargetException, InstantiationException,  NoSuchMethodException, ClassNotFoundException {
         MarcaRepository marcaRepository = new MarcaRepository(this.appContext);
 
         Marca marca = (Marca) marcaRepository.retrieveById(1);
@@ -51,7 +50,7 @@ public class MarcaPersistenceTest
 
     @Test
     public void retrieveAll() throws IllegalAccessException, InvocationTargetException,
-            InstantiationException, ColunmTypeNotKnownException, NoSuchMethodException,
+            InstantiationException,  NoSuchMethodException,
             ClassNotFoundException
     {
         MarcaRepository marcaRepository = new MarcaRepository(this.appContext);
@@ -62,7 +61,7 @@ public class MarcaPersistenceTest
     }
 
     @Test
-    public void updateMarca() throws ColunmTypeNotKnownException, IllegalAccessException,
+    public void updateMarca() throws  IllegalAccessException,
             ClassNotFoundException, NoSuchMethodException, InstantiationException,
             InvocationTargetException, IOException
     {

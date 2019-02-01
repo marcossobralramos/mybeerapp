@@ -11,13 +11,13 @@ public class Produto implements IModel
     private int id;
     private Loja loja;
     private Bebida bebida;
-    private Double precoUnidade;
-    private Double precoML;
+    private double precoUnidade;
+    private double precoML;
     private String ultimaAtualizacao;
 
     public Produto(){}
 
-    public Produto(Loja loja, Bebida bebida, Double precoUnidade, String ultimaAtualizacao) {
+    public Produto(Loja loja, Bebida bebida, double precoUnidade, String ultimaAtualizacao) {
         this.loja = loja;
         this.bebida = bebida;
         this.precoUnidade = precoUnidade;
@@ -48,16 +48,16 @@ public class Produto implements IModel
         this.bebida = bebida;
     }
 
-    public Double getPrecoUnidade() {
+    public double getPrecoUnidade() {
         return precoUnidade;
     }
 
-    public void setPrecoUnidade(Double precoUnidade) {
+    public void setPrecoUnidade(double precoUnidade) {
         this.precoUnidade = precoUnidade;
         this.precoML = this.precoUnidade/this.bebida.getModelo().getVolume();
     }
 
-    public Double getPrecoML() {
+    public double getPrecoML() {
         return precoML;
     }
 
