@@ -37,8 +37,6 @@ public class CestaRepository extends Repository
         if(id == -1)
             return -1;
 
-        dbManager.getWritableDatabase().beginTransaction();
-
         Cesta cesta = (Cesta) model;
 
         for(int x = 0; x < cesta.getProdutos().size(); x++)
@@ -129,12 +127,15 @@ public class CestaRepository extends Repository
             InvocationTargetException, InstantiationException,
             NoSuchMethodException, ClassNotFoundException
     {
-        String selectQuery = "SELECT * FROM " + this.tableToSaveProdutosCesta +
-                " WHERE cestaId = " + cesta.getId();
-
         ProdutoRepository produtoRepository = new ProdutoRepository(this.context);
 
-        Cursor dbResult = dbManager.getWritableDatabase().rawQuery(selectQuery, null);
+        Cursor dbResult = dbManager.getWritableDatabase().query(
+                this.tableToSaveProdutosCesta,
+                new String[]{"cestaId", "produtoId", "qtdeProdutos"},
+                "cestaId = ?",
+                new String[]{String.valueOf(cesta.getId())},
+                null, null, null, null
+        );
         dbResult.moveToFirst();
 
         while(!dbResult.isAfterLast())
@@ -143,6 +144,8 @@ public class CestaRepository extends Repository
             Produto produto = (Produto) produtoRepository.retrieveById(produtoId);
             int quantidade = dbResult.getInt(dbResult.getColumnIndex("qtdeProdutos"));
             cesta.addProduto(produto, quantidade);
+
+            dbResult.moveToNext();
         }
 
         return cesta;

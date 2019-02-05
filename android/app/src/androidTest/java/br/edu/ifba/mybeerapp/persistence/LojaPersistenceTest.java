@@ -34,7 +34,7 @@ public class LojaPersistenceTest
     {
         LojaRepository lojaRepository = new LojaRepository(this.appContext);
 
-        Loja loja = new Loja("Extra - Paralela");
+        Loja loja = new Loja("Walmart - Brotas");
 
         Assert.assertNotEquals(-1, lojaRepository.create(loja));
     }

@@ -52,7 +52,6 @@ public abstract class Repository
 
     public List<IModel> retrieveAll() throws ClassNotFoundException, IllegalAccessException,
             InstantiationException, NoSuchMethodException, InvocationTargetException
-
     {
         String fieldsNames = UtilsDB.generateStringFields(this.modelClassName);
 

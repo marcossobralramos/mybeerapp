@@ -37,13 +37,13 @@ public class ProdutoPersistenceTest
     {
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
 
-        Loja loja = (Loja) (new LojaRepository(this.appContext)).retrieveById(1);
+        Loja loja = (Loja) (new LojaRepository(this.appContext)).retrieveById(2);
         Bebida bebida = (Bebida) (new BebidaRepository(this.appContext)).retrieveById(3);
 
         Produto produto = new Produto();
         produto.setLoja(loja);
         produto.setBebida(bebida);
-        produto.setPrecoUnidade(5.99);
+        produto.setPrecoUnidade(3.99);
         produto.setUltimaAtualizacao("25/01/2019");
 
         Assert.assertNotEquals(-1, produtoRepository.create(produto));

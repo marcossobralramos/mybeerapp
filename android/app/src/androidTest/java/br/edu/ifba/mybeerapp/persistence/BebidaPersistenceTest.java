@@ -17,6 +17,8 @@ import br.edu.ifba.mybeerapp.model.Marca;
 import br.edu.ifba.mybeerapp.model.Modelo;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import br.edu.ifba.mybeerapp.repository.BebidaRepository;
+import br.edu.ifba.mybeerapp.repository.MarcaRepository;
+import br.edu.ifba.mybeerapp.repository.ModeloRepository;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -35,11 +37,9 @@ public class BebidaPersistenceTest
             InvocationTargetException, IOException {
         BebidaRepository bebidaRepository = new BebidaRepository(this.appContext);
 
-        Marca marca = new Marca();
-        marca.setId(3);
+        Marca marca = (Marca) (new MarcaRepository(this.appContext)).retrieveById(2);
 
-        Modelo modelo = new Modelo();
-        modelo.setId(3);
+        Modelo modelo = (Modelo) (new ModeloRepository(this.appContext)).retrieveById(1);
 
         Bebida bebida = new Bebida(marca, modelo);
 

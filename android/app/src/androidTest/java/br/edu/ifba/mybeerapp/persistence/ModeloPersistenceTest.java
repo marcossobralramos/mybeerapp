@@ -34,7 +34,7 @@ public class ModeloPersistenceTest
     {
         ModeloRepository modeloRepository = new ModeloRepository(this.appContext);
 
-        Modelo modelo = new Modelo("Litrinho", 250);
+        Modelo modelo = new Modelo("Bujudinha", 350);
 
         Assert.assertNotEquals(-1, modeloRepository.create(modelo));
     }
