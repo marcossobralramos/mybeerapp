@@ -1,11 +1,15 @@
 package br.edu.ifba.mybeerapp.model;
 
+import br.edu.ifba.mybeerapp.model.annotations.DBField;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 
 public class Modelo implements IModel
 {
+    @DBField
     private int id;
+    @DBField
     private String nome;
+    @DBField
     private Integer volume; // ml
 
     public Modelo(){}

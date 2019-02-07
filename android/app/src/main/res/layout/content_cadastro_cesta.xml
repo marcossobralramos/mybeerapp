@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foldingcell.FoldingCell xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/tools"
+    folding-cell:additionalFlipsCount="2"
+    folding-cell:animationDuration="1300"
+    folding-cell:backSideColor="@color/colorPrimary"
+    folding-cell:cameraHeight="30"
+    android:layout_marginTop="40dp"
+    app:ignore="NamespaceTypo">
+
+    <!-- TITLE (FOLDED) LAYOUT (MUST BE AT LEAST 2x times SMALLER than content layout above) -->
+    <include layout="@layout/cell_title_produtos_cesta" />
+
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cadastroCestaView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A9A9A9"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="2dp"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/list_margin"
+        android:scrollbars="none"
+        tools:context=".views.cesta.ListCestasActivity" />
+
+</foldingcell.FoldingCell>

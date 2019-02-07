@@ -4,4 +4,18 @@
     <color name="colorPrimaryDark">#004D40</color>
     <color name="colorAccent">#E65100</color>
     <color name="colorBgCesta">#1A237E</color>
+    <color name="bgBackSideColor">#00695C</color>
+    <color name="bgTitleLeft">#00695C</color>
+    <color name="bgTitleRight">#ffffff</color>
+    <color name="bgContentTop">#00695C</color>
+    <color name="bgContent">#ffffff</color>
+    <color name="contentDividerLine">#e0e0e0</color>
+    <color name="contentBadgeTitle">#a9a9a9</color>
+    <color name="titleBadgeTitle">#adafb1</color>
+    <color name="titleBadgeText">#adafb1</color>
+    <color name="mainTextColor">#343d43</color>
+    <color name="btnRequest">#00695C</color>
+    <color name="subTextColor">#ffffff</color>
+    <color name="edit">#22e422</color>
+    <color name="remove">#f45430</color>
 </resources>

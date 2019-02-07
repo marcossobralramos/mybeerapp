@@ -2,12 +2,16 @@ package br.edu.ifba.mybeerapp.model;
 
 import android.media.Image;
 
+import br.edu.ifba.mybeerapp.model.annotations.DBField;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 
 public class Bebida implements IModel
 {
+    @DBField
     private int id;
+    @DBField
     private Marca marca;
+    @DBField
     private Modelo modelo;
     //private Image imagem;
 

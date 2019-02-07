@@ -46,7 +46,7 @@ public class CestaRepository extends Repository
             ContentValues contentValues = new ContentValues();
             contentValues.put("cestaId", id);
             contentValues.put("produtoId", idProduto);
-            contentValues.put("qtdeProdutos", cesta.getQuantidadeProduto(idProduto));
+            contentValues.put("qtdeProdutos", cesta.getProduto(idProduto).getQtde());
 
             long result = dbManager.getWritableDatabase().insert(
                     this.tableToSaveProdutosCesta,
@@ -99,7 +99,7 @@ public class CestaRepository extends Repository
             ContentValues contentValues = new ContentValues();
             contentValues.put("cestaId", novaCesta.getId());
             contentValues.put("produtoId", novaCesta.getProdutos().get(x).getId());
-            contentValues.put("qtdeProdutos", novaCesta.getQuantidadesProdutos().get(x));
+            contentValues.put("qtdeProdutos", novaCesta.getProdutos().get(x).getQtde());
 
             return dbManager.getWritableDatabase().update(
                     this.table,

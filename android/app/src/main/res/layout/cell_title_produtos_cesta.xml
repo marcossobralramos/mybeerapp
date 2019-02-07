@@ -9,7 +9,7 @@
     <!-- LEFT TITLE PART -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="155dp"
+        android:layout_height="120dp"
         android:layout_weight="3"
         android:background="@color/bgTitleLeft"
         android:gravity="center_horizontal"
@@ -63,7 +63,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/litros"
+            android:id="@+id/loja"
             style="@style/TitleBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,12 +72,30 @@
             android:layout_alignParentStart="true" />
 
         <TextView
-            android:id="@+id/preco_total"
+            android:id="@+id/preco"
+            style="@style/TitleBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/qtde"
             style="@style/TitleBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
+
+        <TextView
+            style="@style/TitleBadgeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/loja"
+            android:layout_alignLeft="@id/loja"
+            android:layout_alignStart="@id/loja"
+            android:text="@string/loja" />
 
         <TextView
             style="@style/TitleBadgeTitle"
@@ -98,7 +116,7 @@
             android:text="@string/valor_total" />
 
         <ImageButton
-            android:id="@+id/edit_cesta"
+            android:id="@+id/edit_produto"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
@@ -107,10 +125,10 @@
             android:background="@color/edit"/>
 
         <ImageButton
-            android:id="@+id/remove_cesta"
+            android:id="@+id/remove_produto"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_above="@id/edit_cesta"
+            android:layout_above="@id/edit_produto"
             android:layout_alignLeft="@id/edit_cesta"
             android:layout_alignStart="@id/edit_cesta"
             android:src="@drawable/delete_forever_outline"

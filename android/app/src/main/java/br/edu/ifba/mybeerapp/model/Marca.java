@@ -1,10 +1,13 @@
 package br.edu.ifba.mybeerapp.model;
 
+import br.edu.ifba.mybeerapp.model.annotations.DBField;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 
 public class Marca implements IModel
 {
+    @DBField
     public int id;
+    @DBField
     public String nome;
 
     public Marca(){}

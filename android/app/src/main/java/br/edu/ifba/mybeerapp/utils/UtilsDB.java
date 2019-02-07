@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import br.edu.ifba.mybeerapp.model.annotations.DBField;
 import br.edu.ifba.mybeerapp.model.annotations.RepositoryNotAccess;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import br.edu.ifba.mybeerapp.repository.Repository;
@@ -29,6 +30,9 @@ public class UtilsDB
         Object object = Class.forName(modelClassName).newInstance();
         for(Field f : object.getClass().getDeclaredFields())
         {
+            if(f.isAnnotationPresent(DBField.class) == false)
+                continue;
+
             String typeName = f.getType().getTypeName();
 
             if(Map.class.getName().equals(typeName) ||

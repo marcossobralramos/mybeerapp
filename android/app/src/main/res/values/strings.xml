@@ -1,7 +1,33 @@
 <resources>
     <string name="app_name">My Beer, My Cash</string>
+    <string name="title_cesta_activity">Cestas</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Configurações</string>
+    <string name="order_id_mock" translatable="false">Março</string>
+    <string name="price_mock" translatable="false">2018</string>
+    <string name="requests_count_mock" translatable="false">5</string>
+    <string name="litros" translatable="false">LITROS</string>
+    <string name="loja" translatable="false">LOJA</string>
+    <string name="pledge_mock" translatable="false">$150</string>
+    <string name="valor_total" translatable="false">VALOR TOTAL</string>
+    <string name="sender_badge" translatable="false">FUNCIONÁRIO</string>
+    <string name="client_name_mock" translatable="false">Marcos Sobral</string>
+    <string name="rating_mock" translatable="false">UDS</string>
+    <string name="from_badge" translatable="false">HORAS TRABALHADAS</string>
+    <string name="to_badge" translatable="false">HORAS DEVIDAS</string>
+    <string name="delivery_date_badge" translatable="false">SALDO</string>
+    <string name="delivery_time_mock" translatable="false">4:37:51</string>
+    <string name="delivery_date_mock" translatable="false"></string>
+    <string name="deadline_badge" translatable="false"></string>
+    <string name="deadline_time_mock" translatable="false"></string>
+    <string name="request_btn_text" translatable="false">CONSULTAR</string>
+    <string name="content_from1_mock">88:37:51</string>
+    <string name="content_from2_mock"></string>
+    <string name="content_to1_mock">84:00:00</string>
+    <string name="content_to2_mock"></string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_cadastro_cesta">Cadastro de Cesta</string>
+
 </resources>

@@ -4,16 +4,26 @@ import java.util.Date;
 
 import br.edu.ifba.mybeerapp.model.Loja;
 import br.edu.ifba.mybeerapp.model.Bebida;
+import br.edu.ifba.mybeerapp.model.annotations.DBField;
+import br.edu.ifba.mybeerapp.model.annotations.RepositoryNotAccess;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 
 public class Produto implements IModel
 {
+    @DBField
     private int id;
+    @DBField
     private Loja loja;
+    @DBField
     private Bebida bebida;
+    @DBField
     private double precoUnidade;
+    @DBField
     private double precoML;
+    @DBField
     private String ultimaAtualizacao;
+
+    private int qtde;
 
     public Produto(){}
 
@@ -22,6 +32,16 @@ public class Produto implements IModel
         this.bebida = bebida;
         this.precoUnidade = precoUnidade;
         this.ultimaAtualizacao = ultimaAtualizacao;
+    }
+
+    @RepositoryNotAccess
+    public int getQtde() {
+        return qtde;
+    }
+
+    @RepositoryNotAccess
+    public void setQtde(int qtde) {
+        this.qtde = qtde;
     }
 
     public int getId() {

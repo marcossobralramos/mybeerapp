@@ -4,28 +4,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.edu.ifba.mybeerapp.model.annotations.DBField;
 import br.edu.ifba.mybeerapp.model.annotations.RepositoryNotAccess;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 
 public class Cesta implements IModel
 {
+    @DBField
     private int id;
+    @DBField
     private String descricao;
+    @DBField
     private double valorTotal;
+    @DBField
     private ArrayList<Produto> produtos;
-    private Map<String, Integer> quantidadesProdutos;
+
+    private double totalLitros;
 
     public Cesta(){
         this.produtos = new ArrayList<>();
-        this.quantidadesProdutos = new HashMap<>();
         this.valorTotal = 0;
+        this.totalLitros = 0;
     }
 
-    public Cesta(String descricao, Double valorTotal, ArrayList<Produto> produtos, Map<String, Integer> quantidadesProdutos) {
+    public Cesta(String descricao, Double valorTotal, ArrayList<Produto> produtos) {
         this.descricao = descricao;
         this.valorTotal = valorTotal;
         this.produtos = produtos;
-        this.quantidadesProdutos = quantidadesProdutos;
     }
 
     public int getId() {
@@ -73,13 +78,13 @@ public class Cesta implements IModel
     }
 
     @RepositoryNotAccess
-    public Map<String, Integer> getQuantidadesProdutos() {
-        return quantidadesProdutos;
+    public Double getTotalLitros() {
+        return totalLitros;
     }
 
     @RepositoryNotAccess
-    public void setQuantidadeProdutos(Map<String, Integer> quantidadesProdutos) {
-        this.quantidadesProdutos = quantidadesProdutos;
+    public void setTotalLitros(Double totalLitros) {
+        this.totalLitros = totalLitros;
     }
 
     public boolean addProduto(Produto produto, int qtde)
@@ -87,30 +92,27 @@ public class Cesta implements IModel
         if(produto == null)
             return false;
 
+        produto.setQtde(qtde);
         boolean result = this.produtos.add(produto);
-        this.setQuantidadeProduto(produto.getId(), qtde);
 
         if(result == true)
-            this.valorTotal += (produto.getPrecoUnidade() * this.quantidadesProdutos.get(String.valueOf(produto.getId())));
+        {
+            this.valorTotal += (produto.getPrecoUnidade() * qtde);
+            this.totalLitros += (produto.getBebida().getModelo().getVolume() * qtde) / 1000;
+        }
 
         return false;
     }
 
     public boolean removeProduto(Produto produto)
     {
-        return this.produtos.remove(produto);
-    }
-
-    @RepositoryNotAccess
-    public void setQuantidadeProduto(int idProduto, int quantidade)
-    {
-        this.quantidadesProdutos.put(String.valueOf(idProduto), quantidade);
-    }
-
-    @RepositoryNotAccess
-    public int getQuantidadeProduto(int idProduto)
-    {
-        return this.quantidadesProdutos.get(String.valueOf(idProduto));
+        boolean result = this.produtos.remove(produto);
+        if(result == true)
+        {
+            this.valorTotal -= (produto.getPrecoUnidade() * produto.getQtde());
+            this.totalLitros += (produto.getBebida().getModelo().getVolume() * produto.getQtde()) / 1000;
+        }
+        return result;
     }
 
     public String toString()
