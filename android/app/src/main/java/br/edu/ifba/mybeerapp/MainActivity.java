@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
+import br.edu.ifba.mybeerapp.repository.CestaRepository;
 import br.edu.ifba.mybeerapp.views.cesta.ListCestasActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -35,6 +36,21 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        Button bnt = findViewById(R.id.btnCompras);
+        final MainActivity main = this;
+        bnt.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(main, ListCestasActivity.class);
+                main.startActivity(intent);
+
+            }
+        });
+
+
     }
 
     @Override
@@ -94,4 +110,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

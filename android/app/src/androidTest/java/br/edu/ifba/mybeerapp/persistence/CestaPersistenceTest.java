@@ -36,6 +36,7 @@ public class CestaPersistenceTest
         CestaRepository cestaRepository = new CestaRepository(this.appContext);
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
 
+
         Cesta cesta = new Cesta();
         cesta.setDescricao("Reggae - Casa de Mila");
 
@@ -46,6 +47,18 @@ public class CestaPersistenceTest
         cesta.addProduto(prod2, 8);
 
         Produto prod3 = (Produto) produtoRepository.retrieveById(3);
+        cesta.addProduto(prod3, 10);
+
+        Cesta cesta2 = new Cesta();
+        cesta.setDescricao("Reggae - Casa de Mila");
+
+        Produto prod11 = (Produto) produtoRepository.retrieveById(1);
+        cesta.addProduto(prod1, 10);
+
+        Produto prod12 = (Produto) produtoRepository.retrieveById(2);
+        cesta.addProduto(prod2, 8);
+
+        Produto prod13 = (Produto) produtoRepository.retrieveById(3);
         cesta.addProduto(prod3, 10);
 
         Assert.assertNotEquals(-1, cestaRepository.create(cesta));

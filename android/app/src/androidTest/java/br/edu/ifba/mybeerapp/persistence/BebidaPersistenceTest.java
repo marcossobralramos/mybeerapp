@@ -37,7 +37,7 @@ public class BebidaPersistenceTest
             InvocationTargetException, IOException {
         BebidaRepository bebidaRepository = new BebidaRepository(this.appContext);
 
-        Marca marca = (Marca) (new MarcaRepository(this.appContext)).retrieveById(2);
+        Marca marca = (Marca) (new MarcaRepository(this.appContext)).retrieveById(1);
 
         Modelo modelo = (Modelo) (new ModeloRepository(this.appContext)).retrieveById(1);
 
