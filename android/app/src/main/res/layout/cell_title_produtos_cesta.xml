@@ -115,23 +115,22 @@
             android:layout_alignStart="@id/preco_total"
             android:text="@string/valor_total" />
 
-        <ImageButton
+        <Button
             android:id="@+id/edit_produto"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:src="@drawable/pencil_outline"
+            android:drawableStart="@drawable/pencil_outline"
             android:background="@color/edit"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/remove_produto"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_above="@id/edit_produto"
-            android:layout_alignLeft="@id/edit_cesta"
             android:layout_alignStart="@id/edit_cesta"
-            android:src="@drawable/delete_forever_outline"
+            android:drawableStart="@drawable/delete_forever_outline"
             android:layout_marginBottom="2dp"
             android:background="@color/remove"/>
 

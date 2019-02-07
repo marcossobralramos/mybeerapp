@@ -9,18 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import br.edu.ifba.mybeerapp.R;
-import br.edu.ifba.mybeerapp.model.Cesta;
 import br.edu.ifba.mybeerapp.model.Produto;
-import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import foldingcell.FoldingCell;
 
 /**
@@ -129,6 +124,6 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
         TextView loja;
         TextView preco;
         TextView qtde;
-        ImageButton edit;
+        Button edit;
     }
 }

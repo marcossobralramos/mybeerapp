@@ -1,5 +1,6 @@
 package br.edu.ifba.mybeerapp.views.cesta;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -7,10 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,10 +20,6 @@ import br.edu.ifba.mybeerapp.model.Cesta;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 import foldingcell.FoldingCell;
 
-/**
- * Simple example of ListAdapter for using with Folding Cell
- * Adapter holds indexes of unfolded elements for correct work with default reusable views behavior
- */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class ListCestaView extends ArrayAdapter<IModel> {
 
@@ -34,6 +30,7 @@ public class ListCestaView extends ArrayAdapter<IModel> {
         super(context, 0, objects);
     }
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -47,7 +44,6 @@ public class ListCestaView extends ArrayAdapter<IModel> {
             LayoutInflater vi = LayoutInflater.from(getContext());
             cell = (FoldingCell) vi.inflate(R.layout.content_list_cesta, parent, false);
             // binding view parts to view holder
-            viewHolder.id = cell.findViewById(R.id.id);
             viewHolder.descricao = cell.findViewById(R.id.descricao);
             viewHolder.litros = cell.findViewById(R.id.litros);
             viewHolder.precoTotal = cell.findViewById(R.id.preco_total);
@@ -67,7 +63,6 @@ public class ListCestaView extends ArrayAdapter<IModel> {
             return cell;
 
         // bind data from selected element to view through view holder
-        viewHolder.id.setText(String.valueOf(cesta.getId()));
         viewHolder.descricao.setText(cesta.getDescricao());
         viewHolder.litros.setText(String.format("%.2f", cesta.getTotalLitros()) + "L");
         viewHolder.precoTotal.setText("R$" + String.format("%.2f", cesta.getValorTotal()));
@@ -79,13 +74,6 @@ public class ListCestaView extends ArrayAdapter<IModel> {
                 getContext().startActivity(intent);
             }
         });
-        // set custom btn handler for list item from that item
-        /*if (mes.getRequestBtnClickListener() != null) {
-            viewHolder.contentRequestBtn.setOnClickListener(mes.getRequestBtnClickListener());
-        } else {
-            // (optionally) add "default" handler if no handler found in item
-            viewHolder.contentRequestBtn.setOnClickListener(defaultRequestBtnClickListener);
-        }*/
 
         return cell;
     }
@@ -116,10 +104,9 @@ public class ListCestaView extends ArrayAdapter<IModel> {
 
     // View lookup cache
     private static class ViewHolder {
-        TextView id;
         TextView descricao;
         TextView litros;
         TextView precoTotal;
-        ImageButton edit;
+        LinearLayout edit;
     }
 }
