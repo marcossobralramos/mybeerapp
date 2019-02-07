@@ -37,8 +37,8 @@ public class ProdutoPersistenceTest
     {
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
 
-        Loja loja = (Loja) (new LojaRepository(this.appContext)).retrieveById(2);
-        Bebida bebida = (Bebida) (new BebidaRepository(this.appContext)).retrieveById(3);
+        Loja loja = (Loja) (new LojaRepository(this.appContext)).retrieveById(1);
+        Bebida bebida = (Bebida) (new BebidaRepository(this.appContext)).retrieveById(1);
 
         Produto produto = new Produto();
         produto.setLoja(loja);
