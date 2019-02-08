@@ -80,9 +80,9 @@ public class ProdutosListView extends ArrayAdapter<IModel> {
         viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CadastroCestaActivity.class);
+                Intent intent = new Intent(getContext(), CadastroProdutoActivity.class);
                 intent.putExtra("idProduto", produto.getId());
-                getContext().startActivity(intent);
+                ((ProdutosListActivity) getContext()).startActivityForResult(intent, 1);
             }
         });
 

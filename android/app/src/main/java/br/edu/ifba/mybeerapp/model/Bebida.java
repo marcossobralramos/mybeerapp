@@ -56,6 +56,19 @@ public class Bebida implements IModel
     }*/
 
     @Override
+    public boolean equals(Object o)
+    {
+        if(o == this)
+            return true;
+        if(!(o instanceof Bebida))
+            return false;
+
+        Bebida bebida = (Bebida) o;
+
+        return (this.id == bebida.id);
+    }
+
+    @Override
     public String toString()
     {
         return this.marca.getNome() + " - " + this.modelo.getNome() + " - " + this.modelo.getVolume() + "ml";

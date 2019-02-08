@@ -33,6 +33,19 @@ public class Loja implements IModel
     }
 
     @Override
+    public boolean equals(Object o)
+    {
+        if(o == this)
+            return true;
+        if(!(o instanceof Loja))
+            return false;
+
+        Loja loja = (Loja) o;
+
+        return (this.id == loja.id);
+    }
+
+    @Override
     public String toString()
     {
         return String.valueOf(this.nome);

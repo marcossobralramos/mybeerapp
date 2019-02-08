@@ -10,7 +10,7 @@
     <!-- LEFT TITLE PART -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="155dp"
         android:layout_weight="3"
         android:background="@color/bgTitleLeft"
         android:gravity="center_horizontal"
@@ -23,7 +23,7 @@
         <ImageView
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:src="@drawable/beer"
+            android:src="@drawable/bebida"
             android:layout_centerHorizontal="true"
             android:minHeight="40dp"
             android:minWidth="40dp"/>
@@ -47,10 +47,10 @@
             android:layout_marginTop="-5dp"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-            android:singleLine="true"
-            android:textColor="@android:color/black"
             android:gravity="center"
             android:paddingTop="10dp"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
         <TextView
@@ -58,46 +58,45 @@
             style="@style/TitleBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignStart="@+id/descricao"
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/preco"
             style="@style/TitleBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignBottom="@+id/textPreco"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="-24dp" />
 
         <TextView
             style="@style/TitleBadgeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/loja"
-            android:layout_alignLeft="@id/loja"
-            android:layout_alignStart="@id/loja"
+            android:layout_above="@+id/loja"
+            android:layout_alignStart="@+id/descricao"
             android:text="@string/loja" />
 
         <TextView
+            android:id="@+id/textPreco"
             style="@style/TitleBadgeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/preco"
-            android:layout_alignLeft="@id/preco"
-            android:layout_alignStart="@id/preco"
+            android:layout_below="@+id/loja"
+            android:layout_alignParentStart="true"
             android:text="@string/preco" />
 
         <Button
             android:id="@+id/remove_produto"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:drawableStart="@drawable/delete_forever_outline"
-            android:stateListAnimator="@null"
-            android:elevation="20dp"
-            android:background="@color/remove"
-            android:textAppearance="@style/TextAppearance.AppCompat"/>
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="37dp"
+            android:layout_height="35dp"
+            android:layout_alignEnd="@+id/descricao"
+            android:layout_alignParentBottom="true"
+            android:backgroundTint="@color/bgContent"
+            android:drawableStart="@drawable/lixo"
+            android:visibility="visible" />
+
     </RelativeLayout>
 </LinearLayout>

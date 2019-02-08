@@ -9,13 +9,13 @@
             android:icon="@drawable/briefcase_outline"
             android:title="Cestas" />
         <item
+            android:id="@+id/nav_cervejas"
+            android:icon="@drawable/bebida"
+            android:title="Cervejas" />
+        <!--<item
             android:id="@+id/nav_lojas"
             android:icon="@drawable/store"
             android:title="Lojas" />
-        <item
-            android:id="@+id/nav_cervejas"
-            android:icon="@drawable/beer"
-            android:title="Cervejas" />
         <item
             android:id="@+id/nav_marcas"
             android:icon="@drawable/alpha_m_circle"
@@ -27,7 +27,7 @@
         <item
             android:id="@+id/nav_pesquisas"
             android:icon="@drawable/help_circle_outline"
-            android:title="Pesquisas Rápidas" />
+            android:title="Pesquisas Rápidas" />-->
     </group>
 
 </menu>

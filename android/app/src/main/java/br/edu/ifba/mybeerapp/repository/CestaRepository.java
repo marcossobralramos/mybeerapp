@@ -86,6 +86,7 @@ public class CestaRepository extends Repository
     public int update(IModel modelOld, IModel modelNew) throws IllegalAccessException,
             InvocationTargetException, NoSuchMethodException, IOException, ClassNotFoundException
     {
+        modelNew.setId(modelOld.getId());
         int result = super.update(modelOld, modelNew);
 
         if(result == -1)

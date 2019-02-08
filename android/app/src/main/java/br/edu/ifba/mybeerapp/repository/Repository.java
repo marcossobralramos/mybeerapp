@@ -85,6 +85,7 @@ public abstract class Repository
     public int update(IModel modelOld, IModel modelNew) throws IllegalAccessException,
             InvocationTargetException, NoSuchMethodException, IOException, ClassNotFoundException
     {
+        modelNew.setId(modelOld.getId());
         ContentValues contentValues = UtilsDB.getContentValues(modelNew);
         return dbManager.getWritableDatabase().update(
                 this.table,
