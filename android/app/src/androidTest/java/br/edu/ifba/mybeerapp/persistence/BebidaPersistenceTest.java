@@ -89,7 +89,7 @@ public class BebidaPersistenceTest
     public void deleteBebida()
     {
         BebidaRepository bebidaRepository = new BebidaRepository(this.appContext);
-        int result = bebidaRepository.delete(1);
+        int result = bebidaRepository.delete(2);
 
         Assert.assertEquals(1, result);
     }

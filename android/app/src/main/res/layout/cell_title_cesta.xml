@@ -23,7 +23,7 @@
         <ImageView
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:src="@drawable/cart_outline"
+            android:src="@drawable/packbeer"
             android:layout_centerHorizontal="true"
             android:minHeight="40dp"
             android:minWidth="40dp"/>
@@ -94,7 +94,7 @@
             android:layout_height="15dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:drawableStart="@drawable/delete_forever_outline"
+            android:drawableStart="@drawable/lixo"
             android:stateListAnimator="@null"
             android:elevation="20dp"
             android:background="@color/remove"

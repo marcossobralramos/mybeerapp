@@ -34,7 +34,7 @@ public class MarcaPersistenceTest
     {
         MarcaRepository marcaRepository = new MarcaRepository(this.appContext);
 
-        Marca marca = new Marca("Schin");
+        Marca marca = new Marca("Skhol");
 
         Assert.assertNotEquals(-1, marcaRepository.create(marca));
     }
@@ -76,7 +76,7 @@ public class MarcaPersistenceTest
     public void deleteMarca()
     {
         MarcaRepository marcaRepository = new MarcaRepository(this.appContext);
-        int result = marcaRepository.delete(1);
+        int result = marcaRepository.delete(3);
 
         Assert.assertEquals(1, result);
     }

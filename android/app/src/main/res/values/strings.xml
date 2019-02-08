@@ -29,5 +29,8 @@
     <string name="content_to2_mock"></string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_cadastro_cesta">Cadastro de Cesta</string>
+    <string name="total_da_cesta">Total da cesta</string>
+    <string name="comparacao">Até o momento a cerveja mais em conta  nesta cesta é a skol 269, do estabelecimento  Gbarbosa Costa Azul, o valor do ml esta á  R$ 0,0069, aproveite!</string>
+    <string name="dataAtual">Última atualização</string>
 
 </resources>
