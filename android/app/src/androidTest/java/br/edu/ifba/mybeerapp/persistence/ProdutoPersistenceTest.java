@@ -38,7 +38,7 @@ public class ProdutoPersistenceTest
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
 
         Loja loja = (Loja) (new LojaRepository(this.appContext)).retrieveById(1);
-        Bebida bebida = (Bebida) (new BebidaRepository(this.appContext)).retrieveById(1);
+        Bebida bebida = (Bebida) (new BebidaRepository(this.appContext)).retrieveById(2);
 
         Produto produto = new Produto();
         produto.setLoja(loja);
@@ -86,7 +86,7 @@ public class ProdutoPersistenceTest
     public void deleteProduto()
     {
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
-        int result = produtoRepository.delete(1);
+        int result = produtoRepository.delete(2);
 
         Assert.assertEquals(1, result);
     }
