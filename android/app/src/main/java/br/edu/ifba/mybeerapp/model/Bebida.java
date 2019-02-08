@@ -58,7 +58,7 @@ public class Bebida implements IModel
     @Override
     public String toString()
     {
-        return String.valueOf(this.id);
+        return this.marca.getNome() + " - " + this.modelo.getNome() + " - " + this.modelo.getVolume() + "ml";
     }
 
 }

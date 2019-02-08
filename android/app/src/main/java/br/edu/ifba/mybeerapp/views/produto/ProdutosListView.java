@@ -1,11 +1,10 @@
-package br.edu.ifba.mybeerapp.views.cesta;
+package br.edu.ifba.mybeerapp.views.produto;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,43 +16,46 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import br.edu.ifba.mybeerapp.MainActivity;
 import br.edu.ifba.mybeerapp.R;
-import br.edu.ifba.mybeerapp.model.Cesta;
+import br.edu.ifba.mybeerapp.model.Produto;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.CestaRepository;
+import br.edu.ifba.mybeerapp.repository.ProdutoRepository;
+import br.edu.ifba.mybeerapp.views.cesta.CadastroCestaActivity;
 import foldingcell.FoldingCell;
 
+/**
+ * Simple example of ListAdapter for using with Folding Cell
+ * Adapter holds indexes of unfolded elements for correct work with default reusable views behavior
+ */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class ListCestaView extends ArrayAdapter<IModel> {
+public class ProdutosListView extends ArrayAdapter<IModel> {
 
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
     private View.OnClickListener defaultRequestBtnClickListener;
-    private Activity activity;
 
-    public ListCestaView(Context context, ArrayList<IModel> objects) {
+    public ProdutosListView(Context context, ArrayList<IModel> objects) {
         super(context, 0, objects);
     }
 
-    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    @SuppressLint("SetTextI18n")
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // get item for selected view
-        final Cesta cesta = (Cesta) getItem(position);
+        final Produto produto = (Produto) getItem(position);
         // if cell is exists - reuse it, if not - create the new one from resource
         FoldingCell cell = (FoldingCell) convertView;
-        final ViewHolder viewHolder;
+        ViewHolder viewHolder;
         if (cell == null) {
             viewHolder = new ViewHolder();
             LayoutInflater vi = LayoutInflater.from(getContext());
-            cell = (FoldingCell) vi.inflate(R.layout.content_list_cesta, parent, false);
+            cell = (FoldingCell) vi.inflate(R.layout.content_produtos_list, parent, false);
             // binding view parts to view holder
             viewHolder.descricao = cell.findViewById(R.id.descricao);
-            viewHolder.litros = cell.findViewById(R.id.litros);
-            viewHolder.precoTotal = cell.findViewById(R.id.preco_total);
-            viewHolder.edit = cell.findViewById(R.id.edit_cesta);
-            viewHolder.remove = cell.findViewById(R.id.remove_cesta);
+            viewHolder.loja = cell.findViewById(R.id.loja);
+            viewHolder.preco = cell.findViewById(R.id.preco);
+            viewHolder.edit = cell.findViewById(R.id.edit_produto);
+            viewHolder.remove = cell.findViewById(R.id.remove_produto);
             cell.setTag(viewHolder);
         } else {
             // for existing cell set valid valid state(without animation)
@@ -65,26 +67,30 @@ public class ListCestaView extends ArrayAdapter<IModel> {
             viewHolder = (ViewHolder) cell.getTag();
         }
 
-        if (null == cesta)
+        if (null == produto)
             return cell;
 
         // bind data from selected element to view through view holder
-        viewHolder.descricao.setText(cesta.getDescricao());
-        viewHolder.litros.setText(String.format("%.2f", cesta.getTotalLitros()) + "L");
-        viewHolder.precoTotal.setText("R$" + String.format("%.2f", cesta.getValorTotal()));
+        viewHolder.descricao.setText(produto.getBebida().getMarca().getNome() + " - " +
+                produto.getBebida().getModelo().getNome() + " - " +
+                produto.getBebida().getModelo().getVolume() + "ml");
+        viewHolder.loja.setText(produto.getLoja().getNome());
+        viewHolder.preco.setText("R$" + String.format("%.2f", produto.getPrecoUnidade()));
+
         viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CadastroCestaActivity.class);
-                intent.putExtra("idCesta", cesta.getId());
+                intent.putExtra("idProduto", produto.getId());
                 getContext().startActivity(intent);
             }
         });
+
         final FoldingCell finalCell = cell;
         viewHolder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (new CestaRepository(getContext())).delete(cesta.getId());
+                (new ProdutoRepository(getContext())).delete(produto.getId());
                 Activity activity = (Activity) getContext();
                 activity.finish();
                 activity.startActivity(activity.getIntent());
@@ -120,9 +126,10 @@ public class ListCestaView extends ArrayAdapter<IModel> {
 
     // View lookup cache
     private static class ViewHolder {
+        TextView id;
         TextView descricao;
-        TextView litros;
-        TextView precoTotal;
+        TextView loja;
+        TextView preco;
         LinearLayout edit;
         Button remove;
     }

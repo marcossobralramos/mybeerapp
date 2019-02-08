@@ -46,7 +46,7 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
             LayoutInflater vi = LayoutInflater.from(getContext());
             cell = (FoldingCell) vi.inflate(R.layout.content_cadastro_cesta, parent, false);
             // binding view parts to view holder
-            viewHolder.id = cell.findViewById(R.id.id);
+
             viewHolder.descricao = cell.findViewById(R.id.descricao);
             viewHolder.loja = cell.findViewById(R.id.loja);
             viewHolder.preco = cell.findViewById(R.id.preco);
@@ -67,21 +67,21 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
             return cell;
 
         // bind data from selected element to view through view holder
-        viewHolder.id.setText(String.valueOf(produto.getId()));
+
         viewHolder.descricao.setText(produto.getBebida().getMarca().getNome() + " - " +
                 produto.getBebida().getModelo().getNome() + " - " +
                 produto.getBebida().getModelo().getVolume() + "ml");
         viewHolder.loja.setText(produto.getLoja().getNome());
         viewHolder.preco.setText("R$" + String.format("%.2f", produto.getPrecoUnidade()));
         viewHolder.qtde.setText(String.valueOf(produto.getQtde()));
-        viewHolder.edit.setOnClickListener(new View.OnClickListener() {
+       /* viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(getContext(), CadastroProdutoActivity.class);
+                Intent intent = new Intent(getContext(), CadastroProdutoActivity.class);
                 intent.putExtra("idproduto", String.valueOf(produto.getId()));
-                getContext().startActivity(intent);*/
+                getContext().startActivity(intent);
             }
-        });
+        });*/
         // set custom btn handler for list item from that item
         /*if (mes.getRequestBtnClickListener() != null) {
             viewHolder.contentRequestBtn.setOnClickListener(mes.getRequestBtnClickListener());
@@ -119,7 +119,6 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
 
     // View lookup cache
     private static class ViewHolder {
-        TextView id;
         TextView descricao;
         TextView loja;
         TextView preco;

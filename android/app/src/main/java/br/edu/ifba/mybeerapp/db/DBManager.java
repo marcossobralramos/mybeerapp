@@ -1,5 +1,6 @@
 package br.edu.ifba.mybeerapp.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -21,6 +22,13 @@ public class DBManager extends SQLiteOpenHelper
         db.execSQL(CREATE_PRODUTO_TABLE);
         db.execSQL(CREATE_CESTA_TABLE);
         db.execSQL(CREATE_PRODUTOS_CESTAS_TABLE);
+        db.execSQL(INSERT_MARCAS_DEFAULT);
+        db.execSQL(INSERT_MODELOS_DEFAULT);
+        db.execSQL(INSERT_BEBIDAS_DEFAULT);
+        db.execSQL(INSERT_LOJAS_DEFAULT);
+        db.execSQL(INSERT_PRODUTOS_DEFAULT);
+        db.execSQL(INSERT_CESTAS_DEFAULT);
+        db.execSQL(INSERT_PRODUTOS_CESTAS_DEFAULT);
     }
 
     @Override
@@ -38,7 +46,7 @@ public class DBManager extends SQLiteOpenHelper
 
     // DB info
     private static final String NOME_BASE_DE_DADOS = "MYBEERAPP.db";
-    private static final int VERSAO_BASE_DE_DADOS = 3;
+    private static final int VERSAO_BASE_DE_DADOS = 6;
 
     // create tables
     private static final String CREATE_MARCA_TABLE = "CREATE TABLE marca (" +
@@ -58,7 +66,7 @@ public class DBManager extends SQLiteOpenHelper
     private static final String CREATE_PRODUTO_TABLE = "CREATE TABLE produto (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, lojaId INTEGER NOT NULL, " +
             "bebidaId INTEGER NOT NULL, precoUnidade REAL(8,2) NOT NULL, " +
-            "precoML REAL(8,2) NOT NULL, ultimaAtualizacao TEXT, " +
+            "precoML REAL(8,4) NOT NULL, ultimaAtualizacao TEXT, " +
             "FOREIGN KEY(lojaId) REFERENCES loja(id)," +
             "FOREIGN KEY(bebidaId) REFERENCES bebida(id))";
 
@@ -72,4 +80,24 @@ public class DBManager extends SQLiteOpenHelper
             "FOREIGN KEY(produtoId) REFERENCES produto(id)," +
             "FOREIGN KEY(cestaId) REFERENCES cesta(id))";
 
+    private static final String INSERT_MARCAS_DEFAULT = "INSERT INTO marca (nome) VALUES ('Skol'), " +
+            "('Schin'), ('Petra')";
+
+    private static final String INSERT_MODELOS_DEFAULT = "INSERT INTO modelo (nome, volume) " +
+            "VALUES ('Piriguete', 269),  ('Bujudinha', 350), ('Litrinho', 250)";
+
+    private static final String INSERT_BEBIDAS_DEFAULT = "INSERT INTO bebida (marcaId, modeloId)" +
+            " VALUES (1,1), (1,2), (1,3), (2,1), (2,2), (2,3), (3,1), (3,2), (3,3)";
+
+    private static final String INSERT_LOJAS_DEFAULT = "INSERT INTO loja (nome) VALUES " +
+            "('Extra - Paralela'), ('Walmart - Brotas'), ('Mercearia do Miseravão')";
+
+    private static final String INSERT_PRODUTOS_DEFAULT = "INSERT INTO produto (lojaId, bebidaId," +
+            " precoUnidade, precoML) VALUES (1,1,5.99,0.0059), (1,2,3.99,0.0039), (1,3,2.99,0.0029)";
+
+    private static final String INSERT_CESTAS_DEFAULT = "INSERT INTO cesta (descricao, valorTotal)" +
+            " VALUES ('Minha Primeira Cesta', 29.94), ('Minha Segunda Cesta', 29.94)";
+
+    private static final String INSERT_PRODUTOS_CESTAS_DEFAULT = "INSERT INTO produtos_cestas " +
+            "(cestaId, produtoId, qtdeProdutos) VALUES (1,1,3), (1,2,3), (2,1,3), (2,2,3)";
 }

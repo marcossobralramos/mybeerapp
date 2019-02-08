@@ -5,12 +5,12 @@
     android:background="@color/bgContent"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:id="@+id/edit_cesta">
+    android:id="@+id/edit_produto">
 
     <!-- LEFT TITLE PART -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="155dp"
+        android:layout_height="120dp"
         android:layout_weight="3"
         android:background="@color/bgTitleLeft"
         android:gravity="center_horizontal"
@@ -23,7 +23,7 @@
         <ImageView
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:src="@drawable/bebida"
+            android:src="@drawable/beer"
             android:layout_centerHorizontal="true"
             android:minHeight="40dp"
             android:minWidth="40dp"/>
@@ -47,10 +47,10 @@
             android:layout_marginTop="-5dp"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-            android:gravity="center"
-            android:paddingTop="10dp"
             android:singleLine="true"
             android:textColor="@android:color/black"
+            android:gravity="center"
+            android:paddingTop="10dp"
             android:textSize="20sp" />
 
         <TextView
@@ -58,60 +58,47 @@
             style="@style/TitleBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/descricao"
-            android:layout_centerVertical="true" />
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/preco"
             style="@style/TitleBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/qtde"
-            android:layout_marginEnd="105dp" />
-
-        <TextView
-            android:id="@+id/qtde"
-            style="@style/TitleBadgeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/descricao" />
+            android:layout_alignParentEnd="true" />
 
         <TextView
             style="@style/TitleBadgeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/loja"
-            android:layout_alignStart="@+id/descricao"
+            android:layout_above="@id/loja"
+            android:layout_alignLeft="@id/loja"
+            android:layout_alignStart="@id/loja"
             android:text="@string/loja" />
 
         <TextView
             style="@style/TitleBadgeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/qtde"
-            android:layout_alignStart="@+id/preco"
+            android:layout_above="@id/preco"
+            android:layout_alignLeft="@id/preco"
+            android:layout_alignStart="@id/preco"
             android:text="@string/preco" />
-
-        <TextView
-            style="@style/TitleBadgeTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/qtde"
-            android:layout_alignStart="@+id/descricao"
-            android:text="@string/quantidade" />
 
         <Button
             android:id="@+id/remove_produto"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="37dp"
-            android:layout_height="35dp"
-            android:layout_alignEnd="@+id/descricao"
-            android:layout_alignParentBottom="true"
-            android:backgroundTint="@color/bgContent"
-            android:drawableStart="@drawable/lixo"
-            android:visibility="visible" />
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:drawableStart="@drawable/delete_forever_outline"
+            android:stateListAnimator="@null"
+            android:elevation="20dp"
+            android:background="@color/remove"
+            android:textAppearance="@style/TextAppearance.AppCompat"/>
 
     </RelativeLayout>
 </LinearLayout>
