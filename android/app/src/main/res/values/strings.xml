@@ -10,8 +10,9 @@
     <string name="requests_count_mock" translatable="false">5</string>
     <string name="litros" translatable="false">LITROS</string>
     <string name="loja" translatable="false">LOJA</string>
-    <string name="pledge_mock" translatable="false">$150</string>
+    <string name="preco" translatable="false">PREÇO</string>
     <string name="valor_total" translatable="false">VALOR TOTAL</string>
+    <string name="quantidade" translatable="false">QUANTIDADE</string>
     <string name="sender_badge" translatable="false">FUNCIONÁRIO</string>
     <string name="client_name_mock" translatable="false">Marcos Sobral</string>
     <string name="rating_mock" translatable="false">UDS</string>
@@ -27,8 +28,10 @@
     <string name="content_from2_mock"></string>
     <string name="content_to1_mock">84:00:00</string>
     <string name="content_to2_mock"></string>
-    <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_cadastro_cesta">Cadastro de Cesta</string>
+    <string name="title_activity_produtos">Produtos</string>
+    <string name="title_activity_cestas">Cestas</string>
+    <string name="title_activity_cadastro_produto">Cadastro de Produto</string>
     <string name="total_da_cesta">Total da cesta</string>
     <string name="comparacao">Até o momento a cerveja mais em conta  nesta cesta é a skol 269, do estabelecimento  Gbarbosa Costa Azul, o valor do ml esta á  R$ 0,0069, aproveite!</string>
     <string name="dataAtual">Última atualização</string>

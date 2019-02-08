@@ -17,6 +17,7 @@ import android.widget.Button;
 
 import br.edu.ifba.mybeerapp.repository.CestaRepository;
 import br.edu.ifba.mybeerapp.views.cesta.ListCestasActivity;
+import br.edu.ifba.mybeerapp.views.produto.ProdutosListActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -97,7 +98,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_lojas) {
 
         } else if (id == R.id.nav_cervejas) {
-
+            Intent intent = new Intent(this, ProdutosListActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_marcas) {
 
         } else if (id == R.id.nav_modelos) {

@@ -18,14 +18,14 @@ import br.edu.ifba.mybeerapp.repository.CestaRepository;
 
 public class CadastroCestaActivity extends AppCompatActivity
 {
+    private Cesta cesta;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_cesta);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        loadCesta();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -35,23 +35,16 @@ public class CadastroCestaActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-    }
-
-    protected void loadCesta()
-    {
-        ListView theListView = findViewById(R.id.cadastroCestaView);
-
-        Cesta cesta = null;
 
         int idCesta = getIntent().getIntExtra("idCesta", 0);
 
         try {
-            cesta = (Cesta) (new CestaRepository(this.getApplicationContext())).retrieveById(idCesta);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            this.cesta = (Cesta) (new CestaRepository(this.getApplicationContext())).retrieveById(idCesta);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -59,9 +52,13 @@ public class CadastroCestaActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        final CadastroCestaView adapter = new CadastroCestaView(this, cesta.getProdutos());
+        loadCesta();
+    }
 
-        // set elements to adapter
+    protected void loadCesta()
+    {
+        ListView theListView = findViewById(R.id.cadastroCestaView);
+        final CadastroCestaView adapter = new CadastroCestaView(this, this.cesta.getProdutos());
         theListView.setAdapter(adapter);
     }
 

@@ -35,7 +35,7 @@ public class Loja implements IModel
     @Override
     public String toString()
     {
-        return String.valueOf(this.id);
+        return String.valueOf(this.nome);
     }
 
 }

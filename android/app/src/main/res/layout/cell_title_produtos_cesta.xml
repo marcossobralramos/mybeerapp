@@ -194,7 +194,8 @@
                     android:textColor="@color/bgBackSideColor"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:layout_editor_absoluteY="155dp" />
+                    tools:layout_editor_absoluteY="155dp"
+                    tools:ignore="MissingConstraints" />
 
                 <TextView
                     android:id="@+id/textTotalGasto"
@@ -220,7 +221,8 @@
                     android:textColor="@color/bgBackSideColor"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:layout_editor_absoluteY="220dp" />
+                    tools:layout_editor_absoluteY="220dp"
+                    tools:ignore="MissingConstraints" />
 
             </android.support.constraint.ConstraintLayout>
 

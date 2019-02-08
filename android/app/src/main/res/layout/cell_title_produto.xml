@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bgContent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:id="@+id/edit_produto">
+
+    <!-- LEFT TITLE PART -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_weight="3"
+        android:background="@color/bgTitleLeft"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="20dp">
+
+        <ImageView
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:src="@drawable/beer"
+            android:layout_centerHorizontal="true"
+            android:minHeight="40dp"
+            android:minWidth="40dp"/>
+
+    </RelativeLayout>
+    <!-- RIGHT TITLE PART -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/bgTitleRight"
+        android:paddingBottom="15dp"
+        android:paddingEnd="5dp"
+        android:paddingStart="15dp"
+        android:paddingTop="15dp">
+
+        <TextView
+            android:id="@+id/descricao"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/loja"
+            style="@style/TitleBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/preco"
+            style="@style/TitleBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            style="@style/TitleBadgeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/loja"
+            android:layout_alignLeft="@id/loja"
+            android:layout_alignStart="@id/loja"
+            android:text="@string/loja" />
+
+        <TextView
+            style="@style/TitleBadgeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/preco"
+            android:layout_alignLeft="@id/preco"
+            android:layout_alignStart="@id/preco"
+            android:text="@string/preco" />
+
+        <Button
+            android:id="@+id/remove_produto"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:drawableStart="@drawable/delete_forever_outline"
+            android:stateListAnimator="@null"
+            android:elevation="20dp"
+            android:background="@color/remove"
+            android:textAppearance="@style/TextAppearance.AppCompat"/>
+
+
+    </RelativeLayout>
+</LinearLayout>
