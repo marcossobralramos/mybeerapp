@@ -19,7 +19,6 @@
         android:id="@+id/cadastroCestaView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
         android:background="#A9A9A9"
         android:clipChildren="false"
         android:clipToPadding="false"
@@ -30,6 +29,6 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/list_margin"
         android:scrollbars="none"
-        tools:context=".views.cesta.ListCestasActivity" />
+        tools:context=".views.cesta.CadastroCestaActivity" />
 
 </foldingcell.FoldingCell>

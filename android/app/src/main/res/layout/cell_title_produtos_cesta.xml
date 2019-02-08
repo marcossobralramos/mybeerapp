@@ -1,153 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/bgContent"
-    android:baselineAligned="false">
-
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:id="@+id/edit_cesta">
 
     <!-- LEFT TITLE PART -->
-    <!-- RIGHT TITLE PART -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="155dp"
+        android:layout_weight="3"
+        android:background="@color/bgTitleLeft"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="20dp">
 
-    <LinearLayout
-        android:layout_width="0dp"
+        <ImageView
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:src="@drawable/bebida"
+            android:layout_centerHorizontal="true"
+            android:minHeight="40dp"
+            android:minWidth="40dp"/>
+
+    </RelativeLayout>
+    <!-- RIGHT TITLE PART -->
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:background="@color/bgTitleRight"
+        android:paddingBottom="15dp"
+        android:paddingEnd="5dp"
+        android:paddingStart="15dp"
+        android:paddingTop="15dp">
 
         <TextView
-            android:id="@+id/textView16"
-            android:layout_width="match_parent"
+            android:id="@+id/descricao"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="atulalizacao" />
+            android:layout_marginTop="-5dp"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="167dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:layout_width="82dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/bgTitleLeft"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingBottom="15dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="15dp">
-
-                <TextView
-                    android:id="@+id/id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="0sp" />
-
-                <ImageView
-                    android:layout_width="61dp"
-                    android:layout_height="77dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="0dp"
-                    android:minHeight="30dp"
-                    android:minWidth="30dp"
-                    android:src="@drawable/bebida" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="276dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/bgTitleRight"
-                android:paddingBottom="10dp"
-                android:paddingEnd="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="20dp"
-                android:paddingStart="15dp"
-                android:paddingTop="20dp">
-
-                <TextView
-                    android:id="@+id/descricao"
-                    android:layout_width="fill_parent"
-                    android:layout_height="74dp"
-                    android:layout_centerInParent="true"
-                    android:ellipsize="marquee"
-                    android:fadingEdge="horizontal"
-                    android:gravity="center"
-                    android:paddingTop="10dp"
-                    android:singleLine="true"
-                    android:textColor="@android:color/black"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/loja"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:paddingTop="10dp" />
-
-                <TextView
-                    android:id="@+id/preco"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/qtde"
-                    style="@style/TitleBadgeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true" />
-
-                <TextView
-                    style="@style/TitleBadgeTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/descricao"
-                    android:layout_alignStart="@+id/loja"
-                    android:text="@string/loja" />
-
-                <TextView
-                    style="@style/TitleBadgeTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/descricao"
-                    android:layout_centerVertical="true"
-                    android:text="@string/litros" />
-
-                <TextView
-                    style="@style/TitleBadgeTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/descricao"
-                    android:layout_alignTop="@+id/descricao"
-                    android:text="@string/valor_total" />
-
-                <Button
-                    android:id="@+id/edit_produto"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true" />
+        <TextView
+            android:id="@+id/loja"
+            style="@style/TitleBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/descricao"
+            android:layout_centerVertical="true" />
 
                 <Button
                     android:id="@+id/remove_produto"
@@ -162,71 +74,3 @@
 
             </RelativeLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/relativeLayout5"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textComp"
-                    android:layout_width="match_parent"
-                    android:layout_height="90dp"
-                    android:text="@string/comparacao"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textTotalItens"
-                    style="@style/TitleBadgeTitle"
-                    android:layout_width="325dp"
-                    android:layout_height="27dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="16dp"
-
-                    android:text="Itens "
-                    android:textColor="@color/bgBackSideColor"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:layout_editor_absoluteY="155dp"
-                    tools:ignore="MissingConstraints" />
-
-                <TextView
-                    android:id="@+id/textTotalGasto"
-                    style="@style/TitleBadgeTitle"
-                    android:layout_width="209dp"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="188dp"
-                    android:text="Gastos "
-                    android:textColor="@color/bgBackSideColor"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textAtualizacao"
-                    android:layout_width="327dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="16dp"
-                    android:text="@string/dataAtual"
-                    android:textColor="@color/bgBackSideColor"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:layout_editor_absoluteY="220dp"
-                    tools:ignore="MissingConstraints" />
-
-            </android.support.constraint.ConstraintLayout>
-
-        </LinearLayout>
-    </LinearLayout>
-
-</LinearLayout>

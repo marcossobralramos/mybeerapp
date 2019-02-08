@@ -99,7 +99,5 @@
             android:elevation="20dp"
             android:background="@color/remove"
             android:textAppearance="@style/TextAppearance.AppCompat"/>
-
-
     </RelativeLayout>
 </LinearLayout>

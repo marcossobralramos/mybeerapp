@@ -51,7 +51,6 @@ public class ProdutosListView extends ArrayAdapter<IModel> {
             LayoutInflater vi = LayoutInflater.from(getContext());
             cell = (FoldingCell) vi.inflate(R.layout.content_produtos_list, parent, false);
             // binding view parts to view holder
-            viewHolder.id = cell.findViewById(R.id.id);
             viewHolder.descricao = cell.findViewById(R.id.descricao);
             viewHolder.loja = cell.findViewById(R.id.loja);
             viewHolder.preco = cell.findViewById(R.id.preco);

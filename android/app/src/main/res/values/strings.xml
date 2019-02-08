@@ -12,7 +12,7 @@
     <string name="loja" translatable="false">LOJA</string>
     <string name="preco" translatable="false">PREÇO</string>
     <string name="valor_total" translatable="false">VALOR TOTAL</string>
-    <string name="quantidade" translatable="false">QUANTIDADE</string>
+    <string name="quantidade" translatable="false">QTDE</string>
     <string name="sender_badge" translatable="false">FUNCIONÁRIO</string>
     <string name="client_name_mock" translatable="false">Marcos Sobral</string>
     <string name="rating_mock" translatable="false">UDS</string>
@@ -28,7 +28,7 @@
     <string name="content_from2_mock"></string>
     <string name="content_to1_mock">84:00:00</string>
     <string name="content_to2_mock"></string>
-    <string name="title_activity_cadastro_cesta">Cadastro de Cesta</string>
+    <string name="title_activity_cadastro_cesta">Produtos da Cesta</string>
     <string name="title_activity_produtos">Produtos</string>
     <string name="title_activity_cestas">Cestas</string>
     <string name="title_activity_cadastro_produto">Cadastro de Produto</string>
