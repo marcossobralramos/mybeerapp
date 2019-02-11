@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="29dp"
         android:layout_marginLeft="5dp"
-        android:text="Bebidas"
+        android:text="PRODUTO"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         android:textFontWeight="bold"/>

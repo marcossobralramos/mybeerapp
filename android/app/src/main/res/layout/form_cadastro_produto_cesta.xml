@@ -8,7 +8,7 @@
         android:layout_width="55dp"
         android:layout_height="29dp"
         android:layout_marginLeft="5dp"
-        android:text="Loja"
+        android:text="LOJA"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         android:textFontWeight="bold"/>
@@ -22,36 +22,35 @@
         android:layout_width="wrap_content"
         android:layout_height="29dp"
         android:layout_marginLeft="5dp"
-        android:text="Bebidas"
+        android:text="PRODUTO"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         android:textFontWeight="bold"/>
 
     <Spinner
-        android:id="@+id/combo_bebidas"
+        android:id="@+id/combo_produtos"
         android:layout_width="fill_parent"
         android:layout_height="41dp" />
 
     <TextView
-        android:layout_width="55dp"
+        android:layout_width="69dp"
         android:layout_height="29dp"
         android:layout_marginLeft="5dp"
-        android:text="Preço"
+        android:text="PREÇO"
         android:textColor="@color/colorPrimaryDark"
         android:textFontWeight="bold"
         android:textSize="18sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/preco"
         android:layout_width="fill_parent"
-        android:layout_height="59dp"
-        android:inputType="numberDecimal" />
+        android:layout_height="59dp" />
 
     <TextView
-        android:layout_width="55dp"
+        android:layout_width="69dp"
         android:layout_height="29dp"
         android:layout_marginLeft="5dp"
-        android:text="Qtde"
+        android:text="QTDE"
         android:textColor="@color/colorPrimaryDark"
         android:textFontWeight="bold"
         android:textSize="18sp" />
@@ -63,7 +62,7 @@
         android:inputType="numberDecimal" />
 
     <Button
-        android:id="@+id/salvar"
+        android:id="@+id/salvar_produtos"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/btnRequest"

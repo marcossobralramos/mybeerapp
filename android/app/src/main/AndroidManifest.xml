@@ -43,6 +43,10 @@
             android:name=".views.produto.ProdutosListActivity"
             android:label="@string/title_activity_produtos"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.cesta.CadastroProdutoCestaActivity"
+            android:label="@string/add_produto_cesta"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

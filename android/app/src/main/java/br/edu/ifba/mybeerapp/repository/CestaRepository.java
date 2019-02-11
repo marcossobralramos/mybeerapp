@@ -102,18 +102,45 @@ public class CestaRepository extends Repository
             contentValues.put("produtoId", novaCesta.getProdutos().get(x).getId());
             contentValues.put("qtdeProdutos", novaCesta.getProdutos().get(x).getQtde());
 
-            return dbManager.getWritableDatabase().update(
-                    this.table,
-                    contentValues,
-                    "cestaId = ? AND produtoId = ?",
-                    new String[]{
-                            String.valueOf(antigaCesta.getId()),
-                            String.valueOf(antigaCesta.getProdutos().get(x).getId())
-                    }
-            );
+            if(antigaCesta.getProdutos().contains(novaCesta.getProduto(x))) {
+                int posProdAntigo = antigaCesta.getProdutos().indexOf(novaCesta.getProduto(x));
+
+                int resultUp = dbManager.getWritableDatabase().update(
+                        this.tableToSaveProdutosCesta,
+                        contentValues,
+                        "cestaId = ? AND produtoId = ?",
+                        new String[]{
+                                String.valueOf(antigaCesta.getId()),
+                                String.valueOf(antigaCesta.getProdutos().get(posProdAntigo).getId())
+                        }
+                );
+            } else {
+                long resultCreate = dbManager.getWritableDatabase().insert(
+                        this.tableToSaveProdutosCesta,
+                        null,
+                        contentValues
+                );
+            }
+        }
+
+        for(int x = 0; x < antigaCesta.getProdutos().size(); x++) {
+            if (!novaCesta.getProdutos().contains(antigaCesta.getProduto(x))) {
+                int resultDel = this.deleteProduto(antigaCesta.getId(), antigaCesta.getProdutos().get(x).getId());
+                if(resultDel == -1)
+                    continue;
+            }
         }
 
         return result;
+    }
+
+    public int deleteProduto(int cestaId, int produtoId) {
+        return super.dbManager.getWritableDatabase().delete(
+                this.tableToSaveProdutosCesta,
+                "cestaId = ? AND produtoId = ?",
+                new String[]{Integer.toString(cestaId,produtoId)}
+        );
+
     }
 
     public int delete(int id) {

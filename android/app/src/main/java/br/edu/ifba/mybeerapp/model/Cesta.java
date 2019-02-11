@@ -78,12 +78,12 @@ public class Cesta implements IModel
     }
 
     @RepositoryNotAccess
-    public Double getTotalLitros() {
+    public double getTotalLitros() {
         return totalLitros;
     }
 
     @RepositoryNotAccess
-    public void setTotalLitros(Double totalLitros) {
+    public void setTotalLitros(double totalLitros) {
         this.totalLitros = totalLitros;
     }
 
@@ -93,6 +93,10 @@ public class Cesta implements IModel
             return false;
 
         produto.setQtde(qtde);
+
+        if(this.produtos.contains(produto))
+            this.removeProduto(produto);
+
         boolean result = this.produtos.add(produto);
 
         if(result == true)

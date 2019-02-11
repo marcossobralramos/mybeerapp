@@ -30,6 +30,7 @@
     <string name="content_to2_mock"></string>
     <string name="title_activity_cadastro_cesta">Produtos da Cesta</string>
     <string name="title_activity_produtos">Produtos</string>
+    <string name="add_produto_cesta">Adicionando Produto</string>
     <string name="title_activity_cestas">Cestas</string>
     <string name="title_activity_cadastro_produto">Cadastro de Produto</string>
     <string name="total_da_cesta">Total da cesta</string>

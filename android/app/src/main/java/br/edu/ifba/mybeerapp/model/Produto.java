@@ -98,6 +98,6 @@ public class Produto implements IModel
 
     public String toString()
     {
-        return String.valueOf(this.id);
+        return this.bebida.toString();
     }
 }

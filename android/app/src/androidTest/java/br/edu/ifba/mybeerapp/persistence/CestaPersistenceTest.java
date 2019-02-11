@@ -36,16 +36,11 @@ public class CestaPersistenceTest
         CestaRepository cestaRepository = new CestaRepository(this.appContext);
         ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
 
-
         Cesta cesta = new Cesta();
         cesta.setDescricao("Reggae - Casa de lupita");
 
-        Produto prod2 = (Produto) produtoRepository.retrieveById(2);
-        cesta.addProduto(prod2, 8);
-
-
-
-
+        Produto prod1 = (Produto) produtoRepository.retrieveById(1);
+        cesta.addProduto(prod1, 3);
 
         Assert.assertNotEquals(-1, cestaRepository.create(cesta));
     }
@@ -79,10 +74,22 @@ public class CestaPersistenceTest
             InvocationTargetException, IOException
     {
         CestaRepository cestaRepository = new CestaRepository(this.appContext);
+        ProdutoRepository produtoRepository = new ProdutoRepository(this.appContext);
+
+        Cesta cestaOld = (Cesta) cestaRepository.retrieveById(3);
 
         Cesta cesta = new Cesta();
+        cesta.setId(cestaOld.getId());
+        cesta.setDescricao(cestaOld.getDescricao());
 
-        // Assert.assertNotEquals(-1, cestaRepository.update(cesta));
+        Produto prod1 = (Produto) produtoRepository.retrieveById(11);
+        cesta.addProduto(prod1, 3);
+        Produto prod2 = (Produto) produtoRepository.retrieveById(12);
+        /*cesta.addProduto(prod2, 3);
+        Produto prod3 = (Produto) produtoRepository.retrieveById(13);
+        cesta.addProduto(prod3, 3);*/
+
+        Assert.assertNotEquals(-1, cestaRepository.update(cestaOld, cesta));
     }
 
     @Test
