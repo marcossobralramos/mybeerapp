@@ -10,9 +10,11 @@
     <string name="requests_count_mock" translatable="false">5</string>
     <string name="litros" translatable="false">LITROS</string>
     <string name="loja" translatable="false">LOJA</string>
-    <string name="preco" translatable="false">PREÇO</string>
+    <string name="preco" translatable="false">PREÇO UN.</string>
+    <string name="preco_litro" translatable="false">PREÇO/LITRO</string>
     <string name="valor_total" translatable="false">VALOR TOTAL</string>
     <string name="quantidade" translatable="false">QTDE</string>
+    <string name="title_cadastro_produto" translatable="false">Cadastro de Produto</string>
     <string name="sender_badge" translatable="false">FUNCIONÁRIO</string>
     <string name="client_name_mock" translatable="false">Marcos Sobral</string>
     <string name="rating_mock" translatable="false">UDS</string>

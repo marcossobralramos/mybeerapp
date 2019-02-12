@@ -1,5 +1,6 @@
 package br.edu.ifba.mybeerapp.views.cesta;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -46,15 +47,8 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
 
         try {
             thisCesta = (Cesta) (new CestaRepository(this.getApplicationContext())).retrieveById(idCesta);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException
+                | InvocationTargetException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -109,7 +103,7 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Produto produto = (Produto) parent.getItemAtPosition(position);
                 TextView preco = findViewById(R.id.preco);
-                preco.setText("R$" + String.valueOf(produto.getPrecoUnidade()));
+                preco.setText(String.valueOf(produto.getPrecoUnidade()));
             }
 
             @Override
@@ -117,7 +111,6 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
 
             }
         });
-
 
         ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, produtos);
@@ -131,8 +124,6 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
         btnSalvarProdutos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText qtde = findViewById(R.id.qtde);
-
                 Produto produto = null;
 
                 try {
@@ -146,37 +137,43 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Cesta newCesta = thisCesta;
-                newCesta.addProduto(produto, Integer.valueOf(qtde.getText().toString()));
+                EditText precoET = findViewById(R.id.preco);
+                double preco = Double.parseDouble(precoET.getText().toString());
+                EditText qtdeET = findViewById(R.id.qtde);
+                int qtde = Integer.parseInt(qtdeET.getText().toString());
+                produto.setPrecoUnidade(preco);
+                produto.setQtde(qtde);
 
-                try {
-                    long result = -1;
-                    if (thisCesta != null)
-                        result = (new CestaRepository(getApplicationContext())).update(thisCesta, newCesta);
-
-                    if (result == -1)
-                        Toast.makeText(getApplicationContext(),
-                                "Falha ao salvar o produto!",
-                                Toast.LENGTH_SHORT).show();
-                    else {
-                        Toast.makeText(getApplicationContext(),
-                                "Produto salvo com sucesso!",
-                                Toast.LENGTH_SHORT).show();
-
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra("success", true);
-                        setResult(200, returnIntent);
-                        finish();
+                long result = -1;
+                if (thisCesta != null) {
+                    try {
+                        result = (new CestaRepository(getApplicationContext())).addProduto(produto, thisCesta.getId());
+                    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException
+                            | InvocationTargetException | IllegalAccessException e)
+                    {
+                        e.printStackTrace();
                     }
-                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
-                        | ClassNotFoundException | IOException e) {
-                    e.printStackTrace();
                 }
 
+                if (result == -1)
+                    Toast.makeText(getApplicationContext(),
+                            "Falha ao salvar o produto!",
+                            Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(getApplicationContext(),
+                            "Produto salvo com sucesso!",
+                            Toast.LENGTH_SHORT).show();
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("success", true);
+                    setResult(200, returnIntent);
+                    finish();
+                }
             }
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void loadProduto(int idProduto, int idCesta) {
         Spinner comboLojas = findViewById(R.id.combo_lojas);
         for (int x = 0; x < comboLojas.getAdapter().getCount(); x++) {
@@ -195,8 +192,8 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
             }
         }
 
-        TextView preco = findViewById(R.id.preco);
-        preco.setText("R$" + String.valueOf(thisCesta.getProduto(idProduto).getPrecoUnidade()));
+        EditText preco = findViewById(R.id.preco);
+        preco.setText(String.valueOf(thisCesta.getProduto(idProduto).getPrecoUnidade()));
 
         EditText qtde = findViewById(R.id.qtde);
         qtde.setText(String.valueOf(thisCesta.getProduto(idProduto).getQtde()));

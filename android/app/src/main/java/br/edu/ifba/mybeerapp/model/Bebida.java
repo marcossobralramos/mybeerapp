@@ -31,6 +31,11 @@ public class Bebida implements IModel
         this.id = id;
     }
 
+    @Override
+    public IModel clone() {
+        return null;
+    }
+
     public Marca getMarca() {
         return marca;
     }

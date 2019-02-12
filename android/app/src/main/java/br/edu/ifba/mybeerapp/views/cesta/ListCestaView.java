@@ -70,7 +70,7 @@ public class ListCestaView extends ArrayAdapter<IModel> {
 
         // bind data from selected element to view through view holder
         viewHolder.descricao.setText(cesta.getDescricao());
-        viewHolder.litros.setText(String.format("%.2f", cesta.getTotalLitros()) + "L");
+        viewHolder.litros.setText(String.format("%.3f", cesta.getTotalLitros()) + "L");
         viewHolder.precoTotal.setText("R$" + String.format("%.2f", cesta.getValorTotal()));
         viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override

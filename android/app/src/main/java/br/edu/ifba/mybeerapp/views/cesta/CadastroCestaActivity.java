@@ -57,7 +57,13 @@ public class CadastroCestaActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        loadCesta();
+        try {
+            loadCesta();
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException |
+                InvocationTargetException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
 
         final CadastroCestaActivity activity = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_produto);
@@ -71,8 +77,11 @@ public class CadastroCestaActivity extends AppCompatActivity {
         });
     }
 
-    protected void loadCesta() {
+    protected void loadCesta() throws ClassNotFoundException, NoSuchMethodException,
+            InvocationTargetException, InstantiationException, IllegalAccessException
+    {
         ListView theListView = findViewById(R.id.cadastroCestaView);
+        this.cesta = (Cesta) (new CestaRepository(getApplicationContext())).retrieveById(this.cesta.getId());
         final CadastroCestaView adapter = new CadastroCestaView(this, this.cesta.getProdutos());
         theListView.setAdapter(adapter);
     }
@@ -81,9 +90,16 @@ public class CadastroCestaActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == 200) {
-                boolean resposta = data.getBooleanExtra("success", false);
-                if (resposta == true)
-                    this.loadCesta();
+                boolean success = data.getBooleanExtra("success", false);
+                if (success) {
+                    try {
+                        this.loadCesta();
+                    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException
+                            | InvocationTargetException | IllegalAccessException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }

@@ -41,6 +41,17 @@ public class Cesta implements IModel
         this.id = id;
     }
 
+    @Override
+    public IModel clone() {
+        Cesta clone = new Cesta();
+        clone.setId(this.id);
+        clone.setDescricao(this.descricao);
+        clone.setProdutos((ArrayList<Produto>) this.produtos.clone());
+        clone.setTotalLitros(this.totalLitros);
+        clone.setValorTotal(this.valorTotal);
+        return clone;
+    }
+
     public String getDescricao() {
         return descricao;
     }
@@ -49,10 +60,12 @@ public class Cesta implements IModel
         this.descricao = descricao;
     }
 
+    @RepositoryNotAccess
     public double getValorTotal() {
         return valorTotal;
     }
 
+    @RepositoryNotAccess
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
     }
@@ -93,30 +106,31 @@ public class Cesta implements IModel
             return false;
 
         produto.setQtde(qtde);
+        produto.setCestaId(this.id);
 
         if(this.produtos.contains(produto))
             this.removeProduto(produto);
 
-        boolean result = this.produtos.add(produto);
+        boolean success = this.produtos.add(produto);
 
-        if(result == true)
+        if(success)
         {
-            this.valorTotal += (produto.getPrecoUnidade() * qtde);
-            this.totalLitros += (produto.getBebida().getModelo().getVolume() * qtde) / 1000;
+            this.valorTotal += produto.getValorTotal();
+            this.totalLitros += produto.getTotalML() / 1000;
         }
 
-        return false;
+        return success;
     }
 
     public boolean removeProduto(Produto produto)
     {
-        boolean result = this.produtos.remove(produto);
-        if(result == true)
+        boolean success = this.produtos.remove(produto);
+        if(success)
         {
             this.valorTotal -= (produto.getPrecoUnidade() * produto.getQtde());
             this.totalLitros += (produto.getBebida().getModelo().getVolume() * produto.getQtde()) / 1000;
         }
-        return result;
+        return success;
     }
 
     public String toString()

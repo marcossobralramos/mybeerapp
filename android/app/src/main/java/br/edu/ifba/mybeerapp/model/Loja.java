@@ -24,6 +24,11 @@ public class Loja implements IModel
         this.id = id;
     }
 
+    @Override
+    public IModel clone() {
+        return null;
+    }
+
     public String getNome() {
         return nome;
     }
