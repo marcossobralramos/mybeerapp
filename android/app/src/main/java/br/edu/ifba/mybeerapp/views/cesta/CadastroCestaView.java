@@ -20,6 +20,7 @@ import java.util.HashSet;
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.Produto;
 import br.edu.ifba.mybeerapp.repository.CestaRepository;
+import br.edu.ifba.mybeerapp.views.produto.ProdutosListActivity;
 import foldingcell.FoldingCell;
 
 /**
@@ -79,7 +80,10 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
         viewHolder.descricao.setText(produto.getBebida().getMarca().getNome() + " - " +
                 produto.getBebida().getModelo().getNome() + " - " +
                 produto.getBebida().getModelo().getVolume() + "ml");
-        viewHolder.loja.setText(produto.getLoja().getNome());
+        if(produto.getLoja().getNome().length() > 14)
+            viewHolder.loja.setText(produto.getLoja().getNome().substring(0,14) + "...");
+        else
+            viewHolder.loja.setText(produto.getLoja().getNome());
         viewHolder.preco.setText("R$" + String.format("%.2f", produto.getPrecoUnidade()));
         viewHolder.precoLitro.setText("R$" + String.format("%.2f", produto.getPrecoLitro()));
         viewHolder.qtde.setText(String.valueOf(produto.getQtde()));
@@ -89,8 +93,9 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CadastroProdutoCestaActivity.class);
-                intent.putExtra("idProduto", String.valueOf(produto.getId()));
-                getContext().startActivity(intent);
+                intent.putExtra("idProduto", produto.getId());
+                intent.putExtra("idCesta", produto.getCestaId());
+                ((CadastroCestaActivity) getContext()).startActivityForResult(intent, 1);
             }
         });
        viewHolder.remove.setOnClickListener(new View.OnClickListener() {

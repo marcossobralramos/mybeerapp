@@ -15,9 +15,9 @@
         android:background="@color/bgTitleLeft"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:paddingTop="20dp">
 
         <TextView
@@ -26,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:textSize="16dp" />
+            android:textSize="14sp"
+            android:gravity="center"/>
 
         <ImageView
             android:id="@+id/img_beer"
@@ -43,7 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:textSize="16dp" />
+            android:textSize="14sp"
+            android:gravity="center"/>
 
     </RelativeLayout>
     <!-- RIGHT TITLE PART -->

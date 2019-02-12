@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,6 +42,8 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_cadastro_produto_cesta);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final int idProduto = getIntent().getIntExtra("idProduto", 0);
         final int idCesta = getIntent().getIntExtra("idCesta", 0);
@@ -52,15 +55,11 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        loadLojasCombobox(idProduto);
-
-        // then edit
-        if (idCesta != 0 && idProduto != 0)
-            this.loadProduto(idProduto, idCesta);
+        loadLojasCombobox(idProduto, idCesta);
 
     }
 
-    private void loadLojasCombobox(final int idProduto) {
+    private void loadLojasCombobox(final int idProduto, final int idCesta) {
         List<IModel> lojas = null;
         try {
             lojas = (new LojaRepository(this.getApplicationContext())).retrieveAll();
@@ -74,7 +73,7 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Loja loja = (Loja) parent.getItemAtPosition(position);
-                loadProdutosCombo(loja.getId(), idProduto);
+                loadProdutosCombo(loja.getId(), idProduto, idCesta);
             }
 
             @Override
@@ -88,7 +87,7 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
         comboLojas.setAdapter(adapter);
     }
 
-    private void loadProdutosCombo(int lojaId, final int idProduto) {
+    private void loadProdutosCombo(int lojaId, final int idProduto, final int idCesta) {
         List<IModel> produtos = null;
         try {
             produtos = (new ProdutoRepository(this.getApplicationContext())).retrieveByLoja(lojaId);
@@ -116,6 +115,9 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, produtos);
         comboProdutos.setAdapter(adapter);
         loadButtons(idProduto);
+        // then edit
+        if (idCesta != 0 && idProduto != 0)
+            this.loadProduto(idProduto, idCesta);
     }
 
     private void loadButtons(final int idProduto) {

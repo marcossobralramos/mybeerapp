@@ -11,21 +11,6 @@
     android:layout_marginTop="40dp"
     app:ignore="NamespaceTypo">
 
-    <TextView
-        android:id="@+id/textMain"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:text=" Cesta + @string/app_name"
-        android:textAlignment="center"
-        android:textColor="?attr/actionModeSplitBackground"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <!-- TITLE (FOLDED) LAYOUT (MUST BE AT LEAST 2x times SMALLER than content layout above) -->
     <include layout="@layout/cell_title_cesta" />
 

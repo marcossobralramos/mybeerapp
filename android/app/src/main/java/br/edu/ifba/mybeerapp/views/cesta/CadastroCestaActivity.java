@@ -30,17 +30,6 @@ public class CadastroCestaActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*LinearLayout ll = findViewById(R.id.edit_produto);
-        ll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, CadastroProdutoCestaActivity.class);
-                intent.putExtra("idCesta", cesta.getId());
-                // intent.putExtra("idProduto")
-                activity.startActivityForResult(intent, 1);
-            }
-        });*/
-
         final int idCesta = getIntent().getIntExtra("idCesta", 0);
 
         try {

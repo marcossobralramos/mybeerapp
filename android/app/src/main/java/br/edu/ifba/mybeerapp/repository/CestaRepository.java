@@ -43,7 +43,7 @@ public class CestaRepository extends Repository
         if(cesta.getProdutos().contains(produto))
         {
             int pos = cesta.getProdutos().indexOf(produto);
-            contentValues.put("qtdeProdutos", produto.getQtde() + cesta.getProdutos().get(pos).getQtde());
+            contentValues.put("qtdeProdutos", produto.getQtde());
             return dbManager.getWritableDatabase().update(
                     this.tableToSaveProdutosCesta,
                     contentValues,
@@ -118,54 +118,6 @@ public class CestaRepository extends Repository
     {
         Cesta cesta = (Cesta) super.retrieveById(id);
         return loadProdutosCesta(cesta);
-    }
-
-    public int update(IModel modelOld, IModel modelNew) throws IllegalAccessException,
-            InvocationTargetException, NoSuchMethodException, IOException, ClassNotFoundException
-    {
-        modelNew.setId(modelOld.getId());
-        int result = super.update(modelOld, modelNew);
-
-        if(result == -1)
-            return -1;
-
-        Cesta novaCesta = (Cesta) modelNew;
-        Cesta antigaCesta = (Cesta) modelOld;
-
-        for(int x = 0; x < novaCesta.getProdutos().size(); x++)
-        {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("cestaId", novaCesta.getId());
-            contentValues.put("produtoId", novaCesta.getProdutos().get(x).getId());
-            contentValues.put("qtdeProdutos", novaCesta.getProdutos().get(x).getQtde());
-            contentValues.put("preco", novaCesta.getProdutos().get(x).getPrecoUnidade());
-
-            if(antigaCesta.getProdutos().contains(novaCesta.getProduto(x))) {
-                int posProdAntigo = antigaCesta.getProdutos().indexOf(novaCesta.getProduto(x));
-
-                int resultUp = dbManager.getWritableDatabase().update(
-                        this.tableToSaveProdutosCesta,
-                        contentValues,
-                        "cestaId = ? AND produtoId = ?",
-                        new String[]{
-                                String.valueOf(antigaCesta.getId()),
-                                String.valueOf(antigaCesta.getProdutos().get(posProdAntigo).getId())
-                        }
-                );
-            } else {
-                long resultCreate = dbManager.getWritableDatabase().insert(
-                        this.tableToSaveProdutosCesta,
-                        null,
-                        contentValues
-                );
-            }
-        }
-
-        for(int x = 0; x < antigaCesta.getProdutos().size(); x++)
-            if (!novaCesta.getProdutos().contains(antigaCesta.getProduto(x)))
-                this.deleteProduto(antigaCesta.getId(), antigaCesta.getProdutos().get(x).getId());
-
-        return result;
     }
 
     public int deleteProduto(int cestaId, int produtoId) {

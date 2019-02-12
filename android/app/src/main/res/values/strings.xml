@@ -12,6 +12,10 @@
     <string name="loja" translatable="false">LOJA</string>
     <string name="preco" translatable="false">PREÇO UN.</string>
     <string name="preco_litro" translatable="false">PREÇO/LITRO</string>
+    <string name="cancel" translatable="false">CANCELAR</string>
+    <string name="ver_produtos" translatable="false">PRODUTOS DA CESTA</string>
+    <string name="salvar" translatable="false">SALVAR</string>
+    <string name="descricao_cesta" translatable="false">DESCRIÇÃO DA CESTA</string>
     <string name="valor_total" translatable="false">VALOR TOTAL</string>
     <string name="quantidade" translatable="false">QTDE</string>
     <string name="title_cadastro_produto" translatable="false">Cadastro de Produto</string>

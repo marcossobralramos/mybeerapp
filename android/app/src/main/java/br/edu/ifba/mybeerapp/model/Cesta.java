@@ -1,6 +1,9 @@
 package br.edu.ifba.mybeerapp.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,7 +85,8 @@ public class Cesta implements IModel
 
     @RepositoryNotAccess
     public ArrayList<Produto> getProdutos() {
-        return produtos;
+        Collections.sort(this.produtos);
+        return this.produtos;
     }
 
     @RepositoryNotAccess
