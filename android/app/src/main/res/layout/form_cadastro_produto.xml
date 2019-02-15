@@ -4,6 +4,17 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
+    <Button
+        android:id="@+id/abrir_lojas"
+        android:layout_width="fill_parent"
+        android:layout_height="47dp"
+        android:layout_gravity="end"
+        android:drawableTop="@drawable/store"
+        android:text="Cadastro de Lojas"
+        android:maxHeight="10dp"
+        android:minHeight="10dp"
+        android:background="@color/colorPrimary"/>
+
     <TextView
         android:layout_width="55dp"
         android:layout_height="29dp"
@@ -18,11 +29,22 @@
         android:layout_width="fill_parent"
         android:layout_height="41dp" />
 
+    <Button
+        android:id="@+id/abrir_bebidas"
+        android:layout_width="fill_parent"
+        android:layout_height="47dp"
+        android:layout_gravity="end"
+        android:drawableTop="@drawable/beer"
+        android:maxHeight="10dp"
+        android:minHeight="10dp"
+        android:text="Cadastro de Bebidas"
+        android:background="@color/colorPrimary"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="29dp"
         android:layout_marginLeft="5dp"
-        android:text="PRODUTO"
+        android:text="BEBIDA"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         android:textFontWeight="bold"/>

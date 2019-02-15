@@ -29,6 +29,8 @@ import br.edu.ifba.mybeerapp.repository.BebidaRepository;
 import br.edu.ifba.mybeerapp.repository.CestaRepository;
 import br.edu.ifba.mybeerapp.repository.LojaRepository;
 import br.edu.ifba.mybeerapp.repository.ProdutoRepository;
+import br.edu.ifba.mybeerapp.views.loja.LojasListActivity;
+import br.edu.ifba.mybeerapp.views.produto.ProdutosListActivity;
 
 public class CadastroProdutoCestaActivity extends AppCompatActivity {
     private static Cesta thisCesta;
@@ -121,6 +123,25 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
     }
 
     private void loadButtons(final int idProduto) {
+        final CadastroProdutoCestaActivity activity = this;
+        Button abrirLojas = findViewById(R.id.abrir_lojas);
+        abrirLojas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LojasListActivity.class);
+                activity.startActivity(intent);
+            }
+        });
+
+        Button abrirProdutos = findViewById(R.id.abrir_produtos);
+        abrirProdutos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ProdutosListActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button btnSalvarProdutos = findViewById(R.id.salvar_produtos);
 
         btnSalvarProdutos.setOnClickListener(new View.OnClickListener() {

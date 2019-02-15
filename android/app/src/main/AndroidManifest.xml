@@ -47,6 +47,14 @@
             android:name=".views.cesta.CadastroProdutoCestaActivity"
             android:label="@string/add_produto_cesta"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.loja.LojasListActivity"
+            android:label="Lojas"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.bebida.BebidasListActivity"
+            android:label="Bebidas"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
