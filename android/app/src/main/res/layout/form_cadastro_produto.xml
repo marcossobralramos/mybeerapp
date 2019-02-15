@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:background="@color/btnRequest"
         android:text="Salvar"
-        android:textColor="@color/bgTitleRight"
+        android:textColor="#ff0000"
         android:textColorLink="@color/bgContent" />
 
 </LinearLayout>

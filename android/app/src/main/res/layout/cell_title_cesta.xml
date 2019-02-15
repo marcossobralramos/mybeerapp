@@ -15,18 +15,18 @@
         android:background="@color/bgTitleLeft"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingBottom="20dp"
         android:paddingLeft="10dp"
+        android:paddingTop="20dp"
         android:paddingRight="10dp"
-        android:paddingTop="20dp">
+        android:paddingBottom="20dp">
 
         <ImageView
-            android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:src="@drawable/packbeer"
+            android:layout_height="fill_parent"
             android:layout_centerHorizontal="true"
+            android:minWidth="40dp"
             android:minHeight="40dp"
-            android:minWidth="40dp"/>
+            android:src="@drawable/packbeer" />
 
     </RelativeLayout>
     <!-- RIGHT TITLE PART -->

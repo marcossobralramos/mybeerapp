@@ -15,10 +15,10 @@
         android:background="@color/bgTitleLeft"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingBottom="5dp"
         android:paddingLeft="5dp"
+        android:paddingTop="20dp"
         android:paddingRight="5dp"
-        android:paddingTop="20dp">
+        android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/preco_total"
@@ -26,17 +26,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:textSize="14sp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/img_beer"
-            android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:src="@drawable/bebida"
+            android:layout_height="fill_parent"
             android:layout_centerHorizontal="true"
+            android:minWidth="40dp"
             android:minHeight="40dp"
-            android:minWidth="40dp"/>
+            android:src="@drawable/bebida" />
 
         <TextView
             android:id="@+id/total_ml"
@@ -44,8 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:textSize="14sp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textSize="14sp" />
 
     </RelativeLayout>
     <!-- RIGHT TITLE PART -->

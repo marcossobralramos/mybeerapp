@@ -29,11 +29,12 @@
         android:id="@+id/salvar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="4dp"
+        android:layout_marginTop="16dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/salvar"/>
+        android:background="#FF6FD0C4"
+        android:text="@string/salvar"
+        android:textColor="#ff0000"/>
 
 </LinearLayout>
