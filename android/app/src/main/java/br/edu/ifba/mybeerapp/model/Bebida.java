@@ -31,6 +31,11 @@ public class Bebida implements IModel
         this.id = id;
     }
 
+    @Override
+    public IModel clone() {
+        return null;
+    }
+
     public Marca getMarca() {
         return marca;
     }
@@ -54,6 +59,19 @@ public class Bebida implements IModel
     public void setImagem(Image imagem) {
         this.imagem = imagem;
     }*/
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o == this)
+            return true;
+        if(!(o instanceof Bebida))
+            return false;
+
+        Bebida bebida = (Bebida) o;
+
+        return (this.id == bebida.id);
+    }
 
     @Override
     public String toString()

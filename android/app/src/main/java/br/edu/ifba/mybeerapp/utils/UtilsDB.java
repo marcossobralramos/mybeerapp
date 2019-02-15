@@ -56,32 +56,40 @@ public class UtilsDB
     }
 
     public static ContentValues getContentValues(Object model) throws
-            IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+            IllegalAccessException, InvocationTargetException {
         ContentValues contentValues = new ContentValues();
 
-        for(Field f : model.getClass().getDeclaredFields())
-        {
+        for(Field f : model.getClass().getDeclaredFields()) {
             String fieldName = f.getName();
-            String methodName = "get" + fieldName.substring(0,1).toUpperCase() +
+            String methodName = "get" + fieldName.substring(0, 1).toUpperCase() +
                     fieldName.substring(1, fieldName.length());
-
-            Method method = model.getClass().getMethod(methodName);
-
-            if(method.isAnnotationPresent(RepositoryNotAccess.class))
-                continue;
-
-            String typeName = method.getReturnType().getTypeName();
-
-            String modelName = fieldName.substring(0,1).toUpperCase() + fieldName.substring(1,fieldName.length());
 
             try
             {
-                if(Class.forName(UtilsDB.PACKAGE_NAME_MODEL + "." + modelName) != null)
-                    fieldName += "Id";
-            }
-            catch (ClassNotFoundException ex) {}
+                Method method = model.getClass().getMethod(methodName);
+                if(method.isAnnotationPresent(RepositoryNotAccess.class))
+                    continue;
 
-            contentValues.put(fieldName, String.valueOf(method.invoke(model)));
+                String typeName = method.getReturnType().getTypeName();
+
+                String modelName = fieldName.substring(0,1).toUpperCase() + fieldName.substring(1,fieldName.length());
+
+                try
+                {
+                    if(Class.forName(UtilsDB.PACKAGE_NAME_MODEL + "." + modelName) != null)
+                    {
+                        fieldName += "Id";
+                        IModel returnGet = (IModel) method.invoke(model);
+                        contentValues.put(fieldName, returnGet.getId());
+                    }
+                }
+                catch (ClassNotFoundException ex) {
+                    contentValues.put(fieldName, String.valueOf(method.invoke(model)));
+                }
+            }
+            catch (NoSuchMethodException ex) {
+                continue;
+            }
         }
 
         return contentValues;

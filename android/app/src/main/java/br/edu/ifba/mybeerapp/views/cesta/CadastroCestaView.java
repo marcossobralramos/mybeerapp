@@ -1,6 +1,7 @@
 package br.edu.ifba.mybeerapp.views.cesta;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -9,13 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.Produto;
+import br.edu.ifba.mybeerapp.repository.CestaRepository;
+import br.edu.ifba.mybeerapp.views.produto.ProdutosListActivity;
 import foldingcell.FoldingCell;
 
 /**
@@ -32,7 +37,7 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
         super(context, 0, objects);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -50,8 +55,12 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
             viewHolder.descricao = cell.findViewById(R.id.descricao);
             viewHolder.loja = cell.findViewById(R.id.loja);
             viewHolder.preco = cell.findViewById(R.id.preco);
+            viewHolder.precoLitro = cell.findViewById(R.id.preco_litro);
             viewHolder.qtde = cell.findViewById(R.id.qtde);
+            viewHolder.valorTotal = cell.findViewById(R.id.preco_total);
             viewHolder.edit = cell.findViewById(R.id.edit_produto);
+            viewHolder.remove = cell.findViewById(R.id.remove_produto);
+            viewHolder.totalML = cell.findViewById(R.id.total_ml);
             cell.setTag(viewHolder);
         } else {
             // for existing cell set valid valid state(without animation)
@@ -71,24 +80,42 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
         viewHolder.descricao.setText(produto.getBebida().getMarca().getNome() + " - " +
                 produto.getBebida().getModelo().getNome() + " - " +
                 produto.getBebida().getModelo().getVolume() + "ml");
-        viewHolder.loja.setText(produto.getLoja().getNome());
+        if(produto.getLoja().getNome().length() > 14)
+            viewHolder.loja.setText(produto.getLoja().getNome().substring(0,14) + "...");
+        else
+            viewHolder.loja.setText(produto.getLoja().getNome());
         viewHolder.preco.setText("R$" + String.format("%.2f", produto.getPrecoUnidade()));
+        viewHolder.precoLitro.setText("R$" + String.format("%.2f", produto.getPrecoLitro()));
         viewHolder.qtde.setText(String.valueOf(produto.getQtde()));
-       /* viewHolder.edit.setOnClickListener(new View.OnClickListener() {
+        viewHolder.valorTotal.setText("R$" + String.format("%.2f", produto.getValorTotal()));
+        viewHolder.totalML.setText(String.format("%.0f", produto.getTotalML()) + "ml");
+       viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CadastroProdutoActivity.class);
-                intent.putExtra("idproduto", String.valueOf(produto.getId()));
-                getContext().startActivity(intent);
+                Intent intent = new Intent(getContext(), CadastroProdutoCestaActivity.class);
+                intent.putExtra("idProduto", produto.getId());
+                intent.putExtra("idCesta", produto.getCestaId());
+                ((CadastroCestaActivity) getContext()).startActivityForResult(intent, 1);
             }
-        });*/
-        // set custom btn handler for list item from that item
-        /*if (mes.getRequestBtnClickListener() != null) {
-            viewHolder.contentRequestBtn.setOnClickListener(mes.getRequestBtnClickListener());
-        } else {
-            // (optionally) add "default" handler if no handler found in item
-            viewHolder.contentRequestBtn.setOnClickListener(defaultRequestBtnClickListener);
-        }*/
+        });
+       viewHolder.remove.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               int success = (new CestaRepository(getContext())).deleteProduto(produto.getCestaId(), produto.getId());
+               if(success != -1) {
+                   Toast.makeText(getContext(),
+                           "Produto deletado da cesta com sucesso!",
+                           Toast.LENGTH_SHORT).show();
+               } else {
+                   Toast.makeText(getContext(),
+                           "Erro ao deletar o produto da cesta!",
+                           Toast.LENGTH_SHORT).show();
+               }
+               Activity activity = (Activity) getContext();
+               activity.finish();
+               activity.startActivity(activity.getIntent());
+           }
+       });
 
         return cell;
     }
@@ -122,7 +149,11 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
         TextView descricao;
         TextView loja;
         TextView preco;
+        TextView precoLitro;
         TextView qtde;
-        Button edit;
+        TextView valorTotal;
+        TextView totalML;
+        LinearLayout edit;
+        Button remove;
     }
 }

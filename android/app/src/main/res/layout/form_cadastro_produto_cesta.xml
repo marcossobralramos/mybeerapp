@@ -7,8 +7,8 @@
     <TextView
         android:layout_width="55dp"
         android:layout_height="29dp"
-        android:layout_marginLeft="5dp"
-        android:text="Loja"
+        android:layout_marginStart="5dp"
+        android:text="LOJA"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         android:textFontWeight="bold"/>
@@ -28,15 +28,15 @@
         android:textFontWeight="bold"/>
 
     <Spinner
-        android:id="@+id/combo_bebidas"
+        android:id="@+id/combo_produtos"
         android:layout_width="fill_parent"
         android:layout_height="41dp" />
 
     <TextView
-        android:layout_width="55dp"
+        android:layout_width="69dp"
         android:layout_height="29dp"
         android:layout_marginLeft="5dp"
-        android:text="Preço"
+        android:text="PREÇO"
         android:textColor="@color/colorPrimaryDark"
         android:textFontWeight="bold"
         android:textSize="18sp" />
@@ -45,10 +45,25 @@
         android:id="@+id/preco"
         android:layout_width="fill_parent"
         android:layout_height="59dp"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"/>
+
+    <TextView
+        android:layout_width="69dp"
+        android:layout_height="29dp"
+        android:layout_marginLeft="5dp"
+        android:text="QTDE"
+        android:textColor="@color/colorPrimaryDark"
+        android:textFontWeight="bold"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/qtde"
+        android:layout_width="fill_parent"
+        android:layout_height="59dp"
+        android:inputType="number" />
 
     <Button
-        android:id="@+id/salvar"
+        android:id="@+id/salvar_produtos"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/btnRequest"

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 
@@ -22,8 +23,16 @@ public class ProdutosListActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produtos_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        loadProdutosList();
+        try {
+            loadProdutosList();
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException |
+                InvocationTargetException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
 
         final ProdutosListActivity activity = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_produto);
@@ -39,34 +48,31 @@ public class ProdutosListActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == 1 ) {
+        if (requestCode == 1) {
             if(resultCode == 200){
                 boolean resposta = data.getBooleanExtra("success", false);
-                if(resposta == true)
-                    this.loadProdutosList();
+                if(resposta == true) {
+                    try {
+                        this.loadProdutosList();
+                    } catch (ClassNotFoundException | NoSuchMethodException |
+                            InvocationTargetException | IllegalAccessException |
+                            InstantiationException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
 
-    private void loadProdutosList()
+    private void loadProdutosList() throws ClassNotFoundException, NoSuchMethodException,
+            InvocationTargetException, InstantiationException, IllegalAccessException
     {
-        ListView theListView = findViewById(R.id.cestaListView);
+        ListView theListView = findViewById(R.id.produtosListView);
 
         ArrayList<IModel> produtosList = null;
 
-        try {
-            produtosList = (ArrayList<IModel>) (new ProdutoRepository(this.getApplicationContext())).retrieveAll();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        produtosList = (ArrayList<IModel>) (new ProdutoRepository(this.getApplicationContext())).retrieveAll();
 
         final ProdutosListView adapter = new ProdutosListView(this, produtosList);
 

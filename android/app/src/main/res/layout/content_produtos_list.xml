@@ -32,7 +32,7 @@
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/cestaListView"
+        android:id="@+id/produtosListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#A9A9A9"
@@ -45,6 +45,6 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/list_margin"
         android:scrollbars="none"
-        tools:context=".views.cesta.ListCestasActivity" />
+        tools:context=".views.produto.ProdutosListActivity" />
 
 </foldingcell.FoldingCell>

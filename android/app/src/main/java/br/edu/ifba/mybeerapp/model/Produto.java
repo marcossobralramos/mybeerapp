@@ -1,5 +1,6 @@
 package br.edu.ifba.mybeerapp.model;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import br.edu.ifba.mybeerapp.model.Loja;
@@ -8,7 +9,7 @@ import br.edu.ifba.mybeerapp.model.annotations.DBField;
 import br.edu.ifba.mybeerapp.model.annotations.RepositoryNotAccess;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 
-public class Produto implements IModel
+public class Produto implements IModel, Comparable<Produto>
 {
     @DBField
     private int id;
@@ -19,11 +20,14 @@ public class Produto implements IModel
     @DBField
     private double precoUnidade;
     @DBField
-    private double precoML;
+    private double precoLitro;
     @DBField
     private String ultimaAtualizacao;
 
+    private int cestaId;
     private int qtde;
+    private double valorTotal;
+    private double totalML;
 
     public Produto(){}
 
@@ -35,6 +39,36 @@ public class Produto implements IModel
     }
 
     @RepositoryNotAccess
+    public double getTotalML() {
+        return totalML;
+    }
+
+    @RepositoryNotAccess
+    public void setTotalML(double totalML) {
+        this.totalML = totalML;
+    }
+
+    @RepositoryNotAccess
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    @RepositoryNotAccess
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    @RepositoryNotAccess
+    public int getCestaId() {
+        return cestaId;
+    }
+
+    @RepositoryNotAccess
+    public void setCestaId(int cestaId) {
+        this.cestaId = cestaId;
+    }
+
+    @RepositoryNotAccess
     public int getQtde() {
         return qtde;
     }
@@ -42,6 +76,8 @@ public class Produto implements IModel
     @RepositoryNotAccess
     public void setQtde(int qtde) {
         this.qtde = qtde;
+        this.valorTotal = this.precoUnidade * qtde;
+        this.totalML = this.bebida.getModelo().getVolume() * qtde;
     }
 
     public int getId() {
@@ -50,6 +86,11 @@ public class Produto implements IModel
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public IModel clone() {
+        return null;
     }
 
     public Loja getLoja() {
@@ -74,11 +115,11 @@ public class Produto implements IModel
 
     public void setPrecoUnidade(double precoUnidade) {
         this.precoUnidade = precoUnidade;
-        this.precoML = this.precoUnidade/this.bebida.getModelo().getVolume();
+        this.precoLitro = (this.precoUnidade/this.bebida.getModelo().getVolume()) * 1000;
     }
 
-    public double getPrecoML() {
-        return precoML;
+    public double getPrecoLitro() {
+        return precoLitro;
     }
 
     public String getUltimaAtualizacao() {
@@ -91,13 +132,20 @@ public class Produto implements IModel
 
     public boolean equals(Object o)
     {
-        if(((Produto) o).getId() == this.getId())
-            return true;
-        return false;
+        return ((Produto) o).getId() == this.id;
     }
 
     public String toString()
     {
-        return String.valueOf(this.id);
+        return this.bebida.toString();
+    }
+
+    @Override
+    public int compareTo(Produto o) {
+        if(this.getPrecoLitro() > o.getPrecoLitro())
+            return 1;
+        else if(this.getPrecoLitro() < o.getPrecoLitro())
+            return -1;
+        return 0;
     }
 }

@@ -24,12 +24,30 @@ public class Loja implements IModel
         this.id = id;
     }
 
+    @Override
+    public IModel clone() {
+        return null;
+    }
+
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o == this)
+            return true;
+        if(!(o instanceof Loja))
+            return false;
+
+        Loja loja = (Loja) o;
+
+        return (this.id == loja.id);
     }
 
     @Override

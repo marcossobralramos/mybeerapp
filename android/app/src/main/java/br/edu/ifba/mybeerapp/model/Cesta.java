@@ -1,6 +1,9 @@
 package br.edu.ifba.mybeerapp.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +44,17 @@ public class Cesta implements IModel
         this.id = id;
     }
 
+    @Override
+    public IModel clone() {
+        Cesta clone = new Cesta();
+        clone.setId(this.id);
+        clone.setDescricao(this.descricao);
+        clone.setProdutos((ArrayList<Produto>) this.produtos.clone());
+        clone.setTotalLitros(this.totalLitros);
+        clone.setValorTotal(this.valorTotal);
+        return clone;
+    }
+
     public String getDescricao() {
         return descricao;
     }
@@ -49,10 +63,12 @@ public class Cesta implements IModel
         this.descricao = descricao;
     }
 
+    @RepositoryNotAccess
     public double getValorTotal() {
         return valorTotal;
     }
 
+    @RepositoryNotAccess
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
     }
@@ -69,7 +85,8 @@ public class Cesta implements IModel
 
     @RepositoryNotAccess
     public ArrayList<Produto> getProdutos() {
-        return produtos;
+        Collections.sort(this.produtos);
+        return this.produtos;
     }
 
     @RepositoryNotAccess
@@ -78,12 +95,12 @@ public class Cesta implements IModel
     }
 
     @RepositoryNotAccess
-    public Double getTotalLitros() {
+    public double getTotalLitros() {
         return totalLitros;
     }
 
     @RepositoryNotAccess
-    public void setTotalLitros(Double totalLitros) {
+    public void setTotalLitros(double totalLitros) {
         this.totalLitros = totalLitros;
     }
 
@@ -93,26 +110,31 @@ public class Cesta implements IModel
             return false;
 
         produto.setQtde(qtde);
-        boolean result = this.produtos.add(produto);
+        produto.setCestaId(this.id);
 
-        if(result == true)
+        if(this.produtos.contains(produto))
+            this.removeProduto(produto);
+
+        boolean success = this.produtos.add(produto);
+
+        if(success)
         {
-            this.valorTotal += (produto.getPrecoUnidade() * qtde);
-            this.totalLitros += (produto.getBebida().getModelo().getVolume() * qtde) / 1000;
+            this.valorTotal += produto.getValorTotal();
+            this.totalLitros += produto.getTotalML() / 1000;
         }
 
-        return false;
+        return success;
     }
 
     public boolean removeProduto(Produto produto)
     {
-        boolean result = this.produtos.remove(produto);
-        if(result == true)
+        boolean success = this.produtos.remove(produto);
+        if(success)
         {
             this.valorTotal -= (produto.getPrecoUnidade() * produto.getQtde());
             this.totalLitros += (produto.getBebida().getModelo().getVolume() * produto.getQtde()) / 1000;
         }
-        return result;
+        return success;
     }
 
     public String toString()

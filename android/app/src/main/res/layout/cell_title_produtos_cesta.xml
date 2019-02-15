@@ -5,28 +5,47 @@
     android:background="@color/bgContent"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:id="@+id/edit_cesta">
+    android:id="@+id/edit_produto">
 
     <!-- LEFT TITLE PART -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="155dp"
         android:layout_weight="3"
-        android:background="@color/bgTitleLeft"
+        android:background="#00695c"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:paddingTop="20dp">
 
+        <TextView
+            android:id="@+id/preco_total"
+            style="@style/TitleBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:textSize="14sp" />
+
         <ImageView
-            android:layout_height="fill_parent"
+            android:id="@+id/img_beer"
             android:layout_width="fill_parent"
-            android:src="@drawable/bebida"
+            android:layout_height="fill_parent"
             android:layout_centerHorizontal="true"
             android:minHeight="40dp"
-            android:minWidth="40dp"/>
+            android:minWidth="40dp"
+            android:src="@drawable/bebida" />
+
+        <TextView
+            android:id="@+id/total_ml"
+            style="@style/TitleBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:textSize="14sp" />
 
     </RelativeLayout>
     <!-- RIGHT TITLE PART -->
@@ -35,10 +54,10 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/bgTitleRight"
-        android:paddingBottom="15dp"
-        android:paddingEnd="5dp"
         android:paddingStart="15dp"
-        android:paddingTop="15dp">
+        android:paddingTop="15dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="15dp">
 
         <TextView
             android:id="@+id/descricao"
@@ -61,16 +80,79 @@
             android:layout_alignStart="@+id/descricao"
             android:layout_centerVertical="true" />
 
-                <Button
-                    android:id="@+id/remove_produto"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="37dp"
-                    android:layout_height="35dp"
-                    android:layout_alignEnd="@+id/descricao"
-                    android:layout_alignParentBottom="true"
-                    android:backgroundTint="@color/bgContent"
-                    android:drawableStart="@drawable/lixo"
-                    android:visibility="visible" />
+        <TextView
+            android:id="@+id/preco"
+            style="@style/TitleBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/qtde"
 
-            </RelativeLayout>
-        </LinearLayout>
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-52dp"
+            android:layout_marginEnd="48dp" />
+
+        <TextView
+            android:id="@+id/preco_litro"
+            style="@style/TitleBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/preco"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="53dp"
+            android:layout_marginEnd="111dp" />
+
+        <TextView
+            android:id="@+id/qtde"
+            style="@style/TitleBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/descricao"
+            android:layout_alignParentBottom="true" />
+
+        <TextView
+            style="@style/TitleBadgeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/loja"
+            android:layout_alignStart="@+id/descricao"
+            android:text="@string/loja" />
+
+        <TextView
+            style="@style/TitleBadgeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/qtde"
+            android:layout_alignStart="@+id/preco"
+            android:layout_marginStart="-1dp"
+            android:layout_marginBottom="52dp"
+            android:text="@string/preco" />
+
+        <TextView
+            style="@style/TitleBadgeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/qtde"
+            android:layout_alignStart="@+id/preco_litro"
+            android:text="@string/preco_litro" />
+
+        <TextView
+            style="@style/TitleBadgeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/qtde"
+            android:layout_alignStart="@+id/descricao"
+            android:text="@string/quantidade" />
+
+        <Button
+            android:id="@+id/remove_produto"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="37dp"
+            android:layout_height="35dp"
+            android:layout_alignEnd="@+id/descricao"
+            android:layout_alignParentBottom="true"
+            android:backgroundTint="@color/bgContent"
+            android:drawableStart="@drawable/lixo"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+</LinearLayout>

@@ -2,15 +2,12 @@ package br.edu.ifba.mybeerapp.views.produto;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -30,12 +27,19 @@ import br.edu.ifba.mybeerapp.repository.ProdutoRepository;
 
 public class CadastroProdutoActivity extends AppCompatActivity
 {
-    private Produto produto;
+    private static Produto thisProduto;
+
+    public CadastroProdutoActivity() {
+        super();
+        this.thisProduto = null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_cadastro_produto);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         this.loadComboboxes();
 
@@ -49,7 +53,8 @@ public class CadastroProdutoActivity extends AppCompatActivity
 
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 Spinner comboLojas = findViewById(R.id.combo_lojas);
                 Loja loja = (Loja) comboLojas.getSelectedItem();
 
@@ -64,8 +69,16 @@ public class CadastroProdutoActivity extends AppCompatActivity
                 produto.setPrecoUnidade(Double.parseDouble(preco.getText().toString()));
                 produto.setUltimaAtualizacao(new Date(System.currentTimeMillis()).toString());
 
-                try {
-                    if ((new ProdutoRepository()).create(produto) != -1)
+                try
+                {
+                    long result = -1;
+                    if(thisProduto == null) {
+                        result = (new ProdutoRepository(getApplicationContext())).create(produto);
+                    } else {
+                        result = (new ProdutoRepository(getApplicationContext())).update(thisProduto, produto);
+                    }
+
+                    if (result == -1)
                         Toast.makeText(getApplicationContext(),
                                 "Falha ao salvar o produto!",
                                 Toast.LENGTH_SHORT).show();
@@ -133,7 +146,32 @@ public class CadastroProdutoActivity extends AppCompatActivity
     private void loadProduto(int idProduto)
     {
         try {
-            this.produto = (Produto) (new ProdutoRepository(this.getApplicationContext())).retrieveById(idProduto);
+            thisProduto = (Produto) (new ProdutoRepository(this.getApplicationContext())).retrieveById(idProduto);
+            Spinner comboLojas = findViewById(R.id.combo_lojas);
+
+            for(int x = 0; x < comboLojas.getAdapter().getCount(); x++)
+            {
+                if(comboLojas.getAdapter().getItem(x).equals(thisProduto.getLoja()))
+                {
+                    comboLojas.setSelection(x,true);
+                    break;
+                }
+            }
+
+            Spinner comboBebidas = findViewById(R.id.combo_bebidas);
+
+            for(int x = 0; x < comboBebidas.getAdapter().getCount(); x++)
+            {
+                if(comboBebidas.getAdapter().getItem(x).equals(thisProduto.getBebida()))
+                {
+                    comboBebidas.setSelection(x,true);
+                    break;
+                }
+            }
+
+            EditText preco = findViewById(R.id.preco);
+            preco.setText(String.valueOf(thisProduto.getPrecoUnidade()));
+
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
                 | ClassNotFoundException | InstantiationException e) {
             e.printStackTrace();

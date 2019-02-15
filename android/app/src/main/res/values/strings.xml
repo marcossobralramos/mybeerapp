@@ -10,9 +10,15 @@
     <string name="requests_count_mock" translatable="false">5</string>
     <string name="litros" translatable="false">LITROS</string>
     <string name="loja" translatable="false">LOJA</string>
-    <string name="preco" translatable="false">PREÇO</string>
+    <string name="preco" translatable="false">PREÇO UN.</string>
+    <string name="preco_litro" translatable="false">PREÇO/LITRO</string>
+    <string name="cancel" translatable="false">CANCELAR</string>
+    <string name="ver_produtos" translatable="false">PRODUTOS DA CESTA</string>
+    <string name="salvar" translatable="false">SALVAR</string>
+    <string name="descricao_cesta" translatable="false">DESCRIÇÃO DA CESTA</string>
     <string name="valor_total" translatable="false">VALOR TOTAL</string>
     <string name="quantidade" translatable="false">QTDE</string>
+    <string name="title_cadastro_produto" translatable="false">Cadastro de Produto</string>
     <string name="sender_badge" translatable="false">FUNCIONÁRIO</string>
     <string name="client_name_mock" translatable="false">Marcos Sobral</string>
     <string name="rating_mock" translatable="false">UDS</string>
@@ -30,6 +36,7 @@
     <string name="content_to2_mock"></string>
     <string name="title_activity_cadastro_cesta">Produtos da Cesta</string>
     <string name="title_activity_produtos">Produtos</string>
+    <string name="add_produto_cesta">Adicionando Produto</string>
     <string name="title_activity_cestas">Cestas</string>
     <string name="title_activity_cadastro_produto">Cadastro de Produto</string>
     <string name="total_da_cesta">Total da cesta</string>

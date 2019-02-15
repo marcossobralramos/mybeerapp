@@ -2,6 +2,7 @@ package br.edu.ifba.mybeerapp.views.cesta;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -11,9 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -70,21 +75,76 @@ public class ListCestaView extends ArrayAdapter<IModel> {
 
         // bind data from selected element to view through view holder
         viewHolder.descricao.setText(cesta.getDescricao());
-        viewHolder.litros.setText(String.format("%.2f", cesta.getTotalLitros()) + "L");
+        viewHolder.litros.setText(String.format("%.3f", cesta.getTotalLitros()) + "L");
         viewHolder.precoTotal.setText("R$" + String.format("%.2f", cesta.getValorTotal()));
         viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CadastroCestaActivity.class);
-                intent.putExtra("idCesta", cesta.getId());
-                getContext().startActivity(intent);
+                Dialog myDialog = new Dialog(getContext());
+                myDialog.setContentView(R.layout.form_cadastro_cesta);
+                myDialog.setCancelable(true);
+
+                final EditText descricao = (EditText) myDialog.findViewById(R.id.descricao);
+                descricao.setText(cesta.getDescricao());
+
+                Button btnSalvar = (Button) myDialog.findViewById(R.id.salvar);
+                Button btnVerProdutos = (Button) myDialog.findViewById(R.id.ver_produtos);
+
+                myDialog.show();
+
+                btnSalvar.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Cesta newCesta = (Cesta) cesta.clone();
+                        newCesta.setDescricao(descricao.getText().toString());
+                        try {
+                            if((new CestaRepository(getContext())).update(cesta, newCesta) != 1)
+                            {
+                                Toast.makeText(getContext(), "Cesta salva com sucesso!"
+                                        , Toast.LENGTH_SHORT);
+                            }
+                            else
+                            {
+                                Toast.makeText(getContext(), "Erro ao salvar a cesta!"
+                                        , Toast.LENGTH_SHORT);
+                            }
+                        } catch (IllegalAccessException | InvocationTargetException | IOException
+                                | NoSuchMethodException | ClassNotFoundException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        Activity activity = (Activity) getContext();
+                        activity.finish();
+                        activity.startActivity(activity.getIntent());
+                    }
+                });
+
+                btnVerProdutos.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), CadastroCestaActivity.class);
+                        intent.putExtra("idCesta", cesta.getId());
+                        getContext().startActivity(intent);
+                    }
+                });
             }
         });
         final FoldingCell finalCell = cell;
         viewHolder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (new CestaRepository(getContext())).delete(cesta.getId());
+                if(new CestaRepository(getContext()).delete(cesta.getId()) != -1)
+                {
+                    Toast.makeText(getContext(), "Cesta salva com sucesso!"
+                            , Toast.LENGTH_SHORT);
+                }
+                else
+                {
+                    Toast.makeText(getContext(), "Erro ao salvar a cesta!"
+                            , Toast.LENGTH_SHORT);
+                }
                 Activity activity = (Activity) getContext();
                 activity.finish();
                 activity.startActivity(activity.getIntent());

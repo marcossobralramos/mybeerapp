@@ -95,17 +95,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_cestas) {
             Intent intent = new Intent(this, ListCestasActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_lojas) {
-
         } else if (id == R.id.nav_cervejas) {
             Intent intent = new Intent(this, ProdutosListActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_marcas) {
-
-        } else if (id == R.id.nav_modelos) {
-
-        } else if (id == R.id.nav_pesquisas) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

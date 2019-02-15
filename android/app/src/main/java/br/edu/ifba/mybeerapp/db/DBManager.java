@@ -46,7 +46,7 @@ public class DBManager extends SQLiteOpenHelper
 
     // DB info
     private static final String NOME_BASE_DE_DADOS = "MYBEERAPP.db";
-    private static final int VERSAO_BASE_DE_DADOS = 6;
+    private static final int VERSAO_BASE_DE_DADOS = 8;
 
     // create tables
     private static final String CREATE_MARCA_TABLE = "CREATE TABLE marca (" +
@@ -66,7 +66,7 @@ public class DBManager extends SQLiteOpenHelper
     private static final String CREATE_PRODUTO_TABLE = "CREATE TABLE produto (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, lojaId INTEGER NOT NULL, " +
             "bebidaId INTEGER NOT NULL, precoUnidade REAL(8,2) NOT NULL, " +
-            "precoML REAL(8,4) NOT NULL, ultimaAtualizacao TEXT, " +
+            "precoLitro REAL(8,4) NOT NULL, ultimaAtualizacao TEXT, " +
             "FOREIGN KEY(lojaId) REFERENCES loja(id)," +
             "FOREIGN KEY(bebidaId) REFERENCES bebida(id))";
 
@@ -77,6 +77,7 @@ public class DBManager extends SQLiteOpenHelper
     private static final String CREATE_PRODUTOS_CESTAS_TABLE = "CREATE TABLE produtos_cestas (" +
             "produtoId INTEGER NOT NULL, cestaId INTEGER NOT NULL, " +
             "qtdeProdutos INTEGER NOT NULL," +
+            "preco REAL(8,2)," +
             "FOREIGN KEY(produtoId) REFERENCES produto(id)," +
             "FOREIGN KEY(cestaId) REFERENCES cesta(id))";
 
@@ -93,11 +94,12 @@ public class DBManager extends SQLiteOpenHelper
             "('Extra - Paralela'), ('Walmart - Brotas'), ('Mercearia do Miseravão')";
 
     private static final String INSERT_PRODUTOS_DEFAULT = "INSERT INTO produto (lojaId, bebidaId," +
-            " precoUnidade, precoML) VALUES (1,1,5.99,0.0059), (1,2,3.99,0.0039), (1,3,2.99,0.0029)";
+            " precoUnidade, precoLitro) VALUES (1,1,5.99,22.26), (1,2,3.99,11.40), (1,3,2.99,11.96)";
 
     private static final String INSERT_CESTAS_DEFAULT = "INSERT INTO cesta (descricao, valorTotal)" +
             " VALUES ('Minha Primeira Cesta', 29.94), ('Minha Segunda Cesta', 29.94)";
 
     private static final String INSERT_PRODUTOS_CESTAS_DEFAULT = "INSERT INTO produtos_cestas " +
-            "(cestaId, produtoId, qtdeProdutos) VALUES (1,1,3), (1,2,3), (2,1,3), (2,2,3)";
+            "(cestaId, produtoId, qtdeProdutos, preco) VALUES (1,1,3, 5.99), (1,2,3,3.99), " +
+            "(2,1,3, 2.99), (2,2,3, 3.45)";
 }
