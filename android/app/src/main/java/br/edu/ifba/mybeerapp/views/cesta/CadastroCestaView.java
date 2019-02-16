@@ -84,7 +84,7 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
             viewHolder.loja.setText(produto.getLoja().getNome().substring(0,14) + "...");
         else
             viewHolder.loja.setText(produto.getLoja().getNome());
-        viewHolder.preco.setText("R$" + String.format("%.2f", produto.getPrecoUnidade()));
+        viewHolder.preco.setText("R$ " + String.format("%.2f", produto.getPrecoUnidade()));
         viewHolder.precoLitro.setText("R$" + String.format("%.2f", produto.getPrecoLitro()));
         viewHolder.qtde.setText(String.valueOf(produto.getQtde()));
         viewHolder.valorTotal.setText("R$" + String.format("%.2f", produto.getValorTotal()));
