@@ -6,10 +6,11 @@ import java.util.Date;
 import br.edu.ifba.mybeerapp.model.Loja;
 import br.edu.ifba.mybeerapp.model.Bebida;
 import br.edu.ifba.mybeerapp.model.annotations.DBField;
+import br.edu.ifba.mybeerapp.model.annotations.DBFieldName;
 import br.edu.ifba.mybeerapp.model.annotations.RepositoryNotAccess;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 
-public class Produto implements IModel, Comparable<Produto>
+public class Produto implements IModel, Comparable
 {
     @DBField
     private int id;
@@ -18,12 +19,16 @@ public class Produto implements IModel, Comparable<Produto>
     @DBField
     private Bebida bebida;
     @DBField
+    @DBFieldName(name = "preco_unidade")
     private double precoUnidade;
     @DBField
+    @DBFieldName(name = "preco_litro")
     private double precoLitro;
     @DBField
+    @DBFieldName(name = "ultima_atualizacao")
     private String ultimaAtualizacao;
 
+    private int produtoCestaId;
     private int cestaId;
     private int qtde;
     private double valorTotal;
@@ -122,6 +127,10 @@ public class Produto implements IModel, Comparable<Produto>
         return precoLitro;
     }
 
+    public void setPrecoLitro(double precoLitro) {
+        this.precoLitro = precoLitro;
+    }
+
     public String getUltimaAtualizacao() {
         return ultimaAtualizacao;
     }
@@ -141,11 +150,22 @@ public class Produto implements IModel, Comparable<Produto>
     }
 
     @Override
-    public int compareTo(Produto o) {
-        if(this.getPrecoLitro() > o.getPrecoLitro())
+    public int compareTo(Object o) {
+        Produto produto = (Produto) o;
+        if(this.getPrecoLitro() > produto.getPrecoLitro())
             return 1;
-        else if(this.getPrecoLitro() < o.getPrecoLitro())
+        else if(this.getPrecoLitro() < produto.getPrecoLitro())
             return -1;
         return 0;
+    }
+
+    @RepositoryNotAccess
+    public int getProdutoCestaId() {
+        return produtoCestaId;
+    }
+
+    @RepositoryNotAccess
+    public void setProdutoCestaId(int produtoCestaId) {
+        this.produtoCestaId = produtoCestaId;
     }
 }

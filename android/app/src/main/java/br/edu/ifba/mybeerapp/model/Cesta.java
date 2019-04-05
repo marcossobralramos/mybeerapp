@@ -8,23 +8,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.edu.ifba.mybeerapp.model.annotations.DBField;
+import br.edu.ifba.mybeerapp.model.annotations.DBFieldName;
 import br.edu.ifba.mybeerapp.model.annotations.RepositoryNotAccess;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
 
-public class Cesta implements IModel
-{
+public class Cesta implements IModel {
     @DBField
     private int id;
     @DBField
     private String descricao;
     @DBField
+    @DBFieldName(name = "total")
     private double valorTotal;
     @DBField
     private ArrayList<Produto> produtos;
-
+    @DBField
+    @DBFieldName(name = "litros")
     private double totalLitros;
 
-    public Cesta(){
+    public Cesta() {
         this.produtos = new ArrayList<>();
         this.valorTotal = 0;
         this.totalLitros = 0;
@@ -74,13 +76,17 @@ public class Cesta implements IModel
     }
 
     @RepositoryNotAccess
-    public Produto getProduto(int idProd)
-    {
-        for(Produto produto : this.produtos)
-            if(produto.getId() == idProd)
+    public Produto getProduto(int idProd) {
+        for (Produto produto : this.produtos)
+            if (produto.getId() == idProd)
                 return produto;
 
         return null;
+    }
+
+    @RepositoryNotAccess
+    public boolean produtoExiste(Produto produto) {
+        return this.produtos.contains(produto);
     }
 
     @RepositoryNotAccess
@@ -104,21 +110,19 @@ public class Cesta implements IModel
         this.totalLitros = totalLitros;
     }
 
-    public boolean addProduto(Produto produto, int qtde)
-    {
-        if(produto == null)
+    public boolean addProduto(Produto produto, int qtde) {
+        if (produto == null)
             return false;
 
         produto.setQtde(qtde);
         produto.setCestaId(this.id);
 
-        if(this.produtos.contains(produto))
+        if (this.produtos.contains(produto))
             this.removeProduto(produto);
 
         boolean success = this.produtos.add(produto);
 
-        if(success)
-        {
+        if (success) {
             this.valorTotal += produto.getValorTotal();
             this.totalLitros += produto.getTotalML() / 1000;
         }
@@ -126,19 +130,17 @@ public class Cesta implements IModel
         return success;
     }
 
-    public boolean removeProduto(Produto produto)
-    {
+    public boolean removeProduto(Produto produto) {
         boolean success = this.produtos.remove(produto);
-        if(success)
-        {
+        if (success) {
             this.valorTotal -= (produto.getPrecoUnidade() * produto.getQtde());
-            this.totalLitros += (produto.getBebida().getModelo().getVolume() * produto.getQtde()) / 1000;
+            this.totalLitros -= (produto.getBebida().getModelo().getVolume() * produto.getQtde()) / 1000;
         }
         return success;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return String.valueOf(this.id);
     }
+
 }

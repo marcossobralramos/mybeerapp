@@ -2,8 +2,6 @@ package br.edu.ifba.mybeerapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +13,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
-import br.edu.ifba.mybeerapp.repository.CestaRepository;
+import java.util.Collection;
+
+import br.edu.ifba.mybeerapp.model.interfaces.IModel;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.IBebidaRepository;
+import br.edu.ifba.mybeerapp.repository.interfaces.ILojaRepository;
+import br.edu.ifba.mybeerapp.repository.interfaces.IMarcaRepository;
+import br.edu.ifba.mybeerapp.repository.interfaces.IModeloRepository;
+import br.edu.ifba.mybeerapp.repository.sqlite.Repository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
 import br.edu.ifba.mybeerapp.views.cesta.ListCestasActivity;
 import br.edu.ifba.mybeerapp.views.produto.ProdutosListActivity;
 
@@ -38,7 +45,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         Button bnt = findViewById(R.id.btnCompras);
         final MainActivity main = this;
         bnt.setOnClickListener(new View.OnClickListener() {
@@ -47,11 +53,12 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent intent = new Intent(main, ListCestasActivity.class);
                 main.startActivity(intent);
-
             }
         });
 
-
+        // Definindo o método de persistência dos dados (API ou SQLite)
+        RepositoryLoader repositoryLoader = RepositoryLoader.getInstance();
+        repositoryLoader.setPackageName(RepositoryLoader.API_METHOD);
     }
 
     @Override

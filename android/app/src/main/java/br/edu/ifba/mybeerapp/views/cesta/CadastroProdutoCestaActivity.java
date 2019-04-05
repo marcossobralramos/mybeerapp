@@ -14,31 +14,29 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifba.mybeerapp.R;
-import br.edu.ifba.mybeerapp.model.Bebida;
 import br.edu.ifba.mybeerapp.model.Cesta;
 import br.edu.ifba.mybeerapp.model.Loja;
 import br.edu.ifba.mybeerapp.model.Produto;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.BebidaRepository;
-import br.edu.ifba.mybeerapp.repository.CestaRepository;
-import br.edu.ifba.mybeerapp.repository.LojaRepository;
-import br.edu.ifba.mybeerapp.repository.ProdutoRepository;
+import br.edu.ifba.mybeerapp.repository.api.Repository;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.ICestaRepository;
+import br.edu.ifba.mybeerapp.repository.interfaces.ILojaRepository;
+import br.edu.ifba.mybeerapp.repository.interfaces.IProdutoRepository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
 import br.edu.ifba.mybeerapp.views.loja.LojasListActivity;
+import br.edu.ifba.mybeerapp.views.produto.CadastroProdutoActivity;
 import br.edu.ifba.mybeerapp.views.produto.ProdutosListActivity;
 
 public class CadastroProdutoCestaActivity extends AppCompatActivity {
     private static Cesta thisCesta;
-
-    public CadastroProdutoCestaActivity() {
-        super();
-        this.thisCesta = null;
-    }
+    private ICestaRepository cestaRepository;
+    private final CadastroProdutoCestaActivity activity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,79 +45,113 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        this.cestaRepository = RepositoryLoader.getInstance().getCestaRepository(getApplicationContext());
+
         final int idProduto = getIntent().getIntExtra("idProduto", 0);
         final int idCesta = getIntent().getIntExtra("idCesta", 0);
 
-        try {
-            thisCesta = (Cesta) (new CestaRepository(this.getApplicationContext())).retrieveById(idCesta);
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException
-                | InvocationTargetException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        cestaRepository.setViewCallback(new ViewCallback() {
+            @Override
+            public void success(ArrayList<IModel> models) {
+
+            }
+
+            @Override
+            public void success(IModel model) {
+                thisCesta = (Cesta) model;
+            }
+
+            @Override
+            public void fail(String message) {
+
+            }
+        });
+        cestaRepository.retrieveById(idCesta);
 
         loadLojasCombobox(idProduto, idCesta);
-
     }
 
     private void loadLojasCombobox(final int idProduto, final int idCesta) {
-        List<IModel> lojas = null;
-        try {
-            lojas = (new LojaRepository(this.getApplicationContext())).retrieveAll();
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException
-                | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        Spinner comboLojas = (Spinner) findViewById(R.id.combo_lojas);
-        comboLojas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ILojaRepository lojaRepository = RepositoryLoader.getInstance().getLojaRepository(getApplicationContext());
+        lojaRepository.setViewCallback(new ViewCallback() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Loja loja = (Loja) parent.getItemAtPosition(position);
-                loadProdutosCombo(loja.getId(), idProduto, idCesta);
+            public void success(ArrayList<IModel> models) {
+                Spinner comboLojas = (Spinner) findViewById(R.id.combo_lojas);
+                comboLojas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Loja loja = (Loja) parent.getItemAtPosition(position);
+                        loadProdutosCombo(loja.getId(), idProduto);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+                ArrayAdapter adapter = new ArrayAdapter(activity,
+                        android.R.layout.simple_spinner_item, models);
+                comboLojas.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void success(IModel model) {
+
+            }
+
+            @Override
+            public void fail(String message) {
 
             }
         });
-
-        ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, lojas);
-        comboLojas.setAdapter(adapter);
+        lojaRepository.retrieveAll();
     }
 
-    private void loadProdutosCombo(int lojaId, final int idProduto, final int idCesta) {
-        List<IModel> produtos = null;
-        try {
-            produtos = (new ProdutoRepository(this.getApplicationContext())).retrieveByLoja(lojaId);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException
-                | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        Spinner comboProdutos = (Spinner) findViewById(R.id.combo_produtos);
-        comboProdutos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void loadProdutosCombo(int lojaId, final int idProduto) {
+        IProdutoRepository produtoRepository = RepositoryLoader.getInstance().getProdutoRepository(getApplicationContext());
+        produtoRepository.setViewCallback(new ViewCallback() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Produto produto = (Produto) parent.getItemAtPosition(position);
-                TextView preco = findViewById(R.id.preco);
-                preco.setText(String.valueOf(produto.getPrecoUnidade()));
+            public void success(ArrayList<IModel> models) {
+                Spinner comboProdutos = (Spinner) findViewById(R.id.combo_produtos);
+                comboProdutos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Produto produto = (Produto) parent.getItemAtPosition(position);
+                        if(!thisCesta.produtoExiste(produto)) {
+                            TextView preco = findViewById(R.id.preco);
+                            preco.setText(String.valueOf(produto.getPrecoUnidade()));
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+                ArrayAdapter adapter = new ArrayAdapter(activity,
+                        android.R.layout.simple_spinner_item, models);
+                comboProdutos.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                loadButtons(idProduto);
+                // then edit
+                if (idProduto != 0)
+                    loadProduto(idProduto);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void success(IModel model) {
+
+            }
+
+            @Override
+            public void fail(String message) {
 
             }
         });
-
-        ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, produtos);
-        comboProdutos.setAdapter(adapter);
-        loadButtons(idProduto);
-        // then edit
-        if (idCesta != 0 && idProduto != 0)
-            this.loadProduto(idProduto, idCesta);
+        produtoRepository.retrieveByLoja(lojaId);
     }
 
     private void loadButtons(final int idProduto) {
@@ -147,79 +179,104 @@ public class CadastroProdutoCestaActivity extends AppCompatActivity {
         btnSalvarProdutos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Produto produto = null;
+                // callback para modificações na cesta
+                cestaRepository.setViewCallback(new ViewCallback() {
+                    @Override
+                    public void success(ArrayList<IModel> models) {
 
-                try {
+                    }
+
+                    @Override
+                    public void success(IModel model) {
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("success", true);
+                        setResult(200, returnIntent);
+                        finish();
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                IProdutoRepository produtoRepository = RepositoryLoader.getInstance().getProdutoRepository(getApplicationContext());
+
+                Produto produto = activity.thisCesta.getProduto(idProduto);
+
+                if(produto == null) {
                     int id = (idProduto == 0) ?
                             ((Produto) ((Spinner) findViewById(R.id.combo_produtos))
                                     .getSelectedItem()).getId()
                             : idProduto;
-                    produto = (Produto) (new ProdutoRepository(getApplicationContext())).retrieveById(id);
-                } catch (IllegalAccessException | InstantiationException | ClassNotFoundException |
-                        InvocationTargetException | NoSuchMethodException e) {
-                    e.printStackTrace();
+
+                    produtoRepository.setViewCallback(new ViewCallback() {
+                        @Override
+                        public void success(ArrayList<IModel> models) {
+
+                        }
+
+                        @Override
+                        public void success(IModel model) {
+                            Produto produto = (Produto) model;
+                            EditText precoET = findViewById(R.id.preco);
+                            double preco = Double.parseDouble(precoET.getText().toString());
+                            EditText qtdeET = findViewById(R.id.qtde);
+                            int qtde = Integer.parseInt(qtdeET.getText().toString());
+                            produto.setPrecoUnidade(preco);
+                            produto.setQtde(qtde);
+                            produto.setCestaId(thisCesta.getId());
+
+                            cestaRepository.addProduto(produto);
+                        }
+
+                        @Override
+                        public void fail(String message) {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    produtoRepository.retrieveById(id);
+                } else {
+                    EditText precoET = findViewById(R.id.preco);
+                    double preco = Double.parseDouble(precoET.getText().toString());
+                    EditText qtdeET = findViewById(R.id.qtde);
+                    int qtde = Integer.parseInt(qtdeET.getText().toString());
+                    produto.setPrecoUnidade(preco);
+                    produto.setQtde(qtde);
+                    produto.setCestaId(thisCesta.getId());
+                    cestaRepository.updateProduto(produto);
                 }
 
-                EditText precoET = findViewById(R.id.preco);
-                double preco = Double.parseDouble(precoET.getText().toString());
-                EditText qtdeET = findViewById(R.id.qtde);
-                int qtde = Integer.parseInt(qtdeET.getText().toString());
-                produto.setPrecoUnidade(preco);
-                produto.setQtde(qtde);
-
-                long result = -1;
-                if (thisCesta != null) {
-                    try {
-                        result = (new CestaRepository(getApplicationContext())).addProduto(produto, thisCesta.getId());
-                    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException
-                            | InvocationTargetException | IllegalAccessException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (result == -1)
-                    Toast.makeText(getApplicationContext(),
-                            "Falha ao salvar o produto!",
-                            Toast.LENGTH_SHORT).show();
-                else {
-                    Toast.makeText(getApplicationContext(),
-                            "Produto salvo com sucesso!",
-                            Toast.LENGTH_SHORT).show();
-
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("success", true);
-                    setResult(200, returnIntent);
-                    finish();
-                }
             }
         });
     }
 
     @SuppressLint("SetTextI18n")
-    private void loadProduto(int idProduto, int idCesta) {
+    private void loadProduto(final int idProduto) {
+        Produto produto = thisCesta.getProduto(idProduto);
+
         Spinner comboLojas = findViewById(R.id.combo_lojas);
         for (int x = 0; x < comboLojas.getAdapter().getCount(); x++) {
-            if (comboLojas.getAdapter().getItem(x).equals(thisCesta.getProduto(idProduto).getLoja())) {
+            if (comboLojas.getAdapter().getItem(x).equals(produto.getLoja())) {
                 comboLojas.setSelection(x, true);
                 break;
             }
         }
 
         Spinner comboProdutos = findViewById(R.id.combo_produtos);
-
         for (int x = 0; x < comboProdutos.getAdapter().getCount(); x++) {
-            if (comboProdutos.getAdapter().getItem(x).equals(thisCesta.getProduto(idProduto))) {
+            if (comboProdutos.getAdapter().getItem(x).equals(produto)) {
                 comboProdutos.setSelection(x, true);
                 break;
             }
         }
 
         EditText preco = findViewById(R.id.preco);
-        preco.setText(String.valueOf(thisCesta.getProduto(idProduto).getPrecoUnidade()));
+        preco.setText(String.valueOf(produto.getPrecoUnidade()));
 
         EditText qtde = findViewById(R.id.qtde);
-        qtde.setText(String.valueOf(thisCesta.getProduto(idProduto).getQtde()));
+        qtde.setText(String.valueOf(produto.getQtde()));
     }
 
 }

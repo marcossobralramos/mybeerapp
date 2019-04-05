@@ -20,17 +20,26 @@ import java.util.ArrayList;
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.Loja;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.LojaRepository;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.ILojaRepository;
+import br.edu.ifba.mybeerapp.repository.sqlite.LojaRepository;
+import br.edu.ifba.mybeerapp.repository.sqlite.Repository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
 
-public class LojasListActivity extends AppCompatActivity
-{
+public class LojasListActivity extends AppCompatActivity {
+
+    private ListView lojasListView;
+
+    private ILojaRepository lojaRepository;
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_lojas);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        this.lojasListView = findViewById(R.id.lojasListView);
+        this.lojaRepository = RepositoryLoader.getInstance().getLojaRepository(getApplicationContext());
 
         loadLojasList();
 
@@ -44,14 +53,12 @@ public class LojasListActivity extends AppCompatActivity
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         loadLojasList();
     }
 
-    protected void loadDialogCadastroLoja()
-    {
+    protected void loadDialogCadastroLoja() {
         Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.form_cadastro_loja);
         myDialog.setCancelable(true);
@@ -62,59 +69,62 @@ public class LojasListActivity extends AppCompatActivity
 
         myDialog.show();
 
-        final Context context = this;
-        btnSalvar.setOnClickListener(new View.OnClickListener()
-        {
+        btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Loja loja = new Loja(descricao.getText().toString());
-                try {
-                    if((new LojaRepository(context).create(loja) != 1))
-                    {
-                        Toast.makeText(context, "Loja salva com sucesso!"
-                                , Toast.LENGTH_SHORT);
+                lojaRepository.setViewCallback(new ViewCallback() {
+                    @Override
+                    public void success(ArrayList<IModel> models) {
+
                     }
-                    else
-                    {
-                        Toast.makeText(context, "Erro ao salvar a loja!"
+
+                    @Override
+                    public void success(IModel model) {
+                        Toast.makeText(getApplicationContext(), "Loja salva com sucesso!"
                                 , Toast.LENGTH_SHORT);
+                        LojasListView adapter = (LojasListView) lojasListView.getAdapter();
+                        adapter.add(model);
                     }
-                } catch (IllegalAccessException | InvocationTargetException | IOException
-                        | NoSuchMethodException | ClassNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
-                Activity activity = (Activity) context;
-                activity.finish();
-                activity.startActivity(activity.getIntent());
+
+                    @Override
+                    public void fail(String message) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+                    }
+                });
+                lojaRepository.create(loja);
             }
         });
     }
 
-    protected void loadLojasList()
-    {
-        ListView theListView = findViewById(R.id.lojasListView);
+    protected void loadLojasList() {
+        final LojasListActivity activity = this;
+        lojaRepository.setViewCallback(new ViewCallback() {
+            @Override
+            public void success(ArrayList<IModel> models) {
+                final LojasListView adapter = new LojasListView(activity, models);
+                lojasListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
 
-        ArrayList<IModel> lojasList = null;
+            @Override
+            public void success(IModel model) {
 
-        try {
-            lojasList = (ArrayList<IModel>) (new LojaRepository(this.getApplicationContext())).retrieveAll();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+            }
 
-        final LojasListView adapter = new LojasListView(this, lojasList);
+            @Override
+            public void fail(String message) {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
+            }
+        });
+        lojaRepository.retrieveAll();
+    }
 
-        // set elements to adapter
-        theListView.setAdapter(adapter);
+    public ILojaRepository getLojaRepository() {
+        return lojaRepository;
+    }
+
+    public ListView getLojasListView() {
+        return lojasListView;
     }
 }

@@ -19,8 +19,10 @@ import java.util.HashSet;
 
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.Produto;
-import br.edu.ifba.mybeerapp.repository.CestaRepository;
-import br.edu.ifba.mybeerapp.views.produto.ProdutosListActivity;
+import br.edu.ifba.mybeerapp.model.interfaces.IModel;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.ICestaRepository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
 import foldingcell.FoldingCell;
 
 /**
@@ -80,8 +82,8 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
         viewHolder.descricao.setText(produto.getBebida().getMarca().getNome() + " - " +
                 produto.getBebida().getModelo().getNome() + " - " +
                 produto.getBebida().getModelo().getVolume() + "ml");
-        if(produto.getLoja().getNome().length() > 14)
-            viewHolder.loja.setText(produto.getLoja().getNome().substring(0,14) + "...");
+        if (produto.getLoja().getNome().length() > 14)
+            viewHolder.loja.setText(produto.getLoja().getNome().substring(0, 14) + "...");
         else
             viewHolder.loja.setText(produto.getLoja().getNome());
         viewHolder.preco.setText("R$ " + String.format("%.2f", produto.getPrecoUnidade()));
@@ -89,7 +91,7 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
         viewHolder.qtde.setText(String.valueOf(produto.getQtde()));
         viewHolder.valorTotal.setText("R$" + String.format("%.2f", produto.getValorTotal()));
         viewHolder.totalML.setText(String.format("%.0f", produto.getTotalML()) + "ml");
-       viewHolder.edit.setOnClickListener(new View.OnClickListener() {
+        viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CadastroProdutoCestaActivity.class);
@@ -98,24 +100,37 @@ public class CadastroCestaView extends ArrayAdapter<Produto> {
                 ((CadastroCestaActivity) getContext()).startActivityForResult(intent, 1);
             }
         });
-       viewHolder.remove.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               int success = (new CestaRepository(getContext())).deleteProduto(produto.getCestaId(), produto.getId());
-               if(success != -1) {
-                   Toast.makeText(getContext(),
-                           "Produto deletado da cesta com sucesso!",
-                           Toast.LENGTH_SHORT).show();
-               } else {
-                   Toast.makeText(getContext(),
-                           "Erro ao deletar o produto da cesta!",
-                           Toast.LENGTH_SHORT).show();
-               }
-               Activity activity = (Activity) getContext();
-               activity.finish();
-               activity.startActivity(activity.getIntent());
-           }
-       });
+        final CadastroCestaView cadastroCestaView = this;
+        viewHolder.remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ICestaRepository cestaRepository = RepositoryLoader.getInstance()
+                        .getCestaRepository(getContext());
+
+                cestaRepository.setViewCallback(new ViewCallback() {
+                    @Override
+                    public void success(ArrayList<IModel> models) {
+
+                    }
+
+                    @Override
+                    public void success(IModel model) {
+                        Toast.makeText(getContext(),
+                                "Produto deletado da cesta com sucesso!",
+                                Toast.LENGTH_SHORT).show();
+                        Activity activity = (Activity) getContext();
+                        activity.finish();
+                        activity.startActivity(activity.getIntent());
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                cestaRepository.deleteProduto(produto);
+            }
+        });
 
         return cell;
     }

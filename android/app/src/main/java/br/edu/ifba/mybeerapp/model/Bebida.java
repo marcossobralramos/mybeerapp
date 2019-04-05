@@ -23,6 +23,14 @@ public class Bebida implements IModel
         //this.imagem = imagem;
     }
 
+    public Bebida(int id, Marca marca, Modelo modelo /*, Image imagem*/) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.id = id;
+        //this.imagem = imagem;
+    }
+
+
     public int getId() {
         return id;
     }

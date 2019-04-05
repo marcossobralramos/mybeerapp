@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,8 +20,11 @@ import java.util.HashSet;
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.Produto;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.ProdutoRepository;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.IProdutoRepository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
 import br.edu.ifba.mybeerapp.views.cesta.CadastroCestaActivity;
+import br.edu.ifba.mybeerapp.views.cesta.CadastroCestaView;
 import foldingcell.FoldingCell;
 
 /**
@@ -90,10 +94,27 @@ public class ProdutosListView extends ArrayAdapter<IModel> {
         viewHolder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (new ProdutoRepository(getContext())).delete(produto.getId());
-                Activity activity = (Activity) getContext();
-                activity.finish();
-                activity.startActivity(activity.getIntent());
+                final CadastroCestaActivity activity = (CadastroCestaActivity) getContext();
+                IProdutoRepository produtoRepository = RepositoryLoader.getInstance().getProdutoRepository(getContext());
+                produtoRepository.setViewCallback(new ViewCallback() {
+                    @Override
+                    public void success(ArrayList<IModel> models) {
+
+                    }
+
+                    @Override
+                    public void success(IModel model) {
+                        CadastroCestaView adapter = (CadastroCestaView) activity.getCestaView();
+                        adapter.remove((Produto) model);
+                        adapter.add((Produto) model);
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+                    }
+                });
+                produtoRepository.delete(produto.getId());
             }
         });
 

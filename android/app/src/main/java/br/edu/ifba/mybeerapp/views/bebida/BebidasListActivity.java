@@ -8,15 +8,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.BebidaRepository;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.IBebidaRepository;
+import br.edu.ifba.mybeerapp.repository.sqlite.BebidaRepository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
+
 public class BebidasListActivity extends AppCompatActivity
 {
+    private Dialog formCadastroBebida;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -34,6 +40,18 @@ public class BebidasListActivity extends AppCompatActivity
                 loadDialogCadastroBebida();
             }
         });
+
+        this.formCadastroBebida = new Dialog(this);
+        this.formCadastroBebida.setContentView(R.layout.form_cadastro_bebida);
+
+        Button btnSalvar = (Button) formCadastroBebida.findViewById(R.id.salvar);
+        btnSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     @Override
@@ -45,38 +63,35 @@ public class BebidasListActivity extends AppCompatActivity
 
     protected void loadDialogCadastroBebida()
     {
-        Dialog myDialog = new Dialog(this);
-        myDialog.setContentView(R.layout.form_cadastro_bebida);
-        myDialog.setCancelable(true);
-
-        Button btnSalvar = (Button) myDialog.findViewById(R.id.salvar);
-
-        myDialog.show();
+        this.formCadastroBebida.setCancelable(true);
+        this.formCadastroBebida.show();
     }
 
     protected void loadBebidasList()
     {
-        ListView theListView = findViewById(R.id.lojasListView);
+        final ListView theListView = findViewById(R.id.lojasListView);
 
-        ArrayList<IModel> bebidasList = null;
+        final BebidasListActivity activity = this;
 
-        try {
-            bebidasList = (ArrayList<IModel>) (new BebidaRepository(this.getApplicationContext())).retrieveAll();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        IBebidaRepository bebidaRepository = RepositoryLoader.getInstance().getBebidaRepository(getApplicationContext());
+        bebidaRepository.setViewCallback(new ViewCallback() {
+            @Override
+            public void success(ArrayList<IModel> models) {
+                final BebidasListView adapter = new BebidasListView(activity, models);
+                theListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
 
-        final BebidasListView adapter = new BebidasListView(this, bebidasList);
+            @Override
+            public void success(IModel model) {
 
-        // set elements to adapter
-        theListView.setAdapter(adapter);
+            }
+
+            @Override
+            public void fail(String message) {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
+            }
+        });
+        bebidaRepository.retrieveAll();
     }
 }

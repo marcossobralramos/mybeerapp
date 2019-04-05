@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,7 +15,7 @@ import java.util.Map;
 import br.edu.ifba.mybeerapp.model.annotations.DBField;
 import br.edu.ifba.mybeerapp.model.annotations.RepositoryNotAccess;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.Repository;
+import br.edu.ifba.mybeerapp.repository.sqlite.Repository;
 
 public class UtilsDB
 {
@@ -143,11 +142,15 @@ public class UtilsDB
                     {
                         if(repository != null)
                         {
+                            String classRepositoryName = fieldName.substring(0,1).toUpperCase() +
+                                    fieldName.substring(1,fieldName.length());
                             fieldName += "Id";
+
                             Object obj =  repository.retrieveModel(
-                                typeName,
+                                classRepositoryName,
                                 String.valueOf(dbResult.getInt(dbResult.getColumnIndex(fieldName)))
                             );
+
                             method.invoke(model, obj);
                         }
                     }

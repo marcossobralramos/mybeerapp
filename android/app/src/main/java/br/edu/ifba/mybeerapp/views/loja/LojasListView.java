@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +18,17 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.Loja;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.CestaRepository;
-import br.edu.ifba.mybeerapp.repository.LojaRepository;
+import br.edu.ifba.mybeerapp.repository.api.Repository;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.ILojaRepository;
+import br.edu.ifba.mybeerapp.repository.sqlite.LojaRepository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
 import foldingcell.FoldingCell;
 
 /**
@@ -79,60 +82,49 @@ public class LojasListView extends ArrayAdapter<IModel> {
         viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog myDialog = new Dialog(getContext());
+                final LojasListActivity activity = (LojasListActivity) getContext();
+                final Dialog myDialog = new Dialog(activity);
                 myDialog.setContentView(R.layout.form_cadastro_loja);
                 myDialog.setCancelable(true);
 
                 final EditText descricao = (EditText) myDialog.findViewById(R.id.descricao);
                 descricao.setText(loja.getNome());
 
-                Button btnSalvar = (Button) myDialog.findViewById(R.id.salvar);
-
                 myDialog.show();
 
+                Button btnSalvar = (Button) myDialog.findViewById(R.id.salvar);
                 btnSalvar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         final EditText descricao = (EditText) myDialog.findViewById(R.id.descricao);
                         Loja newLoja = new Loja();
                         newLoja.setNome(descricao.getText().toString());
-                        try {
-                            if ((new LojaRepository(getContext())).update(loja, newLoja) != 1) {
-                                Toast.makeText(getContext(), "Cesta salva com sucesso!"
-                                        , Toast.LENGTH_SHORT);
-                            } else {
-                                Toast.makeText(getContext(), "Erro ao salvar a cesta!"
+
+                        ILojaRepository lojaRepository = activity.getLojaRepository();
+                        lojaRepository.setViewCallback(new ViewCallback() {
+                            @Override
+                            public void success(ArrayList<IModel> models) {
+
+                            }
+
+                            @Override
+                            public void success(IModel model) {
+                                myDialog.hide();
+                                LojasListView adapter = (LojasListView) activity.getLojasListView().getAdapter();
+                                adapter.remove(model);
+                                adapter.add(model);
+                                Toast.makeText(getContext(), "Loja alterada com sucesso!"
                                         , Toast.LENGTH_SHORT);
                             }
-                        } catch (IllegalAccessException | InvocationTargetException | IOException
-                                | NoSuchMethodException | ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        Activity activity = (Activity) getContext();
-                        activity.finish();
-                        activity.startActivity(activity.getIntent());
+
+                            @Override
+                            public void fail(String message) {
+                                Toast.makeText(activity, message, Toast.LENGTH_LONG);
+                            }
+                        });
+                        lojaRepository.update(loja, newLoja);
                     }
                 });
-
-            }
-        });
-
-        viewHolder.remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(new LojaRepository(getContext()).delete(loja.getId()) != -1)
-                {
-                    Toast.makeText(getContext(), "Loja removida com sucesso!"
-                            , Toast.LENGTH_SHORT);
-                }
-                else
-                {
-                    Toast.makeText(getContext(), "Erro ao remover a loja!"
-                            , Toast.LENGTH_SHORT);
-                }
-                Activity activity = (Activity) getContext();
-                activity.finish();
-                activity.startActivity(activity.getIntent());
             }
         });
 
@@ -140,10 +132,25 @@ public class LojasListView extends ArrayAdapter<IModel> {
         viewHolder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (new LojaRepository(getContext())).delete(loja.getId());
-                Activity activity = (Activity) getContext();
-                activity.finish();
-                activity.startActivity(activity.getIntent());
+                ILojaRepository lojaRepository = RepositoryLoader.getInstance().getLojaRepository(getContext());
+                lojaRepository.setViewCallback(new ViewCallback() {
+                    @Override
+                    public void success(ArrayList<IModel> models) {
+
+                    }
+
+                    @Override
+                    public void success(IModel model) {
+                        Activity activity = (Activity) getContext();
+                        activity.finish();
+                        activity.startActivity(activity.getIntent());
+                    }
+
+                    @Override
+                    public void fail(String message) {
+
+                    }
+                });
             }
         });
 

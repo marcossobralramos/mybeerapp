@@ -16,6 +16,11 @@ public class Marca implements IModel
         this.nome = nome;
     }
 
+    public Marca(int id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
     public int getId() {
         return id;
     }

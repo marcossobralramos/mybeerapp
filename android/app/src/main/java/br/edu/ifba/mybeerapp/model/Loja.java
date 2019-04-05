@@ -16,6 +16,11 @@ public class Loja implements IModel
         this.nome = nome;
     }
 
+    public Loja(int id, String nome) {
+        this.nome = nome;
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

@@ -5,8 +5,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +17,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
-import br.edu.ifba.mybeerapp.MainActivity;
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.Cesta;
+import br.edu.ifba.mybeerapp.model.Produto;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.CestaRepository;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.ICestaRepository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
 import foldingcell.FoldingCell;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -83,6 +85,7 @@ public class ListCestaView extends ArrayAdapter<IModel> {
                 Dialog myDialog = new Dialog(getContext());
                 myDialog.setContentView(R.layout.form_cadastro_cesta);
                 myDialog.setCancelable(true);
+                myDialog.show();
 
                 final EditText descricao = (EditText) myDialog.findViewById(R.id.descricao);
                 descricao.setText(cesta.getDescricao());
@@ -90,34 +93,32 @@ public class ListCestaView extends ArrayAdapter<IModel> {
                 Button btnSalvar = (Button) myDialog.findViewById(R.id.salvar);
                 Button btnVerProdutos = (Button) myDialog.findViewById(R.id.ver_produtos);
 
-                myDialog.show();
-
-                btnSalvar.setOnClickListener(new View.OnClickListener()
-                {
+                btnSalvar.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         Cesta newCesta = (Cesta) cesta.clone();
                         newCesta.setDescricao(descricao.getText().toString());
-                        try {
-                            if((new CestaRepository(getContext())).update(cesta, newCesta) != 1)
-                            {
-                                Toast.makeText(getContext(), "Cesta salva com sucesso!"
-                                        , Toast.LENGTH_SHORT);
+
+                        ICestaRepository cestaRepository = RepositoryLoader.getInstance().getCestaRepository(getContext());
+                        cestaRepository.setViewCallback(new ViewCallback() {
+                            @Override
+                            public void success(ArrayList<IModel> models) {
+
                             }
-                            else
-                            {
-                                Toast.makeText(getContext(), "Erro ao salvar a cesta!"
-                                        , Toast.LENGTH_SHORT);
+
+                            @Override
+                            public void success(IModel model) {
+                                Activity activity = (Activity) getContext();
+                                activity.finish();
+                                activity.startActivity(activity.getIntent());
                             }
-                        } catch (IllegalAccessException | InvocationTargetException | IOException
-                                | NoSuchMethodException | ClassNotFoundException e)
-                        {
-                            e.printStackTrace();
-                        }
-                        Activity activity = (Activity) getContext();
-                        activity.finish();
-                        activity.startActivity(activity.getIntent());
+
+                            @Override
+                            public void fail(String message) {
+                                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+                            }
+                        });
+                        cestaRepository.update(cesta, newCesta);
                     }
                 });
 
@@ -125,7 +126,7 @@ public class ListCestaView extends ArrayAdapter<IModel> {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), CadastroCestaActivity.class);
-                        intent.putExtra("idCesta", cesta.getId());
+                        intent.putExtra("cestaId", cesta.getId());
                         getContext().startActivity(intent);
                     }
                 });
@@ -135,19 +136,29 @@ public class ListCestaView extends ArrayAdapter<IModel> {
         viewHolder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(new CestaRepository(getContext()).delete(cesta.getId()) != -1)
-                {
-                    Toast.makeText(getContext(), "Cesta salva com sucesso!"
-                            , Toast.LENGTH_SHORT);
-                }
-                else
-                {
-                    Toast.makeText(getContext(), "Erro ao salvar a cesta!"
-                            , Toast.LENGTH_SHORT);
-                }
-                Activity activity = (Activity) getContext();
-                activity.finish();
-                activity.startActivity(activity.getIntent());
+                final ListCestasActivity activity = (ListCestasActivity) getContext();
+                ICestaRepository cestaRepository = RepositoryLoader.getInstance().getCestaRepository(getContext());
+                cestaRepository.setViewCallback(new ViewCallback() {
+                    @Override
+                    public void success(ArrayList<IModel> models) {
+
+                    }
+
+                    @Override
+                    public void success(IModel model) {
+                        Toast.makeText(getContext(), "Cesta alterada com sucesso!"
+                                , Toast.LENGTH_SHORT);
+                        Activity activity = (Activity) getContext();
+                        activity.finish();
+                        activity.startActivity(activity.getIntent());
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+                    }
+                });
+                cestaRepository.delete(cesta.getId());
             }
         });
 

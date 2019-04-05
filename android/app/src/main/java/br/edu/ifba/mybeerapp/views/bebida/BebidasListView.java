@@ -10,20 +10,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.Bebida;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.BebidaRepository;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.IBebidaRepository;
+import br.edu.ifba.mybeerapp.repository.interfaces.IProdutoRepository;
+import br.edu.ifba.mybeerapp.repository.sqlite.BebidaRepository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
 import foldingcell.FoldingCell;
 
 /**
@@ -82,57 +83,32 @@ public class BebidasListView extends ArrayAdapter<IModel> {
                 final Dialog myDialog = new Dialog(getContext());
                 myDialog.setContentView(R.layout.form_cadastro_bebida);
                 myDialog.setCancelable(true);
-
-                /*final EditText descricao = (EditText) myDialog.findViewById(R.id.descricao);
-                descricao.setText(bebida.getNome());
-
-                Button btnSalvar = (Button) myDialog.findViewById(R.id.salvar);
-
-                myDialog.show();
-
-                btnSalvar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final EditText descricao = (EditText) myDialog.findViewById(R.id.descricao);
-                        bebida newbebida = new bebida();
-                        newbebida.setNome(descricao.getText().toString());
-                        try {
-                            if ((new bebidaRepository(getContext())).update(bebida, newbebida) != 1) {
-                                Toast.makeText(getContext(), "Cesta salva com sucesso!"
-                                        , Toast.LENGTH_SHORT);
-                            } else {
-                                Toast.makeText(getContext(), "Erro ao salvar a cesta!"
-                                        , Toast.LENGTH_SHORT);
-                            }
-                        } catch (IllegalAccessException | InvocationTargetException | IOException
-                                | NoSuchMethodException | ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        Activity activity = (Activity) getContext();
-                        activity.finish();
-                        activity.startActivity(activity.getIntent());
-                    }
-                });*/
-
             }
         });
 
         viewHolder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(new BebidaRepository(getContext()).delete(bebida.getId()) != -1)
-                {
-                    Toast.makeText(getContext(), "bebida removida com sucesso!"
-                            , Toast.LENGTH_SHORT);
-                }
-                else
-                {
-                    Toast.makeText(getContext(), "Erro ao remover a bebida!"
-                            , Toast.LENGTH_SHORT);
-                }
-                Activity activity = (Activity) getContext();
-                activity.finish();
-                activity.startActivity(activity.getIntent());
+                IBebidaRepository bebidaRepository = RepositoryLoader.getInstance().getBebidaRepository(getContext());
+                bebidaRepository.setViewCallback(new ViewCallback() {
+                    @Override
+                    public void success(ArrayList<IModel> models) {
+
+                    }
+
+                    @Override
+                    public void success(IModel model) {
+                        Activity activity = (Activity) getContext();
+                        activity.finish();
+                        activity.startActivity(activity.getIntent());
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+                    }
+                });
+                bebidaRepository.delete(bebida.getId());
             }
         });
 

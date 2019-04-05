@@ -3,10 +3,8 @@ package br.edu.ifba.mybeerapp.views.cesta;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,24 +13,28 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import br.edu.ifba.mybeerapp.R;
 import br.edu.ifba.mybeerapp.model.Cesta;
 import br.edu.ifba.mybeerapp.model.interfaces.IModel;
-import br.edu.ifba.mybeerapp.repository.CestaRepository;
+import br.edu.ifba.mybeerapp.repository.api.Repository;
+import br.edu.ifba.mybeerapp.repository.api.callbacks.ViewCallback;
+import br.edu.ifba.mybeerapp.repository.interfaces.ICestaRepository;
+import br.edu.ifba.mybeerapp.utils.RepositoryLoader;
 
-public class ListCestasActivity extends AppCompatActivity
-{
+public class ListCestasActivity extends AppCompatActivity {
+
+    private ListView cestasListView;
+    private ICestaRepository cestaRepository;
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_cestas);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        this.cestaRepository = RepositoryLoader.getInstance().getCestaRepository(getApplicationContext());
 
         loadCestaList();
 
@@ -46,15 +48,13 @@ public class ListCestasActivity extends AppCompatActivity
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         loadCestaList();
     }
 
-    protected void loadDialogCadastroCesta()
-    {
-        Dialog myDialog = new Dialog(this);
+    protected void loadDialogCadastroCesta() {
+        final Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.form_cadastro_cesta);
         myDialog.setCancelable(true);
 
@@ -65,60 +65,71 @@ public class ListCestasActivity extends AppCompatActivity
         btnVerProdutos.setEnabled(false);
         myDialog.show();
 
-        final Context context = this;
-        btnSalvar.setOnClickListener(new View.OnClickListener()
-        {
+        final ListCestasActivity activity = this;
+        btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Cesta cesta = new Cesta();
                 cesta.setDescricao(descricao.getText().toString());
-                try {
-                    if((new CestaRepository(context).create(cesta) != 1))
-                    {
-                        Toast.makeText(context, "Cesta salva com sucesso!"
-                                , Toast.LENGTH_SHORT);
+                cesta.setTotalLitros(0);
+                cesta.setValorTotal(0);
+
+                ICestaRepository cestaRepository = RepositoryLoader.getInstance().getCestaRepository(getApplicationContext());
+                cestaRepository.setViewCallback(new ViewCallback() {
+                    @Override
+                    public void success(ArrayList<IModel> models) {
+
                     }
-                            else
-                        {
-                            Toast.makeText(context, "Erro ao salvar a cesta!"
-                                    , Toast.LENGTH_SHORT);
-                        }
-                } catch (IllegalAccessException | InvocationTargetException | IOException
-                        | NoSuchMethodException | ClassNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
-                Activity activity = (Activity) context;
-                activity.finish();
-                activity.startActivity(activity.getIntent());
+
+                    @Override
+                    public void success(IModel model) {
+                        ListCestaView adapter = (ListCestaView) cestasListView.getAdapter();
+                        adapter.add(model);
+                        myDialog.hide();
+
+                        Toast.makeText(getApplicationContext(), "Cesta salva com sucesso!"
+                                , Toast.LENGTH_LONG);
+                    }
+
+                    @Override
+                    public void fail(String message) {
+                        Toast.makeText(activity, message, Toast.LENGTH_LONG);
+                    }
+                });
+                cestaRepository.create(cesta);
             }
         });
     }
 
-    protected void loadCestaList()
-    {
-        ListView theListView = findViewById(R.id.cestaListView);
+    protected void loadCestaList() {
+        final ListCestasActivity activity = this;
+        cestaRepository.setViewCallback(new ViewCallback() {
+            @Override
+            public void success(ArrayList<IModel> models) {
+                activity.cestasListView = findViewById(R.id.cestaListView);
+                ListCestaView adapter = new ListCestaView(activity, models);
+                cestasListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
 
-        ArrayList<IModel> cestaList = null;
+            @Override
+            public void success(IModel model) {
 
-        try {
-            cestaList = (ArrayList<IModel>) (new CestaRepository(this.getApplicationContext())).retrieveAll();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+            }
 
-        final ListCestaView adapter = new ListCestaView(this, cestaList);
+            @Override
+            public void fail(String message) {
+                Toast.makeText(activity, message, Toast.LENGTH_LONG);
+            }
+        });
+        this.cestaRepository.retrieveAll();
+    }
 
-        // set elements to adapter
-        theListView.setAdapter(adapter);
+    public ListView getCestasListView() {
+        return cestasListView;
+    }
+
+    public void setCestasListView(ListView cestasListView) {
+        this.cestasListView = cestasListView;
     }
 }

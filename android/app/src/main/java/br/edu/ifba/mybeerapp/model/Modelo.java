@@ -19,6 +19,12 @@ public class Modelo implements IModel
         this.volume = volume;
     }
 
+    public Modelo(int id, String nome, int volume) {
+        this.id = id;
+        this.nome = nome;
+        this.volume = volume;
+    }
+
     public int getId() {
         return id;
     }
