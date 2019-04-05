@@ -17,7 +17,9 @@ class Marca {
 
   @override
   String toString() {
-    return this.id.toString() + " - " + this.nome;
+    return this.nome;
   }
+
+  bool operator == (o) => o is Marca && o.id == id;
 
 }

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mybeerapp/models/marca.dart';
+import 'package:flutter_mybeerapp/models/loja.dart';
 import 'package:flutter_mybeerapp/src/app.dart';
-import 'package:flutter_mybeerapp/repositories/marca_repository.dart';
+import 'package:flutter_mybeerapp/repositories/loja_repository.dart';
 import 'package:toast/toast.dart';
 
-class MarcaPage extends StatefulWidget {
+class LojaPage extends StatefulWidget {
   @override
-  MarcaPageState createState() => MarcaPageState();
+  LojaPageState createState() => LojaPageState();
 }
 
-class MarcaPageState extends State<MarcaPage> {
+class LojaPageState extends State<LojaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Marcas")),
+      appBar: AppBar(title: Text("Lojas")),
       body: Center(
           child: FutureBuilder(
-            future: MarcaRepository.retrieveAll(),
+            future: LojaRepository.retrieveAll(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
@@ -37,7 +37,7 @@ class MarcaPageState extends State<MarcaPage> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    MarcaForm(marca: null, title: "Nova Marca")),
+                    LojaForm(loja: null, title: "Nova Loja")),
           );
         },
         child: Icon(Icons.add),
@@ -46,11 +46,11 @@ class MarcaPageState extends State<MarcaPage> {
   }
 
   _createListView(BuildContext context, AsyncSnapshot snapshot) {
-    List<Marca> marcas = snapshot.data;
+    List<Loja> lojas = snapshot.data;
     return new ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      itemCount: marcas.length,
+      itemCount: lojas.length,
       itemBuilder: (BuildContext context, int index) {
         return new Card(
           elevation: 8.0,
@@ -70,9 +70,9 @@ class MarcaPageState extends State<MarcaPage> {
                       child: Icon(Icons.delete, color: Colors.white),
                       onTap: () async {
                         bool success =
-                        (await MarcaRepository.remove(marcas[index].id));
+                        (await LojaRepository.remove(lojas[index].id));
                         if (success) {
-                          Toast.show("Marca deletada com sucesso!", context,
+                          Toast.show("Loja deletada com sucesso!", context,
                               duration: Toast.LENGTH_LONG);
                           setState(() {});
                         } else {
@@ -83,14 +83,14 @@ class MarcaPageState extends State<MarcaPage> {
                       },
                     )),
                 title: Text(
-                  marcas[index].nome,
+                  lojas[index].nome,
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Row(
                   children: <Widget>[
                     Icon(Icons.linear_scale, color: Colors.yellowAccent),
-                    Text(" ID: " + marcas[index].id.toString(),
+                    Text(" ID: " + lojas[index].id.toString(),
                         style: TextStyle(color: Colors.white))
                   ],
                 ),
@@ -102,10 +102,10 @@ class MarcaPageState extends State<MarcaPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              MarcaForm(
-                                  marca: marcas[index],
-                                  title: "Editando Marca: " +
-                                      marcas[index].nome)),
+                              LojaForm(
+                                  loja: lojas[index],
+                                  title: "Editando Loja: " +
+                                      lojas[index].nome)),
                     );
                   },
                 )),
@@ -116,27 +116,27 @@ class MarcaPageState extends State<MarcaPage> {
   }
 }
 
-class MarcaForm extends StatefulWidget {
-  final Marca marca;
+class LojaForm extends StatefulWidget {
+  final Loja loja;
   final String title;
 
-  const MarcaForm({Key key, this.marca, this.title}) : super(key: key);
+  const LojaForm({Key key, this.loja, this.title}) : super(key: key);
 
   @override
-  MarcaFormState createState() => MarcaFormState(marca, title);
+  LojaFormState createState() => LojaFormState(loja, title);
 }
 
-class MarcaFormState extends State<MarcaForm> {
-  final Marca marca;
+class LojaFormState extends State<LojaForm> {
+  final Loja loja;
   final String title;
 
   final nomeController = TextEditingController();
 
-  MarcaFormState(this.marca, this.title);
+  LojaFormState(this.loja, this.title);
 
   @override
   Widget build(BuildContext context) {
-    if (marca != null) nomeController.text = marca.nome;
+    if (loja != null) nomeController.text = loja.nome;
 
     return new Scaffold(
       appBar: AppBar(title: Text(this.title)),
@@ -148,13 +148,13 @@ class MarcaFormState extends State<MarcaForm> {
                 child: new Column(children: [
                   new Padding(padding: EdgeInsets.only(top: 40.0)),
                   new Text(
-                    'Nova Marca',
+                    'Nova Loja',
                     style: new TextStyle(color: Colors.teal, fontSize: 25.0),
                   ),
                   new Padding(padding: EdgeInsets.only(top: 30.0)),
                   new TextField(
                     decoration: new InputDecoration(
-                      labelText: "Informe o nome da marca",
+                      labelText: "Informe o nome da loja",
                       fillColor: Colors.white,
                       border: new OutlineInputBorder(
                         borderRadius: new BorderRadius.circular(25.0),
@@ -172,29 +172,29 @@ class MarcaFormState extends State<MarcaForm> {
           )),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          Future<Marca> futureMarca;
-          if (this.marca == null) {
-            Marca marca = new Marca(id: 0, nome: nomeController.text);
-            futureMarca = MarcaRepository.create(marca);
+          Future<Loja> futureLoja;
+          if (this.loja == null) {
+            Loja loja = new Loja(id: 0, nome: nomeController.text);
+            futureLoja = LojaRepository.create(loja);
           } else {
-            Marca marca = new Marca(
-                id: this.marca.id, nome: nomeController.text);
-            futureMarca = MarcaRepository.update(marca);
+            Loja loja = new Loja(
+                id: this.loja.id, nome: nomeController.text);
+            futureLoja = LojaRepository.update(loja);
           }
 
-          futureMarca.then((Marca value) {
+          futureLoja.then((Loja value) {
             if (value != null) {
               Navigator.pop(context);
               Toast.show("Dados salvos com sucesso!", context,
                   duration: Toast.LENGTH_LONG);
             }
           },
-          onError: (e) {
-            setState(() {
-              Toast.show(
-                  e.toString(), context, duration: Toast.LENGTH_LONG);
-            });
-          });
+              onError: (e) {
+                setState(() {
+                  Toast.show(
+                      e.toString(), context, duration: Toast.LENGTH_LONG);
+                });
+              });
         },
         label: Text("Salvar"),
         icon: Icon(Icons.save),

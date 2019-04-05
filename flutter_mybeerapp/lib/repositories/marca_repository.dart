@@ -52,10 +52,10 @@ class MarcaRepository {
         headers: {"Content-Type": "application/json"},
         body: json.encode(marca.toJSON()));
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return Marca.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Falha ao editar marca');
+      throw Exception(response.body);
     }
   }
 
