@@ -1,7 +1,4 @@
-import 'package:flutter_mybeerapp/models/bebida.dart';
-import 'package:flutter_mybeerapp/models/loja.dart';
 import 'package:flutter_mybeerapp/models/produto.dart';
-import 'package:intl/intl.dart';
 
 class Cesta {
   final int id;
