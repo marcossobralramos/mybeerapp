@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mybeerapp/models/bebida.dart';
 import 'package:flutter_mybeerapp/models/cesta.dart';
-import 'package:flutter_mybeerapp/models/loja.dart';
-import 'package:flutter_mybeerapp/models/produto.dart';
+import 'package:flutter_mybeerapp/pages/produtos_cesta_pages.dart';
 import 'package:flutter_mybeerapp/repositories/cesta_repository.dart';
 import 'package:flutter_mybeerapp/src/app.dart';
-import 'package:flutter_mybeerapp/repositories/bebida_repository.dart';
-import 'package:flutter_mybeerapp/repositories/produto_repository.dart';
-import 'package:flutter_mybeerapp/repositories/loja_repository.dart';
 import 'package:toast/toast.dart';
 
 class CestaPage extends StatefulWidget {
@@ -19,7 +14,17 @@ class CestaPageState extends State<CestaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Cestas")),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text('Cestas',
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: Center(
           child: FutureBuilder(
         future: CestaRepository.retrieveAll(),
@@ -53,6 +58,10 @@ class CestaPageState extends State<CestaPage> {
 
   _createListView(BuildContext context, AsyncSnapshot snapshot) {
     List<Cesta> cestas = snapshot.data;
+
+    if(cestas == null || cestas.length == 0)
+      return new Text("Não há cestas cadastradas");
+
     return new ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
@@ -75,8 +84,8 @@ class CestaPageState extends State<CestaPage> {
                     child: GestureDetector(
                       child: Icon(Icons.delete, color: Colors.white),
                       onTap: () async {
-                        bool success = (await CestaRepository.remove(
-                            cestas[index].id));
+                        bool success =
+                            (await CestaRepository.remove(cestas[index].id));
                         if (success) {
                           Toast.show("Cesta deletada com sucesso!", context,
                               duration: Toast.LENGTH_LONG);
@@ -96,8 +105,9 @@ class CestaPageState extends State<CestaPage> {
                 subtitle: Row(
                   children: <Widget>[
                     Text(
-                        cestas[index].litros.toStringAsFixed(3) + "L"
-                            " | R\$" +
+                        cestas[index].totalItens.toString() + " itens \n" +
+                        cestas[index].litros.toStringAsFixed(3) + " litros"
+                            "\nR\$" +
                             cestas[index].total.toStringAsFixed(2),
                         style: TextStyle(color: Colors.white))
                   ],
@@ -134,7 +144,7 @@ class CestaForm extends StatefulWidget {
 }
 
 class CestaFormState extends State<CestaForm> {
-  final Cesta cesta;
+  Cesta cesta;
   final String title;
 
   final descricaoController = TextEditingController();
@@ -150,7 +160,17 @@ class CestaFormState extends State<CestaForm> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(title: Text(this.title)),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text(this.title,
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: new Container(
           padding: const EdgeInsets.all(15.0),
           color: Colors.white,
@@ -160,6 +180,37 @@ class CestaFormState extends State<CestaForm> {
                 child: new Center(
                     child: new Column(
                   children: <Widget>[
+                    Container(
+                        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 54.0),
+                        child: Material(
+                          elevation: 8.0,
+                          color: Colors.teal,
+                          borderRadius: BorderRadius.circular(32.0),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProdutosCestaPage(cesta)),
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(Icons.remove_red_eye, color: Colors.white),
+                                  Padding(padding: EdgeInsets.only(right: 16.0)),
+                                  Text('PRODUTOS DA CESTA',
+                                      style: TextStyle(color: Colors.white))
+                                ],
+                              ),
+                            ),
+                          ),
+                        )),
                     new Padding(padding: EdgeInsets.only(top: 30.0)),
                     new TextField(
                       decoration: new InputDecoration(
@@ -171,7 +222,7 @@ class CestaFormState extends State<CestaForm> {
                         ),
                         //fillColor: Colors.green
                       ),
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       style: new TextStyle(
                         fontFamily: "Poppins",
                       ),
@@ -184,15 +235,11 @@ class CestaFormState extends State<CestaForm> {
         onPressed: () async {
           Future<Cesta> futureCesta;
           if (this.cesta == null) {
-            Cesta cesta = new Cesta(
-                id: 0,
-                descricao: descricaoController.text);
+            Cesta cesta = new Cesta(id: 0, descricao: descricaoController.text);
             futureCesta = CestaRepository.create(cesta);
           } else {
-            Cesta bebida = new Cesta(
-                id: this.cesta.id,
-                descricao: descricaoController.text);
-            futureCesta = CestaRepository.update(bebida);
+            cesta.descricao = descricaoController.text;
+            futureCesta = CestaRepository.update(cesta);
           }
 
           futureCesta.then((Cesta value) {

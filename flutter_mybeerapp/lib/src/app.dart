@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mybeerapp/pages/home_page.dart';
+import 'package:toast/toast.dart';
+
 import 'package:flutter_mybeerapp/pages/bebida_pages.dart';
 import 'package:flutter_mybeerapp/pages/cesta_pages.dart';
 import 'package:flutter_mybeerapp/pages/loja_pages.dart';
@@ -21,19 +24,51 @@ class MyApp extends StatelessWidget {
 }
 
 class MainUI {
+  static Widget buildTile(Widget child, {Function() onTap}) {
+    return Material(
+        elevation: 14.0,
+        borderRadius: BorderRadius.circular(12.0),
+        shadowColor: Color(0x802196F3),
+        child: InkWell(
+          // Do onTap() if it isn't null, otherwise do print()
+            onTap: onTap != null
+                ? () => onTap()
+                : () {
+            },
+            child: child));
+  }
   static getDrawer(context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: new ListView(
+        padding: const EdgeInsets.only(top: 0.0),
         children: <Widget>[
-          DrawerHeader(
-            child: null,
-            decoration: BoxDecoration(
-              color: Colors.teal,
-            ),
+          new UserAccountsDrawerHeader(
+              accountName: const Text("Seja bem-vindo ao My Beer, My Cash!"),
+              currentAccountPicture: new CircleAvatar(
+                  backgroundColor: Colors.brown,
+                  child: new Text("Olá!")
+              ),
+              otherAccountsPictures: <Widget>[
+                new GestureDetector(
+                    onTap: () => {},
+                    child: new Icon(Icons.settings)
+                )
+              ]
           ),
+          new ListTile(
+            leading: new Icon(Icons.apps),
+            title: new Text('Dashboard'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+              );
+            },
+          ),
+          new Divider(),
           ListTile(
             title: Text('Marcas'),
+            trailing: Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.push(
                 context,
@@ -43,6 +78,7 @@ class MainUI {
           ),
           ListTile(
             title: Text('Modelos'),
+            trailing: Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.push(
                 context,
@@ -52,6 +88,7 @@ class MainUI {
           ),
           ListTile(
             title: Text('Lojas'),
+            trailing: Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.push(
                 context,
@@ -61,6 +98,7 @@ class MainUI {
           ),
           ListTile(
             title: Text('Bebidas'),
+            trailing: Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.push(
                 context,
@@ -70,6 +108,7 @@ class MainUI {
           ),
           ListTile(
             title: Text('Produtos'),
+            trailing: Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.push(
                 context,
@@ -79,6 +118,7 @@ class MainUI {
           ),
           ListTile(
             title: Text('Cestas'),
+            trailing: Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.push(
                 context,
@@ -89,25 +129,5 @@ class MainUI {
         ],
       ),
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  MyHomePageState createState() => MyHomePageState();
-}
-
-class MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text(widget.title)),
-        body: Center(child: Text('Seja bem-vindo ao My Beer, My Cash! '
-            'Nós vamos te ajudar a montar suas cestas de bebidas mais em conta :D')),
-        drawer: MainUI.getDrawer(context));
   }
 }

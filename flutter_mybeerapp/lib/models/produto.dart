@@ -6,17 +6,15 @@ import 'package:intl/intl.dart';
 class Produto {
   final int id;
   final int idProdutoCesta;
-  final Bebida bebida;
-  final Loja loja;
-  final double precoUnidade;
-  double precoLitro;
-  final String ultimaAtualizacao;
+  Bebida bebida;
+  Loja loja;
+  double precoUnidade;
+  String ultimaAtualizacao;
   int quantidade;
   Cesta cesta;
 
   Produto(
       {this.precoUnidade,
-      this.precoLitro,
       this.ultimaAtualizacao,
       this.id,
       this.bebida,
@@ -24,6 +22,12 @@ class Produto {
       this.quantidade,
       this.cesta,
       this.idProdutoCesta});
+
+  double get totalLitros => quantidade * this.bebida.modelo.volume / 1000;
+
+  double get precoLitro => (precoUnidade / bebida.modelo.volume) * 1000;
+
+  double get totalPack => quantidade * precoUnidade;
 
   factory Produto.fromJson(Map<String, dynamic> json) {
 
@@ -33,7 +37,6 @@ class Produto {
         id: json['id'] as int,
         bebida: Bebida.fromJson(json['bebida']),
         loja: Loja.fromJson(json['loja']),
-        precoLitro: json['preco_litro'] as double,
         precoUnidade: json['preco_unidade'] as double,
         ultimaAtualizacao: json['ultima_atualizacao'],
         quantidade: (json.containsKey('quantidade')) ? json['quantidade'] : 0,
@@ -47,25 +50,20 @@ class Produto {
   Map<String, dynamic> toJSON() {
     var now = new DateTime.now();
     var formatter = new DateFormat('yyyy-MM-dd');
-
-    calcularPrecoLitro();
+    this.ultimaAtualizacao = formatter.format(now);
 
     Map<String, dynamic> json = {
-      "id": this.id,
       "bebida": this.bebida.id,
       "loja": this.loja.id,
       "preco_unidade": this.precoUnidade,
       "preco_litro": this.precoLitro,
-      "ultima_atualizacao": formatter.format(now),
+      "ultima_atualizacao": this.ultimaAtualizacao,
     };
 
-    if (quantidade > 0) json.putIfAbsent("quantidade", quantidade as dynamic);
+    if (this.quantidade != null && this.quantidade != 0)
+      json.putIfAbsent("quantidade", quantidade as dynamic);
 
     return json;
-  }
-
-  void calcularPrecoLitro() {
-    this.precoLitro = (precoUnidade / 1000) * bebida.modelo.volume;
   }
 
   @override
@@ -73,5 +71,10 @@ class Produto {
     return this.bebida.toString();
   }
 
-  bool operator ==(o) => o is Produto && o.id == id;
+  bool operator == (o) => o is Produto && o.id == id;
+
+  compareTo(Produto b) {
+    return (this.precoLitro > b.precoLitro) ? 1
+        : (this.precoLitro < b.precoLitro) ? -1 : 0;
+  }
 }

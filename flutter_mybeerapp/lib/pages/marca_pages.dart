@@ -13,7 +13,17 @@ class MarcaPageState extends State<MarcaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Marcas")),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text('Marcas',
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: Center(
           child: FutureBuilder(
             future: MarcaRepository.retrieveAll(),
@@ -47,6 +57,10 @@ class MarcaPageState extends State<MarcaPage> {
 
   _createListView(BuildContext context, AsyncSnapshot snapshot) {
     List<Marca> marcas = snapshot.data;
+
+    if(marcas == null || marcas.length == 0)
+      return new Text("Não há marcas cadastradas");
+
     return new ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
@@ -139,7 +153,17 @@ class MarcaFormState extends State<MarcaForm> {
     if (marca != null) nomeController.text = marca.nome;
 
     return new Scaffold(
-      appBar: AppBar(title: Text(this.title)),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text(this.title,
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: new Container(
           padding: const EdgeInsets.all(30.0),
           color: Colors.white,

@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mybeerapp/models/bebida.dart';
+import 'package:flutter_mybeerapp/models/cesta.dart';
 import 'package:flutter_mybeerapp/models/loja.dart';
 import 'package:flutter_mybeerapp/models/produto.dart';
+import 'package:flutter_mybeerapp/repositories/cesta_repository.dart';
 import 'package:flutter_mybeerapp/src/app.dart';
 import 'package:flutter_mybeerapp/repositories/bebida_repository.dart';
 import 'package:flutter_mybeerapp/repositories/produto_repository.dart';
 import 'package:flutter_mybeerapp/repositories/loja_repository.dart';
 import 'package:toast/toast.dart';
 
-class ProdutoPage extends StatefulWidget {
+class ProdutosCestaPage extends StatefulWidget {
+  final Cesta _cesta;
+
+  ProdutosCestaPage(this._cesta);
+
   @override
-  ProdutoPageState createState() => ProdutoPageState();
+  ProdutosCestaPageState createState() => ProdutosCestaPageState(this._cesta);
 }
 
-class ProdutoPageState extends State<ProdutoPage> {
+class ProdutosCestaPageState extends State<ProdutosCestaPage> {
+  Cesta _cesta;
+
+  ProdutosCestaPageState(this._cesta);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,12 +35,12 @@ class ProdutoPageState extends State<ProdutoPage> {
           onPressed: () => Navigator.of(context).pop(),
           icon: Icon(Icons.arrow_back, color: Colors.teal),
         ),
-        title: Text('Produtos',
+        title: Text('Cesta: ' + _cesta.descricao,
             style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
       ),
       body: Center(
           child: FutureBuilder(
-        future: ProdutoRepository.retrieveAll(),
+        future: CestaRepository.retrieveProdutos(_cesta.id),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -51,7 +61,7 @@ class ProdutoPageState extends State<ProdutoPage> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    ProdutoForm(produto: null, title: "Novo Produto")),
+                    ProdutoForm(cesta: _cesta, produto: null, title: "Novo Produto")),
           );
         },
         child: Icon(Icons.add),
@@ -63,7 +73,7 @@ class ProdutoPageState extends State<ProdutoPage> {
     List<Produto> produtos = snapshot.data;
 
     if(produtos == null || produtos.length == 0)
-      return new Text("Não há produtos cadastrados");
+      return new Text("Não há produtos nesta cesta");
 
     return new ListView.builder(
       scrollDirection: Axis.vertical,
@@ -87,15 +97,15 @@ class ProdutoPageState extends State<ProdutoPage> {
                     child: GestureDetector(
                       child: Icon(Icons.delete, color: Colors.white),
                       onTap: () async {
-                        bool success = (await ProdutoRepository.remove(
-                            produtos[index].id));
+                        bool success = (await CestaRepository.removeProduto(
+                            produtos[index]));
                         if (success) {
-                          Toast.show("Produto deletado com sucesso!", context,
+                          Toast.show("Produto removido da cesta com sucesso!", context,
                               duration: Toast.LENGTH_LONG);
                           setState(() {});
                         } else {
                           Toast.show(
-                              "Erro ao deletar. Tente novamente!", context,
+                              "Erro ao remover produto. Tente novamente!", context,
                               duration: Toast.LENGTH_LONG);
                         }
                       },
@@ -108,9 +118,15 @@ class ProdutoPageState extends State<ProdutoPage> {
                 subtitle: Row(
                   children: <Widget>[
                     Text(
-                        produtos[index].loja.toString() +
-                            " | R\$" +
-                            produtos[index].precoUnidade.toStringAsFixed(2),
+                        "Loja: " + produtos[index].loja.toString() +
+                            "\nPreço unitário: R\$" +
+                            produtos[index].precoUnidade.toStringAsFixed(2) +
+                            "\nPreço por litro: R\$" +
+                            produtos[index].precoLitro.toStringAsFixed(2) +
+                            "\nQuantidade: " + produtos[index].quantidade.toString()
+                            + " itens" + "\nTotal em litros: " +
+                            produtos[index].totalLitros.toStringAsFixed(3) + "L" +
+                            "\nTotal do pack: R\$" + produtos[index].totalPack.toStringAsFixed(2),
                         style: TextStyle(color: Colors.white))
                   ],
                 ),
@@ -122,6 +138,7 @@ class ProdutoPageState extends State<ProdutoPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ProdutoForm(
+                              cesta: _cesta,
                               produto: produtos[index],
                               title: "Editando Produto: " +
                                   produtos[index].toString())),
@@ -138,38 +155,42 @@ class ProdutoPageState extends State<ProdutoPage> {
 class ProdutoForm extends StatefulWidget {
   final Produto produto;
   final String title;
+  final Cesta cesta;
 
-  const ProdutoForm({Key key, this.produto, this.title}) : super(key: key);
+  const ProdutoForm({Key key, this.produto, this.title, this.cesta}) : super(key: key);
 
   @override
-  ProdutoFormState createState() => ProdutoFormState(produto, title);
+  ProdutoFormState createState() => ProdutoFormState(produto, title, cesta);
 }
 
 class ProdutoFormState extends State<ProdutoForm> {
-  final Produto produto;
+  Produto _produto;
+  final Cesta _cesta;
   final String title;
 
-  List<Bebida> _bebidas;
+  List<Produto> _produtos;
   List<Loja> _lojas;
 
-  Bebida _selectedBebida;
+  Produto _selectedProduto;
   Loja _selectedLoja;
 
-  List<DropdownMenuItem<Bebida>> _dropDownMenuBebidas;
+  List<DropdownMenuItem<Produto>> _dropDownMenuProdutos;
   List<DropdownMenuItem<Loja>> _dropDownMenuLojas;
 
   final precoUnidadeController = TextEditingController();
+  final quantidadeController = TextEditingController();
 
-  ProdutoFormState(this.produto, this.title);
+  // construtor
+  ProdutoFormState(this._produto, this.title, this._cesta);
 
-  List<DropdownMenuItem<Bebida>> getDropDownMenuBebidas() {
-    List<DropdownMenuItem<Bebida>> bebidas = new List();
+  List<DropdownMenuItem<Produto>> getDropDownMenuProdutos() {
+    List<DropdownMenuItem<Produto>> produtos = new List();
 
-    for (Bebida bebida in _bebidas) {
-      bebidas.add(new DropdownMenuItem(
-          value: bebida, child: new Text(bebida.toString())));
+    for (Produto produto in _produtos) {
+      produtos.add(new DropdownMenuItem(
+          value: produto, child: new Text(produto.toString())));
     }
-    return bebidas;
+    return produtos;
   }
 
   List<DropdownMenuItem<Loja>> getDropDownMenuLojas() {
@@ -182,40 +203,43 @@ class ProdutoFormState extends State<ProdutoForm> {
     return lojas;
   }
 
-  void changedDropDownBebida(Bebida selectedBebida) {
+  void changedDropDownProduto(Produto selectedProduto) {
     setState(() {
-      _selectedBebida = selectedBebida;
+      _selectedProduto = selectedProduto;
     });
   }
 
   void changedDropDownLoja(Loja selectedLoja) {
     setState(() {
       _selectedLoja = selectedLoja;
+      // carregando comboboxes de produtos
+      ProdutoRepository.retrieveByLoja(_selectedLoja).then(
+              (produtos) => {
+          this._produtos = produtos,
+          _dropDownMenuProdutos = getDropDownMenuProdutos(),
+          (this._produto != null)
+              ? changedDropDownProduto(this._produto)
+              : changedDropDownProduto(this._produtos[0]),
+          (this._produto != null)
+            ? precoUnidadeController.text = this._produto.precoUnidade.toStringAsFixed(2)
+            : precoUnidadeController.text = this._produtos[0].precoUnidade.toStringAsFixed(2)
+          },
+          onError: (e) => {});
     });
   }
 
   @override
   void initState() {
-    precoUnidadeController.text = (this.produto != null)
-        ? this.produto.precoUnidade.toStringAsFixed(2)
-        : "0.00";
-    // carregando comboboxes de bebidas
-    BebidaRepository.retrieveAll().then(
-        (bebidas) => {
-              this._bebidas = bebidas,
-              _dropDownMenuBebidas = getDropDownMenuBebidas(),
-              (produto != null)
-                  ? changedDropDownBebida(produto.bebida)
-                  : changedDropDownBebida(bebidas[0])
-            },
-        onError: (e) => {});
+    quantidadeController.text = (this._produto != null)
+        ? this._produto.quantidade.toString()
+        : "0";
     // carregando comboboxes de lojas
     LojaRepository.retrieveAll().then(
         (lojas) => {
               this._lojas = lojas,
               _dropDownMenuLojas = getDropDownMenuLojas(),
-              (produto != null)
-                  ? changedDropDownLoja(produto.loja)
+              (_produto != null)
+                  ? changedDropDownLoja(_produto.loja)
                   : changedDropDownLoja(lojas[0])
             },
         onError: (e) => {});
@@ -233,11 +257,11 @@ class ProdutoFormState extends State<ProdutoForm> {
           onPressed: () => Navigator.of(context).pop(),
           icon: Icon(Icons.arrow_back, color: Colors.teal),
         ),
-        title: Text(this.title,
+        title: Text('Adicionando produto à cesta ',
             style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
       ),
       body: new Container(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(10.0),
           color: Colors.white,
           child: new Container(
               color: Colors.white,
@@ -261,27 +285,27 @@ class ProdutoFormState extends State<ProdutoForm> {
                       onChanged: changedDropDownLoja,
                     ),
                     new Container(
-                      padding: new EdgeInsets.all(20.0),
+                      padding: new EdgeInsets.all(10.0),
                     ),
                     new Text(
-                      'Selecione uma bebida',
+                      'Selecione um produto',
                       style: new TextStyle(color: Colors.teal, fontSize: 20.0),
                     ),
                     new Container(
                       padding: new EdgeInsets.all(5.0),
                     ),
                     new DropdownButton(
-                      value: _selectedBebida,
-                      items: _dropDownMenuBebidas,
-                      onChanged: changedDropDownBebida,
+                      value: _selectedProduto,
+                      items: _dropDownMenuProdutos,
+                      onChanged: changedDropDownProduto,
                     ),
                     new Container(
-                      padding: new EdgeInsets.all(15.0),
+                      padding: new EdgeInsets.all(10.0),
                     ),
-                    new Padding(padding: EdgeInsets.only(top: 30.0)),
+                    new Padding(padding: EdgeInsets.only(top: 10.0)),
                     new TextField(
                       decoration: new InputDecoration(
-                        labelText: "Informe o preço unitário do produto",
+                        labelText: "Informe o preço unitário do produto (R\$)",
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
                           borderRadius: new BorderRadius.circular(25.0),
@@ -295,30 +319,42 @@ class ProdutoFormState extends State<ProdutoForm> {
                       ),
                       controller: precoUnidadeController,
                     ),
+                    new Padding(padding: EdgeInsets.only(top: 10.0)),
+                    new TextField(
+                      decoration: new InputDecoration(
+                        labelText: "Informe a quantidade do produto",
+                        fillColor: Colors.white,
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                        //fillColor: Colors.green
+                      ),
+                      keyboardType: TextInputType.numberWithOptions(decimal: false),
+                      style: new TextStyle(
+                        fontFamily: "Poppins",
+                      ),
+                      controller: quantidadeController,
+                    ),
                   ],
                 )),
               ))),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          Future<Produto> futureProduto;
-          if (this.produto == null) {
-            Produto produto = new Produto(
-                id: 0,
-                bebida: _selectedBebida,
-                loja: _selectedLoja,
-                precoUnidade: double.parse(precoUnidadeController.text));
-            futureProduto = ProdutoRepository.create(produto);
+          Future<bool> success;
+          if (this._produto == null) {
+            _selectedProduto.quantidade = int.parse(quantidadeController.text);
+            _selectedProduto.precoUnidade = double.parse(precoUnidadeController.text);
+            _selectedProduto.cesta = this._cesta;
+            success = CestaRepository.addProduto(_selectedProduto);
           } else {
-            Produto bebida = new Produto(
-                id: this.produto.id,
-                bebida: _selectedBebida,
-                loja: _selectedLoja,
-                precoUnidade: double.parse(precoUnidadeController.text));
-            futureProduto = ProdutoRepository.update(bebida);
+            _produto.quantidade = quantidadeController.text as int;
+            _produto.precoUnidade = precoUnidadeController.text as double;
+            success = CestaRepository.updateProduto(_produto);
           }
 
-          futureProduto.then((Produto value) {
-            if (value != null) {
+          success.then((bool value) {
+            if (value == true) {
               Navigator.pop(context);
               Toast.show("Dados salvos com sucesso!", context,
                   duration: Toast.LENGTH_LONG);
@@ -329,8 +365,8 @@ class ProdutoFormState extends State<ProdutoForm> {
             });
           });
         },
-        label: Text("Salvar"),
-        icon: Icon(Icons.save),
+        label: Text("Adicionar"),
+        icon: Icon(Icons.add),
       ),
     );
   }

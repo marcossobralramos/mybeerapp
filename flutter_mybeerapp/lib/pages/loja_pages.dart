@@ -13,7 +13,17 @@ class LojaPageState extends State<LojaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Lojas")),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text('Lojas',
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: Center(
           child: FutureBuilder(
             future: LojaRepository.retrieveAll(),
@@ -47,6 +57,10 @@ class LojaPageState extends State<LojaPage> {
 
   _createListView(BuildContext context, AsyncSnapshot snapshot) {
     List<Loja> lojas = snapshot.data;
+
+    if(lojas == null || lojas.length == 0)
+      return new Text("Não há lojas cadastradas");
+
     return new ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
@@ -139,7 +153,17 @@ class LojaFormState extends State<LojaForm> {
     if (loja != null) nomeController.text = loja.nome;
 
     return new Scaffold(
-      appBar: AppBar(title: Text(this.title)),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text(this.title,
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: new Container(
           padding: const EdgeInsets.all(30.0),
           color: Colors.white,

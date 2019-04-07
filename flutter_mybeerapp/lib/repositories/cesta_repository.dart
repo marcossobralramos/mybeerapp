@@ -33,6 +33,26 @@ class CestaRepository {
         })
     );
 
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      throw Exception('Falha ao listar produtos');
+    }
+  }
+
+  static Future<bool> updateProduto(Produto produto) async {
+    final response = await http.patch(
+        'https://sobral.pythonanywhere.com/produtos_cesta/' +
+            produto.idProdutoCesta.toString() + "/",
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          "cesta": produto.cesta.id,
+          "produto": produto.id,
+          "preco": produto.precoUnidade,
+          "quantidade": produto.quantidade
+        })
+    );
+
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -50,6 +70,20 @@ class CestaRepository {
       throw Exception('Falha ao carregar cesta');
     }
   }
+
+  static Future<List<Produto>> retrieveProdutos(int cestaId) async {
+    final response = await http
+        .get('https://sobral.pythonanywhere.com/cestas/' + cestaId.toString() + "/");
+
+    if (response.statusCode == 200) {
+      Cesta cesta = Cesta.fromJson(json.decode(response.body));
+
+      return cesta.produtos;
+    } else {
+      throw Exception('Falha ao carregar cesta');
+    }
+  }
+
 
   static Future<Cesta> create(Cesta cesta) async {
     final response = await http.post(
@@ -70,7 +104,7 @@ class CestaRepository {
         .patch('https://sobral.pythonanywhere.com/cestas/' + cesta.id.toString()
         + "/",
         headers: {"Content-Type": "application/json"},
-        body: json.encode(cesta.toJSON()));
+        body: json.encode(cesta.toJSONForUpdate()));
 
     if (response.statusCode == 200) {
       return Cesta.fromJson(json.decode(response.body));

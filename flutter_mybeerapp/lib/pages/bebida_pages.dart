@@ -17,7 +17,17 @@ class BebidaPageState extends State<BebidaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Bebidas")),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text('Bebidas',
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: Center(
           child: FutureBuilder(
         future: BebidaRepository.retrieveAll(),
@@ -51,6 +61,10 @@ class BebidaPageState extends State<BebidaPage> {
 
   _createListView(BuildContext context, AsyncSnapshot snapshot) {
     List<Bebida> bebidas = snapshot.data;
+
+    if(bebidas == null || bebidas.length == 0)
+      return new Text("Não há bebidas cadastradas");
+
     return new ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
@@ -204,7 +218,17 @@ class BebidaFormState extends State<BebidaForm> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(title: Text(this.title)),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text(this.title,
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: new Container(
           padding: const EdgeInsets.all(30.0),
           color: Colors.white,

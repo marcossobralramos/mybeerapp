@@ -13,7 +13,17 @@ class ModeloPageState extends State<ModeloPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Modelos")),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text('Modelos',
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: Center(
           child: FutureBuilder(
         future: ModeloRepository.retrieveAll(),
@@ -47,6 +57,10 @@ class ModeloPageState extends State<ModeloPage> {
 
   _createListView(BuildContext context, AsyncSnapshot snapshot) {
     List<Modelo> modelos = snapshot.data;
+
+    if(modelos == null || modelos.length == 0)
+      return new Text("Não há modelos cadastrados");
+
     return new ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
@@ -141,7 +155,17 @@ class ModeloFormState extends State<ModeloForm> {
       volumeController.text = modelo.volume.toString();
     }
     return new Scaffold(
-      appBar: AppBar(title: Text(this.title)),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.teal,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.teal),
+        ),
+        title: Text(this.title,
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w700)),
+      ),
       body: new Container(
           padding: const EdgeInsets.all(30.0),
           color: Colors.white,
@@ -157,7 +181,7 @@ class ModeloFormState extends State<ModeloForm> {
               new TextField(
                 autofocus: true,
                 decoration: new InputDecoration(
-                  labelText: "Informe o nome do modelo",
+                  labelText: "Informe a nome do modelo",
                   fillColor: Colors.white,
                   border: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(25.0),
